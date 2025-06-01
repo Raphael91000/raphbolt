@@ -1,0 +1,62 @@
+.split-true-container {
+  position: relative;
+  display: inline-block;
+  font-weight: bold;
+  line-height: 1.1;
+  font-size: inherit;
+}
+
+.split-true-measure {
+  visibility: hidden;
+  opacity: 0;
+  position: absolute;
+  pointer-events: none;
+  white-space: pre;
+  user-select: none;
+  z-index: -1;
+}
+
+.split-true-half {
+  position: absolute;
+  left: 0; width: 100%;
+  overflow: hidden;
+  color: inherit;
+  pointer-events: none;
+  user-select: none;
+  z-index: 1;
+  transition:
+    transform var(--anim-duration, 700ms) cubic-bezier(.71,1.7,.33,1.01),
+    opacity 180ms;
+}
+
+.split-true-inner {
+  display: block;
+  width: 100%;
+  white-space: pre;
+  font-size: inherit;
+  line-height: 1.1;
+}
+
+.split-true-top {
+  top: 0;
+  height: var(--split-h, 50%);
+  clip-path: inset(0 0 50% 0);
+  transform: translateY(-60%);
+  opacity: 0;
+}
+.split-true-top.in {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.split-true-bottom {
+  top: var(--split-h, 50%);
+  height: var(--split-h, 50%);
+  clip-path: inset(50% 0 0 0);
+  transform: translateY(60%);
+  opacity: 0;
+}
+.split-true-bottom.in {
+  transform: translateY(0);
+  opacity: 1;
+}

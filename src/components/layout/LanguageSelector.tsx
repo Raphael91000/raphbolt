@@ -13,22 +13,23 @@ const LanguageSelector: React.FC = () => {
   const [isOpen, setIsOpen] = React.useState(false);
 
   const toggleDropdown = () => setIsOpen(!isOpen);
-  
+
   const changeLanguage = (langCode: string) => {
     i18n.changeLanguage(langCode);
     setIsOpen(false);
   };
 
   return (
-    <div className="fixed top-5 right-5 z-50">
-      <button 
+    // SUPPRIME fixed, top-5, right-5 ici !
+    <div className="relative">
+      <button
         onClick={toggleDropdown}
         className="flex items-center space-x-1 bg-background-light/80 hover:bg-background-light p-2 rounded-full backdrop-blur-sm"
         aria-label="Select language"
       >
-        <Globe size={20} color="#00DCD9" />
+        <Globe size={20} color="#22eaff" />
       </button>
-      
+
       {isOpen && (
         <div className="absolute right-0 mt-2 w-40 rounded-md shadow-lg bg-background-light/90 backdrop-blur-sm ring-1 ring-black ring-opacity-5">
           <div className="py-1" role="menu" aria-orientation="vertical">

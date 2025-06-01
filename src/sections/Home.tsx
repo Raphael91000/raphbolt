@@ -1,102 +1,113 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { Github, Linkedin } from 'lucide-react';
 import AnimatedText from '../components/ui/AnimatedText';
+import DynamicSplitText from "../components/animations/DynamicSplitText";
+
+const WORDS = ["J'apprends", "J'entreprends", "Je crée", "Je partage"];
 
 const Home: React.FC = () => {
   const { t } = useTranslation();
-  
+  const [motIndex, setMotIndex] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setMotIndex((prev) => (prev + 1) % WORDS.length);
+    }, 2200);
+    return () => clearInterval(timer);
+  }, []);
+
   return (
-    <section id="home" className="flex flex-col justify-center items-center relative">
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1 }}
-        className="absolute inset-0 z-0"
-      >
-        {/* Blue beam effects are handled by AnimatedBackground component */}
-      </motion.div>
-      
+    <section id="home" className="flex flex-col justify-center items-center relative min-h-screen">
+      {/* Pas de bg-white ni bg-black pour ne pas masquer le background animé */}
+
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.2 }}
-        className="z-10 text-center px-4"
+        className="z-10 text-center px-4 w-full"
       >
-        <AnimatedText className="mb-4" />
-        
-        <motion.h1
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.4 }}
-          className="text-5xl md:text-7xl font-bold mb-2"
-        >
-          {t('home.name')}
-        </motion.h1>
-        
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.6 }}
-          className="text-xl md:text-2xl text-gray-300 mb-6"
-        >
-          {t('home.tagline')}
-        </motion.p>
-        
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.8 }}
-          className="text-lg mb-8 max-w-2xl mx-auto"
-        >
-          {t('home.slogan')}
-        </motion.p>
-        
+        <div className="flex flex-col items-center gap-6 md:gap-8">
+          <AnimatedText className="text-white" />
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.3 }}
+            className="text-3xl md:text-4xl font-semibold text-[#1ca6fa]"
+          >
+            <DynamicSplitText text={WORDS[motIndex]} duration={750} />
+          </motion.div>
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+            className="text-5xl md:text-7xl font-bold text-white"
+          >
+            {t('home.name')}
+          </motion.h1>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.6 }}
+            className="text-xl md:text-2xl text-white"
+          >
+            {t('home.tagline')}
+          </motion.p>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.8 }}
+            className="text-lg max-w-2xl mx-auto text-white"
+          >
+            {t('home.slogan')}
+          </motion.p>
+        </div>
+
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 1 }}
-          className="flex flex-col md:flex-row items-center justify-center gap-4"
+          className="flex flex-col md:flex-row items-center justify-center gap-4 mt-8"
         >
-          <a 
-            href="/CV-Raph-2025.pdf" 
+          <a
+            href="/CV-Raph-2025.pdf"
             target="_blank"
             rel="noopener noreferrer"
-            className="px-6 py-3 bg-primary text-background font-medium rounded-lg hover:bg-primary-dark transition-colors flex items-center justify-center min-w-[180px]"
+            className="px-6 py-3 border border-white text-black bg-white font-medium rounded-lg hover:bg-gray-100 transition-colors flex items-center justify-center min-w-[180px]"
           >
             {t('home.cv')}
           </a>
-          
+
           <div className="flex items-center space-x-4 mt-4 md:mt-0">
-            <a 
+            <a
               href="https://github.com/Raphael91000"
               target="_blank"
               rel="noopener noreferrer"
-              className="p-3 bg-background-light rounded-full hover:bg-background-light/80 transition-colors"
+              className="p-3 border border-white bg-white text-black rounded-full hover:bg-gray-100 transition-colors"
               aria-label="GitHub"
             >
               <Github size={24} />
             </a>
-            <a 
+            <a
               href="https://www.linkedin.com/in/raphael-theuillon-689139261/"
               target="_blank"
               rel="noopener noreferrer"
-              className="p-3 bg-background-light rounded-full hover:bg-background-light/80 transition-colors"
+              className="p-3 border border-white bg-white text-black rounded-full hover:bg-gray-100 transition-colors"
               aria-label="LinkedIn"
             >
               <Linkedin size={24} />
             </a>
-            <a 
+            <a
               href="https://www.fiverr.com/users/raph910/seller_dashboard"
               target="_blank"
               rel="noopener noreferrer"
-              className="p-3 bg-background-light rounded-full hover:bg-background-light/80 transition-colors"
+              className="p-3 border border-white bg-white text-black rounded-full hover:bg-gray-100 transition-colors"
               aria-label="Fiverr"
             >
-              <svg 
-                width="24" 
-                height="24" 
+              <svg
+                width="24"
+                height="24"
                 viewBox="0 0 24 24"
                 fill="currentColor"
               >
@@ -106,7 +117,7 @@ const Home: React.FC = () => {
           </div>
         </motion.div>
       </motion.div>
-      
+
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 0.4 }}
@@ -116,11 +127,11 @@ const Home: React.FC = () => {
         <div className="w-6 h-10 border-2 border-white rounded-full flex justify-center">
           <motion.div
             animate={{ y: [0, 12, 0] }}
-            transition={{ 
-              y: { 
-                repeat: Infinity, 
+            transition={{
+              y: {
+                repeat: Infinity,
                 duration: 1.5,
-                ease: "easeInOut" 
+                ease: "easeInOut"
               }
             }}
             className="w-1 h-1 bg-white rounded-full mt-2"

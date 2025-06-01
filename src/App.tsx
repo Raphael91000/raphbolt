@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import BackgroundBeams from './components/layout/BackgroundBeams'; // <-- nouveau background
-import LanguageSelector from './components/layout/LanguageSelector';
+import BackgroundBeams from './components/layout/BackgroundBeams';
+import NavBar from './components/layout/NavBar'; // <-- NavBar BLEUE avec le sélecteur de langue à l'intérieur
 import Home from './sections/Home';
 import About from './sections/About';
 import Skills from './sections/Skills';
@@ -12,7 +12,6 @@ import './lib/i18n';
 function App() {
   const { t } = useTranslation();
 
-  // Animation clic souris
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {
       const circle = document.createElement('span');
@@ -39,9 +38,10 @@ function App() {
   }, [t]);
 
   return (
-    <div className="relative">
-      <BackgroundBeams /> {/* <-- le nouveau background */}
-      <LanguageSelector />
+    <div className="relative min-h-screen">
+      <BackgroundBeams />
+      <NavBar /> {/* LanguageSelector EST dans NavBar */}
+      {/* SUPPRIME LanguageSelector ici */}
 
       <main>
         <Home />
@@ -51,7 +51,7 @@ function App() {
         <Contact />
       </main>
 
-      <footer className="py-6 px-4 text-center text-sm text-gray-400">
+      <footer className="py-6 px-4 text-center text-sm text-gray-400 z-10 relative">
         <p>© {new Date().getFullYear()} Raphael Theuillon. All rights reserved.</p>
       </footer>
     </div>
