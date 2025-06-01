@@ -53,7 +53,7 @@ section {
   top: 0;
   left: 50%;
   transform: translate(-50%, -50%);
-  box-shadow: 
+  box-shadow:
     0 0 15px rgba(0, 220, 217, 0.6),
     0 0 30px rgba(0, 220, 217, 0.3);
   animation: pulse 3s ease-in-out infinite;
@@ -148,4 +148,43 @@ section {
 
 .card:hover {
   transform: rotateY(5deg) rotateX(5deg);
+}
+
+.mouse-click-circle {
+  position: fixed;
+  pointer-events: none;
+  width: 44px;
+  height: 44px;
+  left: 0;
+  top: 0;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 50% 50%,
+    #b6f9ffcc 0%,      /* Bleu-cyan clair lumineux */
+    #17e9fa99 60%,     /* Cyan plus intense */
+    transparent 100%
+  );
+  box-shadow: 0 0 24px 8px #49e1ff66, 0 0 9px 3px #b7fff555;
+  opacity: 0.62;
+  animation: mouse-circle-expand 0.36s cubic-bezier(.4,.82,.64,1) forwards;
+  z-index: 9999;
+  backdrop-filter: blur(2px);
+}
+
+@keyframes mouse-circle-expand {
+  0% {
+    transform: translate(-50%, -50%) scale(0.68);
+    opacity: 0.82;
+    box-shadow: 0 0 3px 1px #7eeaff88, 0 0 16px 6px #d6ffff66;
+  }
+  70% {
+    opacity: 0.50;
+    box-shadow: 0 0 22px 8px #0fffd277, 0 0 24px 8px #fffbe866;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.24);
+    opacity: 0;
+    box-shadow: none;
+  }
 }
