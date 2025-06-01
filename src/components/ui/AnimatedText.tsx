@@ -10,7 +10,7 @@ const AnimatedText: React.FC<AnimatedTextProps> = ({ className = '' }) => {
   const { t } = useTranslation();
   const [currentTextIndex, setCurrentTextIndex] = useState(0);
   const [isChanging, setIsChanging] = useState(false);
-  
+
   const texts = [
     t('text.learn'),
     t('text.create'),
@@ -26,19 +26,19 @@ const AnimatedText: React.FC<AnimatedTextProps> = ({ className = '' }) => {
         setIsChanging(false);
       }, 500);
     }, 3000);
-    
+
     return () => clearInterval(interval);
   }, [texts.length]);
 
   const variants = {
-    hidden: { 
+    hidden: {
       opacity: 0,
       y: -20
     },
-    visible: { 
+    visible: {
       opacity: 1,
       y: 0,
-      transition: { 
+      transition: {
         duration: 0.5,
         ease: "easeOut"
       }

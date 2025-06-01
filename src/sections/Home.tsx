@@ -20,8 +20,6 @@ const Home: React.FC = () => {
 
   return (
     <section id="home" className="flex flex-col justify-center items-center relative min-h-screen">
-      {/* Pas de bg-white ni bg-black pour ne pas masquer le background animé */}
-
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -64,6 +62,7 @@ const Home: React.FC = () => {
           </motion.p>
         </div>
 
+        {/* BOUTONS avec effet hover bleu */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -74,7 +73,7 @@ const Home: React.FC = () => {
             href="/CV-Raph-2025.pdf"
             target="_blank"
             rel="noopener noreferrer"
-            className="px-6 py-3 border border-white text-black bg-white font-medium rounded-lg hover:bg-gray-100 transition-colors flex items-center justify-center min-w-[180px]"
+            className="px-6 py-3 border border-white bg-white text-black font-medium rounded-lg transition-colors flex items-center justify-center min-w-[180px] hover:bg-[#22eaff] hover:text-white hover:border-[#22eaff]"
           >
             {t('home.cv')}
           </a>
@@ -84,7 +83,7 @@ const Home: React.FC = () => {
               href="https://github.com/Raphael91000"
               target="_blank"
               rel="noopener noreferrer"
-              className="p-3 border border-white bg-white text-black rounded-full hover:bg-gray-100 transition-colors"
+              className="p-3 border border-white bg-white text-black rounded-full transition-colors hover:bg-[#22eaff] hover:text-white hover:border-[#22eaff]"
               aria-label="GitHub"
             >
               <Github size={24} />
@@ -93,7 +92,7 @@ const Home: React.FC = () => {
               href="https://www.linkedin.com/in/raphael-theuillon-689139261/"
               target="_blank"
               rel="noopener noreferrer"
-              className="p-3 border border-white bg-white text-black rounded-full hover:bg-gray-100 transition-colors"
+              className="p-3 border border-white bg-white text-black rounded-full transition-colors hover:bg-[#22eaff] hover:text-white hover:border-[#22eaff]"
               aria-label="LinkedIn"
             >
               <Linkedin size={24} />
@@ -102,7 +101,7 @@ const Home: React.FC = () => {
               href="https://www.fiverr.com/users/raph910/seller_dashboard"
               target="_blank"
               rel="noopener noreferrer"
-              className="p-3 border border-white bg-white text-black rounded-full hover:bg-gray-100 transition-colors"
+              className="p-3 border border-white bg-white text-black rounded-full transition-colors hover:bg-[#22eaff] hover:text-white hover:border-[#22eaff]"
               aria-label="Fiverr"
             >
               <svg

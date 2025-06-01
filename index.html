@@ -14,40 +14,4 @@
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
-</html>.mouse-click-circle {
-  position: fixed;
-  pointer-events: none;
-  width: 50px;
-  height: 50px;
-  left: 0;
-  top: 0;
-  transform: translate(-50%, -50%);
-  border-radius: 50%;
-  background: radial-gradient(
-    circle at 60% 40%,
-    #fff 0%,
-    #22eaff 30%,
-    #1fff8a 60%,
-    transparent 100%
-  );
-  box-shadow: 0 0 25px 10px #22eaff99, 0 0 55px 25px #fff7;
-  opacity: 0.8;
-  animation: mouse-circle-expand 0.45s cubic-bezier(0.26,1,0.48,1.13) forwards;
-  z-index: 9999;
-}
-
-@keyframes mouse-circle-expand {
-  0% {
-    transform: translate(-50%, -50%) scale(0.5);
-    opacity: 0.9;
-  }
-  70% {
-    opacity: 1;
-    box-shadow: 0 0 50px 30px #7fffd4bb, 0 0 80px 40px #fff6;
-  }
-  100% {
-    transform: translate(-50%, -50%) scale(1.2);
-    opacity: 0;
-    box-shadow: none;
-  }
-}
+</html>

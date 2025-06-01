@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import BackgroundBeams from './components/layout/BackgroundBeams';
-import NavBar from './components/layout/NavBar'; // <-- NavBar BLEUE avec le sélecteur de langue à l'intérieur
+import TunnelBackground from './components/layout/TunnelBackground';
+import NavBar from './components/layout/NavBar';
 import Home from './sections/Home';
 import About from './sections/About';
 import Skills from './sections/Skills';
@@ -39,10 +39,8 @@ function App() {
 
   return (
     <div className="relative min-h-screen">
-      <BackgroundBeams />
-      <NavBar /> {/* LanguageSelector EST dans NavBar */}
-      {/* SUPPRIME LanguageSelector ici */}
-
+      <TunnelBackground />
+      <NavBar />
       <main>
         <Home />
         <About />
@@ -50,7 +48,6 @@ function App() {
         <Experience />
         <Contact />
       </main>
-
       <footer className="py-6 px-4 text-center text-sm text-gray-400 z-10 relative">
         <p>© {new Date().getFullYear()} Raphael Theuillon. All rights reserved.</p>
       </footer>
