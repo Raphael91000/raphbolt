@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import TunnelBackground from './components/layout/TunnelBackground';
+import CircuitBoardBackground from "./components/layout/CircuitBoardBackground";
 import NavBar from './components/layout/NavBar';
 import Home from './sections/Home';
 import About from './sections/About';
@@ -39,7 +39,7 @@ function App() {
 
   return (
     <div className="relative min-h-screen">
-      <TunnelBackground />
+      <CircuitBoardBackground /> {/* <-- Nouveau background circuit animé */}
       <NavBar />
       <main>
         <Home />
