@@ -2,11 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { Github, Linkedin } from 'lucide-react';
-import AnimatedText from '../components/ui/AnimatedText';
-import DynamicSplitText from "../components/animations/DynamicSplitText";
 import CircuitBoardBackground from "../components/layout/CircuitBoardBackground";
+import SplitRevealText from "../components/animations/SplitRevealText"; // <-- ADAPTE ce chemin si besoin
 
-const WORDS = ["J'apprends", "J'entreprends", "Je crée", "Je partage"];
+const WORDS = ["J'apprends", "J'entreprends", "Je crée", "J'innove", "Je partage"];
 
 const Home: React.FC = () => {
   const { t } = useTranslation();
@@ -15,7 +14,7 @@ const Home: React.FC = () => {
   useEffect(() => {
     const timer = setInterval(() => {
       setMotIndex((prev) => (prev + 1) % WORDS.length);
-    }, 2200);
+    }, 3200);
     return () => clearInterval(timer);
   }, []);
 
@@ -23,33 +22,34 @@ const Home: React.FC = () => {
     <section
       id="home"
       className="flex flex-col justify-center items-center relative min-h-screen overflow-hidden bg-black"
-      // bg-black = fond noir garanti sur toute la section
     >
       <CircuitBoardBackground />
+
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.2 }}
         className="z-10 text-center px-4 w-full"
       >
-        <div className="flex flex-col items-center gap-6 md:gap-8">
-          <AnimatedText className="text-white" />
+        <div className="flex flex-col items-center gap-7 md:gap-12">
+
+          {/* Texte dynamique avec effet split horizontal */}
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.3 }}
-            className="text-3xl md:text-4xl font-semibold text-[#1ca6fa]"
+            className="w-full flex justify-center"
           >
-            <DynamicSplitText text={WORDS[motIndex]} duration={750} />
+            <SplitRevealText
+              className="text-[6vw] md:text-[3.5vw] font-extrabold leading-[1.07] mb-3"
+              color="#17e3e3"
+              duration={1.1}
+            >
+              {WORDS[motIndex]}
+            </SplitRevealText>
           </motion.div>
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-            className="text-5xl md:text-7xl font-bold text-white"
-          >
-            {t('home.name')}
-          </motion.h1>
+
+          {/* Slogan, tagline, etc */}
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -67,6 +67,8 @@ const Home: React.FC = () => {
             {t('home.slogan')}
           </motion.p>
         </div>
+
+        {/* Boutons réseaux */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -107,12 +109,7 @@ const Home: React.FC = () => {
               className="p-3 border border-white bg-white text-black rounded-full transition-colors hover:bg-[#22eaff] hover:text-white hover:border-[#22eaff]"
               aria-label="Fiverr"
             >
-              <svg
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-              >
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M16.25 16.25v-10h-10v10h10m0-11.25c.69 0 1.25.56 1.25 1.25v10c0 .69-.56 1.25-1.25 1.25h-10c-.69 0-1.25-.56-1.25-1.25v-10c0-.69.56-1.25 1.25-1.25h10m-7.5 3.75v1.25h1.25v-1.25h-1.25m3.75 0v1.25h1.25v-1.25h-1.25m-3.75 2.5v1.25h1.25v-1.25h-1.25m3.75 0v1.25h1.25v-1.25h-1.25m-3.75 2.5v1.25h1.25v-1.25h-1.25m3.75 0v1.25h1.25v-1.25h-1.25z" />
               </svg>
             </a>
