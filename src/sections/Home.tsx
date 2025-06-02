@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { Github, Linkedin } from 'lucide-react';
 import AnimatedText from '../components/ui/AnimatedText';
 import DynamicSplitText from "../components/animations/DynamicSplitText";
+import CircuitBoardBackground from "../components/layout/CircuitBoardBackground";
 
 const WORDS = ["J'apprends", "J'entreprends", "Je crée", "Je partage"];
 
@@ -19,7 +20,12 @@ const Home: React.FC = () => {
   }, []);
 
   return (
-    <section id="home" className="flex flex-col justify-center items-center relative min-h-screen">
+    <section
+      id="home"
+      className="flex flex-col justify-center items-center relative min-h-screen overflow-hidden bg-black"
+      // bg-black = fond noir garanti sur toute la section
+    >
+      <CircuitBoardBackground />
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -61,8 +67,6 @@ const Home: React.FC = () => {
             {t('home.slogan')}
           </motion.p>
         </div>
-
-        {/* BOUTONS avec effet hover bleu */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -77,7 +81,6 @@ const Home: React.FC = () => {
           >
             {t('home.cv')}
           </a>
-
           <div className="flex items-center space-x-4 mt-4 md:mt-0">
             <a
               href="https://github.com/Raphael91000"
@@ -115,27 +118,6 @@ const Home: React.FC = () => {
             </a>
           </div>
         </motion.div>
-      </motion.div>
-
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 0.4 }}
-        transition={{ duration: 1, delay: 1.2 }}
-        className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
-      >
-        <div className="w-6 h-10 border-2 border-white rounded-full flex justify-center">
-          <motion.div
-            animate={{ y: [0, 12, 0] }}
-            transition={{
-              y: {
-                repeat: Infinity,
-                duration: 1.5,
-                ease: "easeInOut"
-              }
-            }}
-            className="w-1 h-1 bg-white rounded-full mt-2"
-          />
-        </div>
       </motion.div>
     </section>
   );

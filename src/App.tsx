@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import CircuitBoardBackground from "./components/layout/CircuitBoardBackground";
+import NeuralBeamsBackground from "./components/layout/CircuitBoardBackground"; // <-- Nouveau background animé
 import NavBar from './components/layout/NavBar';
 import Home from './sections/Home';
 import About from './sections/About';
@@ -11,7 +11,19 @@ import './lib/i18n';
 
 function App() {
   const { t } = useTranslation();
+  const [showCircuitBg, setShowCircuitBg] = useState(true);
 
+  // Met à jour le background selon l'ancre de l'URL
+  useEffect(() => {
+    const handleHashChange = () => {
+      setShowCircuitBg(!window.location.hash.includes('about'));
+    };
+    window.addEventListener('hashchange', handleHashChange);
+    handleHashChange();
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, []);
+
+  // Effet clic souris
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {
       const circle = document.createElement('span');
@@ -25,9 +37,7 @@ function App() {
         circle.remove();
       });
     };
-
     document.addEventListener('click', handleClick);
-
     return () => {
       document.removeEventListener('click', handleClick);
     };
@@ -38,8 +48,23 @@ function App() {
   }, [t]);
 
   return (
-    <div className="relative min-h-screen">
-      <CircuitBoardBackground /> {/* <-- Nouveau background circuit animé */}
+    <div className="relative min-h-screen overflow-hidden">
+      {/* NeuralBeamsBackground en full-screen, toujours derrière */}
+      {showCircuitBg && (
+        <div
+          style={{
+            position: 'fixed',
+            zIndex: 0,
+            left: 0,
+            top: 0,
+            width: '100vw',
+            height: '100vh',
+            pointerEvents: 'none'
+          }}
+        >
+          <NeuralBeamsBackground />
+        </div>
+      )}
       <NavBar />
       <main>
         <Home />

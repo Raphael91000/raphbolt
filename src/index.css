@@ -27,83 +27,71 @@ section {
   overflow: hidden;
 }
 
+/* ===== FAISCEAUX LUMINEUX HIGH-TECH ===== */
+
 .beam {
   position: absolute;
-  width: 1px;
-  height: 200px;
+  top: 0;
   background: linear-gradient(
-    to top,
-    transparent,
-    rgba(0, 220, 217, 0.3),
-    rgba(0, 220, 217, 0.1)
+    to bottom,
+    #22eaff 80%,
+    #0e1f3d00 100%
   );
-  animation: beam 22s linear infinite;
-  opacity: 0;
-  will-change: transform;
-  box-shadow: 0 0 20px rgba(0, 220, 217, 0.15);
-  transform-origin: center;
+  border-radius: 2px;
+  opacity: 0.7;
+  filter: blur(0.8px) drop-shadow(0 0 10px #22eaffaa);
+  animation: moveBeam 26s linear infinite;
+  left: 50%;
+  transform: translateX(-50%);
+  will-change: transform, opacity;
 }
 
 .connection-point {
   position: absolute;
-  width: 3px;
-  height: 3px;
-  background: rgba(0, 220, 217, 0.9);
-  border-radius: 50%;
-  top: 0;
   left: 50%;
-  transform: translate(-50%, -50%);
-  box-shadow:
-    0 0 15px rgba(0, 220, 217, 0.6),
-    0 0 30px rgba(0, 220, 217, 0.3);
+  transform: translateX(-50%);
+  background: radial-gradient(circle at 50% 50%, #22eaff 65%, #10e3ff44 100%);
+  border-radius: 50%;
+  box-shadow: 0 0 12px #22eaff88, 0 0 2px #0eefff;
   animation: pulse 3s ease-in-out infinite;
 }
 
-.beam:nth-child(3n) {
-  animation-delay: -5s;
-  animation-duration: 28s;
+.connection-point:first-child {
+  top: -2px;
+}
+.connection-point:last-child {
+  top: 100%;
 }
 
-.beam:nth-child(3n + 1) {
-  animation-delay: -10s;
-  animation-duration: 25s;
-}
-
-.beam:nth-child(3n + 2) {
-  animation-delay: -15s;
-  animation-duration: 30s;
-}
-
-@keyframes beam {
+@keyframes moveBeam {
   0% {
-    transform: translateY(120vh) translateX(-300px) rotate(25deg);
+    top: -30%;
     opacity: 0;
   }
-  15% {
-    opacity: 0.5;
+  10% {
+    opacity: 1;
   }
-  50% {
-    opacity: 0.7;
-  }
-  85% {
-    opacity: 0.5;
+  90% {
+    opacity: 1;
   }
   100% {
-    transform: translateY(-20vh) translateX(300px) rotate(25deg);
+    top: 130%;
     opacity: 0;
   }
 }
 
 @keyframes pulse {
   0%, 100% {
-    transform: translate(-50%, -50%) scale(1);
+    transform: translateX(-50%) scale(1);
     opacity: 0.9;
   }
   50% {
-    transform: translate(-50%, -50%) scale(1.8);
+    transform: translateX(-50%) scale(1.8);
     opacity: 0.3;
   }
 }
+
+/* ===== TEXT SPLIT & CARDS (conserve si tu utilises DynamicSplitText ou les cards) ===== */
 
 .text-split-enter {
   clip-path: inset(0 0 50% 0);
@@ -145,49 +133,12 @@ section {
   transition: transform 0.6s ease-out;
   transform-style: preserve-3d;
 }
-
 .card:hover {
   transform: rotateY(5deg) rotateX(5deg);
 }
 
-.mouse-click-circle {
-  position: fixed;
-  pointer-events: none;
-  width: 44px;
-  height: 44px;
-  left: 0;
-  top: 0;
-  transform: translate(-50%, -50%);
-  border-radius: 50%;
-  background: radial-gradient(
-    circle at 50% 50%,
-    #b6f9ffcc 0%,      /* Bleu-cyan clair lumineux */
-    #17e9fa99 60%,     /* Cyan plus intense */
-    transparent 100%
-  );
-  box-shadow: 0 0 24px 8px #49e1ff66, 0 0 9px 3px #b7fff555;
-  opacity: 0.62;
-  animation: mouse-circle-expand 0.36s cubic-bezier(.4,.82,.64,1) forwards;
-  z-index: 9999;
-  backdrop-filter: blur(2px);
-}
+/* ===== Effet de clic souris ===== */
 
-@keyframes mouse-circle-expand {
-  0% {
-    transform: translate(-50%, -50%) scale(0.68);
-    opacity: 0.82;
-    box-shadow: 0 0 3px 1px #7eeaff88, 0 0 16px 6px #d6ffff66;
-  }
-  70% {
-    opacity: 0.50;
-    box-shadow: 0 0 22px 8px #0fffd277, 0 0 24px 8px #fffbe866;
-  }
-  100% {
-    transform: translate(-50%, -50%) scale(1.24);
-    opacity: 0;
-    box-shadow: none;
-  }
-}
 .mouse-click-circle {
   position: fixed;
   pointer-events: none;
@@ -208,6 +159,7 @@ section {
   opacity: 0.8;
   animation: mouse-circle-expand 0.45s cubic-bezier(0.26,1,0.48,1.13) forwards;
   z-index: 9999;
+  backdrop-filter: blur(2px);
 }
 
 @keyframes mouse-circle-expand {
