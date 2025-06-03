@@ -10,20 +10,16 @@ import PersonalProjects from './sections/PersonalProjects';
 import Contact from './sections/Contact';
 import './lib/i18n';
 
-const LanguageDirection: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const { i18n } = useTranslation();
+function App() {
+  const { t, i18n } = useTranslation();
+  const [showCircuitBg, setShowCircuitBg] = useState(true);
   const isRtl = i18n.language === 'ar';
 
+  // Gérer la direction globale
   useEffect(() => {
     document.documentElement.dir = isRtl ? 'rtl' : 'ltr';
+    console.log("App - Applique dir :", isRtl ? 'rtl' : 'ltr', "pour langue :", i18n.language);
   }, [isRtl]);
-
-  return <>{children}</>;
-};
-
-function App() {
-  const { t } = useTranslation();
-  const [showCircuitBg, setShowCircuitBg] = useState(true);
 
   // Met à jour le background selon l'ancre de l'URL
   useEffect(() => {
@@ -60,37 +56,35 @@ function App() {
   }, [t]);
 
   return (
-    <LanguageDirection>
-      <div className="relative min-h-screen overflow-hidden">
-        {showCircuitBg && (
-          <div
-            style={{
-              position: 'fixed',
-              zIndex: 0,
-              left: 0,
-              top: 0,
-              width: '100vw',
-              height: '100vh',
-              pointerEvents: 'none',
-            }}
-          >
-            <NeuralBeamsBackground />
-          </div>
-        )}
-        <NavBar />
-        <main>
-          <Home />
-          <About />
-          <Skills />
-          <Experience />
-          <PersonalProjects />
-          <Contact />
-        </main>
-        <footer className="py-6 px-4 text-center text-sm text-gray-400 z-10 relative">
-          <p>© {new Date().getFullYear()} Raphael Theuillon. All rights reserved.</p>
-        </footer>
-      </div>
-    </LanguageDirection>
+    <div className="relative min-h-screen overflow-hidden">
+      {showCircuitBg && (
+        <div
+          style={{
+            position: 'fixed',
+            zIndex: 0,
+            left: 0,
+            top: 0,
+            width: '100vw',
+            height: '100vh',
+            pointerEvents: 'none',
+          }}
+        >
+          <NeuralBeamsBackground />
+        </div>
+      )}
+      <NavBar />
+      <main>
+        <Home />
+        <About />
+        <Skills />
+        <Experience />
+        <PersonalProjects />
+        <Contact />
+      </main>
+      <footer className="py-6 px-4 text-center text-sm text-gray-400 z-10 relative">
+        <p>© {new Date().getFullYear()} Raphael Theuillon. All rights reserved.</p>
+      </footer>
+    </div>
   );
 }
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Globe } from 'lucide-react';
 
@@ -13,33 +13,48 @@ const LanguageSelector: React.FC = () => {
   const { i18n } = useTranslation();
   const [isOpen, setIsOpen] = React.useState(false);
 
+  // Log pour déboguer les changements de langue
+  useEffect(() => {
+    console.log("LanguageSelector - Langue actuelle :", i18n.language);
+  }, [i18n.language]);
+
   const toggleDropdown = () => setIsOpen(!isOpen);
 
   const changeLanguage = (langCode: string) => {
+    console.log("Changement de langue vers :", langCode);
     i18n.changeLanguage(langCode);
+    // Forcer la persistance dans localStorage
+    localStorage.setItem('i18nextLng', langCode);
     setIsOpen(false);
   };
 
+  // Ajuster la position du menu déroulant en fonction de la direction
+  const dropdownPosition = i18n.language === 'ar' ? "left-0 origin-top-left" : "right-0 origin-top-right";
+
   return (
-    <div className="relative">
+    <div className="relative z-50">
       <button
         onClick={toggleDropdown}
-        className="flex items-center space-x-1 bg-background-light/80 hover:bg-background-light p-2 rounded-full backdrop-blur-sm"
+        className="flex items-center bg-black/60 hover:bg-black/80 p-2 rounded-full backdrop-blur-sm"
         aria-label="Select language"
+        type="button"
       >
         <Globe size={20} color="#22eaff" />
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-40 rounded-md shadow-lg bg-background-light/90 backdrop-blur-sm ring-1 ring-black ring-opacity-5">
+        <div
+          className={`absolute ${dropdownPosition} mt-2 w-40 rounded-md shadow-lg bg-black/90 backdrop-blur-sm ring-1 ring-black ring-opacity-5 transform transition-transform duration-200`}
+          dir={i18n.language === 'ar' ? 'rtl' : 'ltr'}
+        >
           <div className="py-1" role="menu" aria-orientation="vertical">
             {languages.map((lang) => (
               <button
                 key={lang.code}
                 onClick={() => changeLanguage(lang.code)}
                 className={`${
-                  i18n.language === lang.code ? 'text-primary' : 'text-white'
-                } block w-full text-left px-4 py-2 text-sm hover:bg-background-light`}
+                  i18n.language === lang.code ? 'text-[#22eaff]' : 'text-white'
+                } block w-full text-left px-4 py-2 text-sm hover:bg-black/70`}
                 role="menuitem"
               >
                 {lang.name}

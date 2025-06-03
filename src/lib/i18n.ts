@@ -12,10 +12,18 @@ i18n
     interpolation: {
       escapeValue: false,
     },
+    lng: 'en', // Langue initiale
     detection: {
-      order: ['localStorage', 'navigator'],
-      caches: ['localStorage'],
+      order: ['localStorage', 'navigator'], // Détection via localStorage ou navigateur
+      caches: ['localStorage'], // Stocke dans localStorage
+    },
+    react: {
+      useSuspense: false,
     },
   });
+
+i18n.on('languageChanged', (lng) => {
+  console.log('i18n - Langue changée vers :', lng);
+});
 
 export default i18n;
