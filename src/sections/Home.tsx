@@ -3,9 +3,9 @@ import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { Github, Linkedin } from 'lucide-react';
 import CircuitBoardBackground from "../components/layout/CircuitBoardBackground";
-import SplitRevealText from "../components/animations/SplitRevealText"; // <-- ADAPTE ce chemin si besoin
+import SplitRevealText from "../components/animations/SplitRevealText";
 
-const WORDS = ["J'apprends", "J'entreprends", "Je crée", "J'innove", "Je partage"];
+const WORDS = ["text.learn", "text.enterprise", "text.create", "text.innovate", "text.share"];
 
 const Home: React.FC = () => {
   const { t } = useTranslation();
@@ -45,7 +45,7 @@ const Home: React.FC = () => {
               color="#17e3e3"
               duration={1.1}
             >
-              {WORDS[motIndex]}
+              {t(WORDS[motIndex])}
             </SplitRevealText>
           </motion.div>
 
@@ -56,7 +56,7 @@ const Home: React.FC = () => {
             transition={{ duration: 0.8, delay: 0.6 }}
             className="text-xl md:text-2xl text-white"
           >
-            {t('home.tagline')}
+            {t('homeSection.tagline')}
           </motion.p>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -64,7 +64,7 @@ const Home: React.FC = () => {
             transition={{ duration: 0.8, delay: 0.8 }}
             className="text-lg max-w-2xl mx-auto text-white"
           >
-            {t('home.slogan')}
+            {t('homeSection.slogan')}
           </motion.p>
         </div>
 
@@ -81,7 +81,7 @@ const Home: React.FC = () => {
             rel="noopener noreferrer"
             className="px-6 py-3 border border-white bg-white text-black font-medium rounded-lg transition-colors flex items-center justify-center min-w-[180px] hover:bg-[#22eaff] hover:text-white hover:border-[#22eaff]"
           >
-            {t('home.cv')}
+            {t('homeSection.cv')}
           </a>
           <div className="flex items-center space-x-4 mt-4 md:mt-0">
             <a

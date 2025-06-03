@@ -100,13 +100,13 @@ const About: React.FC = () => {
       {/* Texte par-dessus le canvas */}
       <div className="relative z-20 pt-[36vh] pb-8 flex flex-col items-center">
         <h2 className="text-5xl font-bold mb-7 text-white text-center drop-shadow-lg">
-          {t("about.title")}
+          {t("aboutSection.title")}
         </h2>
         <p
           className="text-lg md:text-xl leading-relaxed text-white max-w-3xl text-center"
           style={{ textShadow: "0 2px 16px #003e6b44" }}
         >
-          {t("about.description")}
+          {t("aboutSection.description")}
         </p>
       </div>
     </section>

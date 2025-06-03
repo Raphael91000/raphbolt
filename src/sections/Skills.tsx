@@ -12,19 +12,19 @@ const Skills: React.FC = () => {
     triggerOnce: true,
     threshold: 0.1,
   });
-  
+
   const [currentIndex, setCurrentIndex] = useState(0);
   const touchStartX = useRef(0);
   const touchEndX = useRef(0);
-  
+
   const handleTouchStart = (e: React.TouchEvent) => {
     touchStartX.current = e.targetTouches[0].clientX;
   };
-  
+
   const handleTouchMove = (e: React.TouchEvent) => {
     touchEndX.current = e.targetTouches[0].clientX;
   };
-  
+
   const handleTouchEnd = () => {
     if (touchStartX.current - touchEndX.current > 50) {
       // Swipe left
@@ -34,22 +34,22 @@ const Skills: React.FC = () => {
       handlePrev();
     }
   };
-  
+
   const handleNext = () => {
     setCurrentIndex((prevIndex) => (prevIndex + 1) % skills.length);
   };
-  
+
   const handlePrev = () => {
     setCurrentIndex((prevIndex) => (prevIndex - 1 + skills.length) % skills.length);
   };
-  
+
   // Calculate visible skills
   const visibleSkills = () => {
     // For mobile, show 1 card
     if (typeof window !== 'undefined' && window.innerWidth < 768) {
       return [skills[currentIndex]];
     }
-    
+
     // For tablet, show up to 2 cards
     if (typeof window !== 'undefined' && window.innerWidth < 1024) {
       return [
@@ -57,7 +57,7 @@ const Skills: React.FC = () => {
         skills[(currentIndex + 1) % skills.length]
       ];
     }
-    
+
     // For desktop, show up to 3 cards
     return [
       skills[currentIndex],
@@ -68,7 +68,7 @@ const Skills: React.FC = () => {
 
   return (
     <section id="skills" className="relative py-20 px-4 md:px-10">
-      <div 
+      <div
         ref={ref}
         className="max-w-6xl mx-auto"
       >
@@ -79,13 +79,13 @@ const Skills: React.FC = () => {
             transition={{ duration: 0.8 }}
             className="h-1 bg-primary mx-auto mb-6"
           />
-          <motion.h2 
+          <motion.h2
             className="text-4xl md:text-5xl font-bold mb-4"
             initial={{ opacity: 0, y: 20 }}
             animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
-            {t('skills.title')}
+            {t('skillsSection.title')}
           </motion.h2>
           <motion.p
             className="text-xl text-gray-300"
@@ -93,11 +93,11 @@ const Skills: React.FC = () => {
             animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
             transition={{ duration: 0.8, delay: 0.4 }}
           >
-            {t('skills.subtitle')}
+            {t('skillsSection.subtitle')}
           </motion.p>
         </div>
-        
-        <div 
+
+        <div
           className="relative"
           onTouchStart={handleTouchStart}
           onTouchMove={handleTouchMove}
@@ -105,9 +105,9 @@ const Skills: React.FC = () => {
         >
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center">
             {visibleSkills().map((skill, index) => (
-              <Card3D 
+              <Card3D
                 key={`${skill.id}-${index}`}
-                title={skill.title} 
+                title={skill.title}
                 description={skill.description}
                 icon={skill.icon}
                 color={skill.color}
@@ -115,7 +115,7 @@ const Skills: React.FC = () => {
               />
             ))}
           </div>
-          
+
           <div className="flex justify-center mt-10 space-x-2">
             {skills.map((_, index) => (
               <button
@@ -128,7 +128,7 @@ const Skills: React.FC = () => {
               />
             ))}
           </div>
-          
+
           <div className="absolute left-0 top-1/2 transform -translate-y-1/2 -ml-4 md:ml-0">
             <button
               onClick={handlePrev}
@@ -140,7 +140,7 @@ const Skills: React.FC = () => {
               </svg>
             </button>
           </div>
-          
+
           <div className="absolute right-0 top-1/2 transform -translate-y-1/2 -mr-4 md:mr-0">
             <button
               onClick={handleNext}
@@ -154,7 +154,7 @@ const Skills: React.FC = () => {
           </div>
         </div>
       </div>
-      
+
       <AnimatedBot />
     </section>
   );

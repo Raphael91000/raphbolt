@@ -11,10 +11,10 @@ const Contact: React.FC = () => {
     triggerOnce: true,
     threshold: 0.1,
   });
-  
+
   return (
     <section id="contact" className="py-20 px-4 md:px-10">
-      <div 
+      <div
         ref={ref}
         className="max-w-6xl mx-auto"
       >
@@ -25,13 +25,13 @@ const Contact: React.FC = () => {
             transition={{ duration: 0.8 }}
             className="h-1 bg-primary mx-auto mb-6"
           />
-          <motion.h2 
+          <motion.h2
             className="text-4xl md:text-5xl font-bold mb-4"
             initial={{ opacity: 0, y: 20 }}
             animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
-            {t('contact.title')}
+            {t('contactSection.title')}
           </motion.h2>
           <motion.p
             className="text-xl text-gray-300"
@@ -39,12 +39,12 @@ const Contact: React.FC = () => {
             animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
             transition={{ duration: 0.8, delay: 0.4 }}
           >
-            {t('contact.subtitle')}
+            {t('contactSection.subtitle')}
           </motion.p>
         </div>
-        
+
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
-          <motion.div 
+          <motion.div
             className="lg:col-span-4"
             initial={{ opacity: 0, x: -30 }}
             animate={inView ? { opacity: 1, x: 0 } : { opacity: 0, x: -30 }}
@@ -60,7 +60,7 @@ const Contact: React.FC = () => {
                   <p className="text-gray-300">contact@raphtech.com</p>
                 </div>
               </div>
-              
+
               <div className="flex items-start space-x-4">
                 <div className="bg-background-light p-3 rounded-lg">
                   <Phone size={24} className="text-primary" />
@@ -70,7 +70,7 @@ const Contact: React.FC = () => {
                   <p className="text-gray-300">+33 6 12 34 56 78</p>
                 </div>
               </div>
-              
+
               <div className="flex items-start space-x-4">
                 <div className="bg-background-light p-3 rounded-lg">
                   <MapPin size={24} className="text-primary" />
@@ -82,8 +82,8 @@ const Contact: React.FC = () => {
               </div>
             </div>
           </motion.div>
-          
-          <motion.div 
+
+          <motion.div
             className="lg:col-span-8"
             initial={{ opacity: 0, x: 30 }}
             animate={inView ? { opacity: 1, x: 0 } : { opacity: 0, x: 30 }}
