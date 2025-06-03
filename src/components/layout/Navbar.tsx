@@ -1,29 +1,43 @@
 import React, { useState } from "react";
+import { useTranslation } from 'react-i18next';
 import LanguageSelector from "./LanguageSelector";
 
 const sections = [
-  { id: "home", label: "Accueil" },
-  { id: "experience", label: "Expériences" },
-  { id: "projects", label: "Projets perso" },
-  { id: "skills", label: "Compétences" },
-  { id: "contact", label: "Contact" },
+  { id: "home", key: "navbar.home" },
+  { id: "about", key: "navbar.about" },
+  { id: "experiences", key: "navbar.experiences" },
+  { id: "projets-perso", key: "navbar.personalProjects" },
+  { id: "skills", key: "navbar.skills" },
+  { id: "contact", key: "navbar.contact" },
 ];
 
 const NAVBAR_BLUE = "#22eaff";
 
 const NavBar: React.FC = () => {
+  const { t, i18n } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
+  const isRtl = i18n.language === 'ar';
 
   const toggleMenu = () => setIsOpen(!isOpen);
 
+  const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
+    e.preventDefault();
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+      window.location.hash = id; // Met à jour l'URL
+    }
+    setIsOpen(false); // Ferme le menu mobile
+  };
+
   return (
-    <nav className="fixed top-0 left-0 w-full z-50 bg-black/40 backdrop-blur-md border-b border-white/10">
+    <nav className={`fixed top-0 ${isRtl ? 'right-0' : 'left-0'} w-full z-50 bg-black/40 backdrop-blur-md border-b border-white/10`} dir={isRtl ? 'rtl' : 'ltr'}>
       <div className="max-w-7xl mx-auto flex items-center justify-between py-3 px-4">
         {/* Hamburger Button (visible on mobile, stylé) */}
         <button
           className="lg:hidden text-white focus:outline-none relative"
           onClick={toggleMenu}
-          aria-label={isOpen ? "Fermer le menu" : "Ouvrir le menu"}
+          aria-label={isOpen ? t('navbar.closeMenu') : t('navbar.openMenu')}
           style={{
             transition: "all 0.3s ease",
           }}
@@ -65,7 +79,7 @@ const NavBar: React.FC = () => {
         <div
           className={`${
             isOpen ? "block translate-y-0 opacity-100" : "hidden translate-y-[-100%] opacity-0"
-          } lg:flex lg:items-center lg:justify-between lg:w-full lg:translate-y-0 lg:opacity-100 absolute lg:static top-full left-0 w-full bg-black/80 backdrop-blur-md lg:bg-transparent transition-all duration-300 ease-in-out`}
+          } lg:flex lg:items-center lg:justify-between lg:w-full lg:translate-y-0 lg:opacity-100 absolute lg:static top-full ${isRtl ? 'right-0' : 'left-0'} w-full bg-black/80 backdrop-blur-md lg:bg-transparent transition-all duration-300 ease-in-out`}
         >
           <div className="flex flex-col lg:flex-row lg:justify-between lg:w-[85%] gap-3 lg:gap-0 py-4 lg:py-0 px-4 lg:px-0">
             {sections.map((section) => (
@@ -79,17 +93,19 @@ const NavBar: React.FC = () => {
                 }}
                 onMouseOver={(e) => (e.currentTarget.style.color = NAVBAR_BLUE)}
                 onMouseOut={(e) => (e.currentTarget.style.color = "#fff")}
-                onClick={() => setIsOpen(false)}
+                onClick={(e) => handleLinkClick(e, section.id)}
               >
-                {section.label}
-                <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-[${NAVBAR_BLUE}] group-hover:w-full transition-all duration-300 lg:duration-200" />
+                {t(section.key)}
+                <span
+                  className={`absolute bottom-0 ${isRtl ? 'right-0' : 'left-0'} w-0 h-[2px] bg-[#22eaff] group-hover:w-full transition-all duration-300 lg:duration-200`}
+                />
               </a>
             ))}
           </div>
         </div>
 
-        {/* LanguageSelector (fixé en haut à droite, hors menu déroulant) */}
-        <div className="flex items-center h-full pl-2 sm:pl-3">
+        {/* LanguageSelector (fixé en haut à droite en LTR, à gauche en RTL) */}
+        <div className={`flex items-center h-full ${isRtl ? 'pr-2 sm:pr-3' : 'pl-2 sm:pl-3'}`}>
           <LanguageSelector />
         </div>
       </div>

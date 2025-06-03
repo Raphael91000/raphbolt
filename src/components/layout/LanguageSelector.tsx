@@ -5,7 +5,8 @@ import { Globe } from 'lucide-react';
 const languages = [
   { code: 'en', name: 'English' },
   { code: 'fr', name: 'Français' },
-  { code: 'es', name: 'Español' }
+  { code: 'es', name: 'Español' },
+  { code: 'ar', name: 'العربية' },
 ];
 
 const LanguageSelector: React.FC = () => {
@@ -20,7 +21,6 @@ const LanguageSelector: React.FC = () => {
   };
 
   return (
-    // SUPPRIME fixed, top-5, right-5 ici !
     <div className="relative">
       <button
         onClick={toggleDropdown}

@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
-import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { OrbitControls, useGLTF } from "@react-three/drei";
+import { Canvas, useFrame } from "@react-three/fiber";
+import { useGLTF } from "@react-three/drei";
 import * as THREE from "three";
 
 // Chargement du cerveau
@@ -16,22 +16,28 @@ function BrainModel({ scroll }: { scroll: number }) {
           color: "#1ca6fa",
           emissive: "#30eaff",
           metalness: 0.45,
-          roughness: 0.2
+          roughness: 0.2,
         });
       }
     });
   }, [gltf]);
 
-  // Animation : scroll = zoom + rotation
+  // Animation : mouvement diagonal droite -> haut gauche, plus lent
   useFrame(() => {
     if (group.current) {
-      group.current.rotation.y = Math.PI / 2 + scroll * Math.PI * 1.6;
-      group.current.rotation.x = 0.1 + scroll * 0.3;
-      group.current.position.z = 3 - scroll * 2.8; // zoom avant
+      // Départ à droite (x=2), arrivée à gauche (x=-1)
+      group.current.position.x = 2 - scroll * 3; // Réduit de 4 à 3
+      // Départ en bas (y=-0.5), montée vers le haut (y=1)
+      group.current.position.y = -0.5 + scroll * 1.5; // Réduit de 2 à 1.5
+      // Maintenir z constant pour éviter le zoom
+      group.current.position.z = 2;
     }
   });
 
-  return <primitive ref={group} object={gltf.scene} scale={2.2} />;
+  // Taille réduite avec responsivité
+  const scale = window.innerWidth < 640 ? 1.4 : 1.8; // Plus petit sur mobile
+
+  return <primitive ref={group} object={gltf.scene} scale={scale} />;
 }
 
 export default function AboutBrain() {
@@ -58,12 +64,19 @@ export default function AboutBrain() {
   }, []);
 
   return (
-    <div ref={aboutRef} className="w-full flex items-center justify-center" style={{ minHeight: 480 }}>
-      <Canvas camera={{ position: [0, 0, 3.6], fov: 45 }}>
-        <ambientLight intensity={1.3} />
-        <directionalLight position={[1, 4, 4]} intensity={0.7} />
-        <BrainModel scroll={scroll} />
-        {/* Pas d'OrbitControls, c'est le scroll qui contrôle */}
+    <div
+      ref={aboutRef}
+      className="w-full flex items-center justify-center min-h-[60vh] sm:min-h-[50vh]"
+    >
+      <Canvas
+        camera={{ position: [0, 0, 4], fov: 45 }}
+        style={{ height: "100%", width: "100%" }}
+      >
+        <React.Suspense fallback={null}>
+          <ambientLight intensity={1.3} />
+          <directionalLight position={[1, 4, 4]} intensity={0.7} />
+          <BrainModel scroll={scroll} />
+        </React.Suspense>
       </Canvas>
     </div>
   );
