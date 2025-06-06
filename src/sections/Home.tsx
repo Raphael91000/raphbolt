@@ -1,23 +1,31 @@
- import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { Github, Linkedin } from 'lucide-react';
 import CircuitBoardBackground from "../components/layout/CircuitBoardBackground";
 import SplitRevealText from "../components/animations/SplitRevealText";
 
-const WORDS = ["J'apprends", "J'entreprends", "Je crée", "J'innove", "Je partage"];
 const NAVBAR_BLUE = "#22eaff";
 
 const Home: React.FC = () => {
   const { t } = useTranslation();
   const [motIndex, setMotIndex] = useState(0);
 
+  // Tableau dynamique basé sur les traductions
+  const phrases = [
+    t('text.learn'),
+    t('text.enterprise'),
+    t('text.create'),
+    t('text.innovate'),
+    t('text.share'),
+  ];
+
   useEffect(() => {
     const timer = setInterval(() => {
-      setMotIndex((prev) => (prev + 1) % WORDS.length);
+      setMotIndex((prev) => (prev + 1) % phrases.length);
     }, 3200);
     return () => clearInterval(timer);
-  }, []);
+  }, [phrases]);
 
   return (
     <section
@@ -45,7 +53,7 @@ const Home: React.FC = () => {
               color={NAVBAR_BLUE}
               duration={1.1}
             >
-              {WORDS[motIndex]}
+              {phrases[motIndex]}
             </SplitRevealText>
           </motion.div>
 
@@ -110,9 +118,9 @@ const Home: React.FC = () => {
               }}
               onMouseOver={(e) => {
                 e.currentTarget.style.color = "#000";
-                e.currentTarget.style.backgroundColor = NAVBAR_BLUE; // Corrigé : #999 à NAVBAR_BLUE
+                e.currentTarget.style.backgroundColor = NAVBAR_BLUE;
                 e.currentTarget.style.boxShadow = `0 0 8px ${NAVBAR_BLUE}80`;
-                e.currentTarget.style.borderColor = NAVBAR_BLUE; // Corrigé : #999 à NAVBAR_BLUE
+                e.currentTarget.style.borderColor = NAVBAR_BLUE;
               }}
               onMouseOut={(e) => {
                 e.currentTarget.style.color = "#fff";
@@ -160,9 +168,9 @@ const Home: React.FC = () => {
               }}
               onMouseOver={(e) => {
                 e.currentTarget.style.color = "#000";
-                e.currentTarget.style.backgroundColor = NAVBAR_BLUE; // Corrigé : #1DBF73 à NAVBAR_BLUE
+                e.currentTarget.style.backgroundColor = NAVBAR_BLUE;
                 e.currentTarget.style.boxShadow = `0 0 8px ${NAVBAR_BLUE}80`;
-                e.currentTarget.style.borderColor = NAVBAR_BLUE; // Corrigé : #1DBF73 à NAVBAR_BLUE
+                e.currentTarget.style.borderColor = NAVBAR_BLUE;
               }}
               onMouseOut={(e) => {
                 e.currentTarget.style.color = "#fff";

@@ -25,6 +25,7 @@ export const resources = {
         create: "Je crée",
         enterprise: "J'entreprends",
         innovate: "J'innove",
+        share: "Je partage", // Ajouté
       },
       about: {
         title: "À propos de moi",
@@ -81,6 +82,7 @@ export const resources = {
         create: "I create",
         enterprise: "I enterprise",
         innovate: "I innovate",
+        share: "I share", // Ajouté
       },
       about: {
         title: "About Me",
@@ -137,6 +139,7 @@ export const resources = {
         create: "Creo",
         enterprise: "Emprendo",
         innovate: "Innovo",
+        share: "Comparto", // Ajouté
       },
       about: {
         title: "Sobre Mí",
@@ -193,6 +196,7 @@ export const resources = {
         create: "أخلق",
         enterprise: "أبادر",
         innovate: "أبتكر",
+        share: "أشارك", // Ajouté
       },
       about: {
         title: "عني",
