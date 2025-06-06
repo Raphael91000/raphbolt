@@ -39,7 +39,7 @@ function App() {
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {
       const circle = document.createElement('span');
-      circle.className='mouse-click-circle';
+      circle.className = 'mouse-click-circle';
       document.body.appendChild(circle);
 
       circle.style.left = `${e.clientX}px`;
@@ -57,6 +57,8 @@ function App() {
 
   useEffect(() => {
     document.title = t('app.title');
+    // Ajout pour conserver la flèche par défaut
+    document.body.style.cursor = 'default';
   }, [t]);
 
   return (
@@ -71,7 +73,7 @@ function App() {
               top: 0,
               width: '100vw',
               height: '100vh',
-              pointerEvents: 'none',
+              pointerEvents: 'none', // Corrigé : pointer-events -> pointerEvents
             }}
           >
             <NeuralBeamsBackground />

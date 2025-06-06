@@ -16,21 +16,25 @@ export const resources = {
       },
       home: {
         name: "Raphael Theuillon",
-        tagline: "Entrepreneur en E-commerce & Passionné de Tech",
-        slogan: "Besoin d'un site web ou d'un agent IA ? N'hésite pas à me contacter !✌🏽🤖",
+        tagline: {
+          line1: "🛍️ Entrepreneur e-commerce",
+          line2: "💻 Apprenti développeur (mais déjà accro)",
+          line3: "🤖 Curieux de l’IA et de ce qu’elle peut m’aider à créer",
+        },
+        slogan: "Bienvenue dans mon portfolio.",
         cv: "Voir mon CV",
       },
       text: {
-        learn: "J'apprends",
-        create: "Je crée",
-        enterprise: "J'entreprends",
-        innovate: "J'innove",
-        share: "Je partage", // Ajouté
+        learn: "Je découvre",
+        enterprise: "Je construis",
+        create: "Je développe",
+        innovate: "Je révolutionne",
+        share: "Je collabore",
       },
       about: {
         title: "À propos de moi",
         description:
-          "Je suis un entrepreneur passionné avec une expérience en vente technique et un intérêt profond pour la technologie, particulièrement l'IA et l'automatisation. Avec une expérience dans différents secteurs, j'ai développé une perspective unique qui combine connaissances techniques et acumen commercial. Mon parcours m'a mené du travail dans des entreprises établies au lancement de mes propres ventures, toujours à la recherche de solutions innovantes à des problèmes concrets. Je suis particulièrement enthousiaste quant au potentiel de l'IA pour transformer les entreprises et j'explore constamment de nouvelles façons d'utiliser la technologie pour la croissance et l'efficacité.",
+          "Moi c'est Raphael 24 ans. Je suis un entrepreneur curieux, avec un pied dans la tech et l’autre dans le business. Après des années en vente technique et dans mes propres projets, je combine instinct commercial et passion pour l’IA et l’automatisation. Toujours en quête de solutions concrètes, j’explore comment la tech peut booster croissance et efficacité.",
       },
       skills: {
         title: "Mes Compétences",
@@ -73,21 +77,25 @@ export const resources = {
       },
       home: {
         name: "Raphael Theuillon",
-        tagline: "E-commerce Entrepreneur & Tech Enthusiast",
-        slogan: "Need a website or an AI agent? Don't hesitate to contact me!✌🏽🤖",
+        tagline: {
+          line1: "🛍️ E-commerce Entrepreneur",
+          line2: "💻 Aspiring Developer (but already hooked)",
+          line3: "🤖 Curious about AI and what it can help me create",
+        },
+        slogan: "Welcome to my portfolio.",
         cv: "View my CV",
       },
       text: {
-        learn: "I learn",
-        create: "I create",
-        enterprise: "I enterprise",
-        innovate: "I innovate",
-        share: "I share", // Ajouté
+        learn: "I explore",
+        enterprise: "I build",
+        create: "I develop",
+        innovate: "I revolutionize",
+        share: "I collaborate",
       },
       about: {
         title: "About Me",
         description:
-          "I'm a passionate entrepreneur with a background in technical sales and a deep interest in technology, particularly AI and automation. With experience across different sectors, I've developed a unique perspective that combines technical knowledge with business acumen. My journey has led me from working in established companies to launching my own ventures, always seeking innovative solutions to real-world problems. I'm particularly enthusiastic about the potential of AI to transform businesses and am constantly exploring new ways to leverage technology for growth and efficiency.",
+          "I'm Raphael, 24 years old. I'm a curious entrepreneur, with one foot in tech and the other in business. After years in technical sales and my own projects, I combine commercial instinct with a passion for AI and automation. Always seeking concrete solutions, I explore how tech can boost growth and efficiency.",
       },
       skills: {
         title: "My Skills",
@@ -130,21 +138,25 @@ export const resources = {
       },
       home: {
         name: "Raphael Theuillon",
-        tagline: "Emprendedor de E-commerce y Entusiasta de la Tecnología",
-        slogan: "¿Necesitas un sitio web o un agente de IA? ¡No dudes en contactarme!✌🏽🤖",
+        tagline: {
+          line1: "🛍️ Emprendedor de E-commerce",
+          line2: "💻 Desarrollador Aprendiz (pero ya enganchado)",
+          line3: "🤖 Curioso sobre la IA y lo que puede ayudarme a crear",
+        },
+        slogan: "Bienvenido a mi portafolio.",
         cv: "Ver mi CV",
       },
       text: {
-        learn: "Aprendo",
-        create: "Creo",
-        enterprise: "Emprendo",
-        innovate: "Innovo",
-        share: "Comparto", // Ajouté
+        learn: "Exploro",
+        enterprise: "Construyo",
+        create: "Desarrollo",
+        innovate: "Revoluciono",
+        share: "Colaboro",
       },
       about: {
         title: "Sobre Mí",
         description:
-          "Soy un emprendedor apasionado con experiencia en ventas técnicas y un profundo interés en la tecnología, especialmente en IA y automatización. Con experiencia en diferentes sectores, he desarrollado una perspectiva única que combina conocimientos técnicos con visión empresarial. Mi trayectoria me ha llevado desde trabajar en empresas establecidas hasta lanzar mis propios proyectos, siempre buscando soluciones innovadoras a problemas reales. Estoy particularmente entusiasmado con el potencial de la IA para transformar negocios y constantemente exploro nuevas formas de aprovechar la tecnología para el crecimiento y la eficiencia.",
+          "Soy Raphael, de 24 años. Soy un emprendedor curioso, con un pie en la tecnología y otro en los negocios. Después de años en ventas técnicas y mis propios proyectos, combino instinto comercial con pasión por la IA y la automatización. Siempre en busca de soluciones concretas, exploro cómo la tecnología puede impulsar el crecimiento y la eficiencia.",
       },
       skills: {
         title: "Mis Habilidades",
@@ -187,21 +199,25 @@ export const resources = {
       },
       home: {
         name: "رافاييل تويون",
-        tagline: "رائد أعمال في التجارة الإلكترونية وعاشق للتكنولوجيا",
-        slogan: "هل تحتاج إلى موقع ويب أو وكيل ذكاء اصطناعي؟ لا تتردد في التواصل معي! ✌🏽🤖",
+        tagline: {
+          line1: "🛍️ رائد أعمال في التجارة الإلكترونية",
+          line2: "💻 مطور مبتدئ (لكنني مدمن بالفعل)",
+          line3: "🤖 مهتم بالذكاء الاصطناعي وما يمكنه مساعدتي في إنشائه",
+        },
+        slogan: "مرحبًا بك في محفظتي.",
         cv: "عرض سيرتي الذاتية",
       },
       text: {
-        learn: "أتعلم",
-        create: "أخلق",
-        enterprise: "أبادر",
-        innovate: "أبتكر",
-        share: "أشارك", // Ajouté
+        learn: "أكتشف",
+        enterprise: "أبني",
+        create: "أطور",
+        innovate: "أثور",
+        share: "أتعاون",
       },
       about: {
         title: "عني",
         description:
-          "أنا رائد أعمال شغوف بخلفية في المبيعات التقنية واهتمام عميق بالتكنولوجيا، خاصة الذكاء الاصطناعي والأتمتة. مع خبرة عبر قطاعات مختلفة، طورت منظورًا فريدًا يجمع بين المعرفة التقنية والبصيرة التجارية. قادتني رحلتي من العمل في شركات راسخة إلى إطلاق مشاريعي الخاصة، دائمًا في البحث عن حلول مبتكرة لمشاكل العالم الحقيقي. أنا متحمس بشكل خاص لإمكانيات الذكاء الاصطناعي في تحويل الأعمال وأستكشف باستمرار طرقًا جديدة للاستفادة من التكنولوجيا للنمو والكفاءة.",
+          "أنا رافاييل، 24 عامًا. أنا رائد أعمال فضولي، بواحدة من قدميّ في التكنولوجيا والأخرى في الأعمال. بعد سنوات في المبيعات التقنية ومشاريعي الخاصة، أجمع بين الحدس التجاري والشغف بالذكاء الاصطناعي والأتمتة. دائمًا في بحث عن حلول ملموسة، أستكشف كيف يمكن للتكنولوجيا تعزيز النمو والكفاءة.",
       },
       skills: {
         title: "مهاراتي",

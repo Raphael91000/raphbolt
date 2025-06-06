@@ -142,41 +142,36 @@ section {
 .mouse-click-circle {
   position: fixed;
   pointer-events: none;
-  width: 50px;
-  height: 50px;
+  width: 30px; /* Augmenté de 20px à 30px pour plus de visibilité */
+  height: 30px;
   left: 0;
   top: 0;
   transform: translate(-50%, -50%);
   border-radius: 50%;
-  background: radial-gradient(
-    circle at 60% 40%,
-    #fff 0%,
-    #22eaff 30%,
-    #1fff8a 60%,
-    transparent 100%
-  );
-  box-shadow: 0 0 25px 10px #22eaff99, 0 0 55px 25px #fff7;
-  opacity: 0.8;
-  animation: mouse-circle-expand 0.45s cubic-bezier(0.26,1,0.48,1.13) forwards;
+  background: rgba(34, 234, 255, 0.3); /* Opacité augmentée de 0.15 à 0.3 */
+  border: 1px solid rgba(34, 234, 255, 0.5); /* Bordure plus visible */
+  opacity: 0.9; /* Opacité initiale augmentée de 0.7 à 0.9 */
+  animation: subtle-glow 0.5s ease-out forwards; /* Durée légèrement augmentée */
   z-index: 9999;
-  backdrop-filter: blur(2px);
 }
 
-@keyframes mouse-circle-expand {
+@keyframes subtle-glow {
   0% {
     transform: translate(-50%, -50%) scale(0.5);
     opacity: 0.9;
   }
-  70% {
-    opacity: 1;
-    box-shadow: 0 0 50px 30px #7fffd4bb, 0 0 80px 40px #fff6;
+  50% {
+    transform: translate(-50%, -50%) scale(1.5); /* Expansion légèrement augmentée */
+    opacity: 0.6; /* Illumination plus visible */
+    box-shadow: 0 0 15px rgba(34, 234, 255, 0.4); /* Ombre plus prononcée */
   }
   100% {
-    transform: translate(-50%, -50%) scale(1.2);
+    transform: translate(-50%, -50%) scale(2); /* Expansion finale augmentée */
     opacity: 0;
     box-shadow: none;
   }
 }
+
 @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap');
 
 html[dir="rtl"] {

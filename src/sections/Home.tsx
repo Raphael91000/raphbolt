@@ -11,7 +11,6 @@ const Home: React.FC = () => {
   const { t } = useTranslation();
   const [motIndex, setMotIndex] = useState(0);
 
-  // Tableau dynamique basé sur les traductions
   const phrases = [
     t('text.learn'),
     t('text.enterprise'),
@@ -57,15 +56,19 @@ const Home: React.FC = () => {
             </SplitRevealText>
           </motion.div>
 
-          {/* Slogan, tagline, etc */}
+          {/* Tagline en trois lignes avec retours à la ligne */}
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.6 }}
             className="text-xl md:text-2xl text-white"
           >
-            {t('home.tagline')}
+            {t('home.tagline.line1')}<br />
+            {t('home.tagline.line2')}<br />
+            {t('home.tagline.line3')}
           </motion.p>
+
+          {/* Slogan */}
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
