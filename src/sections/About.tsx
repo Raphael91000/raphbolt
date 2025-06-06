@@ -3,6 +3,8 @@ import { Canvas, useFrame } from "@react-three/fiber";
 import { useGLTF } from "@react-three/drei";
 import * as THREE from "three";
 import { useTranslation } from "react-i18next";
+import { motion } from 'framer-motion';
+import { useInView } from 'react-intersection-observer';
 
 // Animation cerveau wireframe bleu
 function BrainModelWire({ scroll }: { scroll: number }) {
@@ -57,6 +59,15 @@ function BrainModelWire({ scroll }: { scroll: number }) {
 const About: React.FC = () => {
   const { t } = useTranslation();
   const [scroll, setScroll] = React.useState(0);
+  const [ref, inView] = useInView({
+    triggerOnce: true,
+    threshold: 0.1,
+  });
+
+  // Débogage pour vérifier si inView fonctionne
+  React.useEffect(() => {
+    console.log("About section inView:", inView);
+  }, [inView]);
 
   // Suit le scroll de la section About uniquement
   React.useEffect(() => {
@@ -80,6 +91,7 @@ const About: React.FC = () => {
   return (
     <section
       id="about"
+      ref={ref}
       className="relative flex flex-col items-center justify-center min-h-[100vh] py-20 px-4 overflow-hidden"
       style={{ background: "transparent" }}
     >
@@ -98,10 +110,15 @@ const About: React.FC = () => {
       </div>
 
       {/* Texte par-dessus le canvas */}
-      <div className="relative z-20 pt-[36vh] pb-8 flex flex-col items-center">
-        <h2 className="text-5xl font-bold mb-7 text-white text-center drop-shadow-lg">
-          {t("about.title")}
-        </h2>
+      <div className="relative z-30 pt-[20vh] pb-8 flex flex-col items-center">
+        <motion.h2
+          className="text-4xl md:text-5xl font-bold mb-7 text-white text-center drop-shadow-lg"
+          initial={{ opacity: 0, y: 20 }}
+          animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+        >
+          {t("about.title") || "À propos de moi (traduction manquante)"}
+        </motion.h2>
         <p
           className="text-lg md:text-xl leading-relaxed text-white max-w-3xl text-center"
           style={{ textShadow: "0 2px 16px #003e6b44" }}
