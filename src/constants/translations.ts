@@ -40,11 +40,61 @@ export const resources = {
         title: "Mes Compétences",
         subtitle: "Ce que j'apporte",
         bot: "Swipez à droite ou à gauche pour voir mes autres compétences",
+        relation_client: {
+          title: "Relation client & négociation",
+          description: "Prospection, suivi client, rendez-vous, gestion SAV et formation commerciale."
+        },
+        logistique: {
+          title: "Logistique & préparation de commandes",
+          description: "Picking, scan, emballage, organisation des tournées et optimisation des flux."
+        },
+        experience_terrain: {
+          title: "Expérience terrain & gestion de chantier",
+          description: "Maçonnerie, lecture de plans, sécurité, devis, suivi chantiers."
+        },
+        entrepreneur: {
+          title: "Entrepreneur multi-projets",
+          description: "Création et gestion de plusieurs entreprises (transport, restauration, lavage auto)."
+        },
+        automatisation: {
+          title: "Automatisation & intelligence artificielle",
+          description: "Création d’agents IA, automatisation de processus, productivité augmentée."
+        },
+        marketing: {
+          title: "Marketing digital & contenus",
+          description: "Création visuelle (Canva), vidéos TikTok, stratégie de présence en ligne."
+        },
+        developpement_web: {
+          title: "Développement web",
+          description: "Codage moderne, création de sites dynamiques, composants interactifs."
+        },
+        competences_humaines: {
+          title: "Compétences humaines",
+          description: "Écoute, autonomie, travail d’équipe, résilience, apprentissage continu."
+        }
       },
       experience: {
         title: "Expérience",
         professional: "Expériences Professionnelles",
         personal: "Projets Personnels",
+        professional_exp: {
+          exp1: {
+            title: "Développeur Full Stack",
+            company: "Raphtech Solutions",
+            period: "2023 - Présent",
+            description: "Développement d’applications web modernes avec React, Node.js et MongoDB. Intégration d’IA pour automatiser les processus internes."
+          },
+          // Ajoute d'autres expériences ici si nécessaire
+        },
+        personal_projects: {
+          proj1: {
+            title: "Portfolio Personnel",
+            company: "Projet Solo",
+            period: "2023",
+            description: "Création d’un portfolio interactif avec React, Three.js et Tailwind CSS pour mettre en avant mes compétences et projets."
+          },
+          // Ajoute d'autres projets ici si nécessaire
+        }
       },
       contact: {
         title: "Contactez-moi",
@@ -101,11 +151,59 @@ export const resources = {
         title: "My Skills",
         subtitle: "What I bring to the table",
         bot: "Swipe right or left to see my other skills",
+        relation_client: {
+          title: "Client Relations & Negotiation",
+          description: "Prospecting, client follow-up, appointments, after-sales service management, and commercial training."
+        },
+        logistique: {
+          title: "Logistics & Order Preparation",
+          description: "Picking, scanning, packaging, organizing delivery routes, and optimizing workflows."
+        },
+        experience_terrain: {
+          title: "Field Experience & Construction Management",
+          description: "Masonry, blueprint reading, safety, cost estimation, and project monitoring."
+        },
+        entrepreneur: {
+          title: "Multi-Project Entrepreneur",
+          description: "Creation and management of multiple businesses (transport, catering, car wash)."
+        },
+        automatisation: {
+          title: "Automation & Artificial Intelligence",
+          description: "Development of AI agents, process automation, and enhanced productivity."
+        },
+        marketing: {
+          title: "Digital Marketing & Content Creation",
+          description: "Visual creation (Canva), TikTok videos, online presence strategy."
+        },
+        developpement_web: {
+          title: "Web Development",
+          description: "Modern coding, creation of dynamic websites, interactive components."
+        },
+        competences_humaines: {
+          title: "Soft Skills",
+          description: "Listening, autonomy, teamwork, resilience, continuous learning."
+        }
       },
       experience: {
         title: "Experience",
         professional: "Professional Experience",
         personal: "Personal Projects",
+        professional_exp: {
+          exp1: {
+            title: "Full Stack Developer",
+            company: "Raphtech Solutions",
+            period: "2023 - Present",
+            description: "Development of modern web applications using React, Node.js, and MongoDB. Integration of AI to automate internal processes."
+          },
+        },
+        personal_projects: {
+          proj1: {
+            title: "Personal Portfolio",
+            company: "Solo Project",
+            period: "2023",
+            description: "Creation of an interactive portfolio using React, Three.js, and Tailwind CSS to showcase my skills and projects."
+          },
+        }
       },
       contact: {
         title: "Get In Touch",
@@ -162,11 +260,59 @@ export const resources = {
         title: "Mis Habilidades",
         subtitle: "Lo que puedo aportar",
         bot: "Desliza a la derecha o izquierda para ver mis otras habilidades",
+        relation_client: {
+          title: "Relaciones con Clientes y Negociación",
+          description: "Prospección, seguimiento de clientes, citas, gestión de servicio posventa y formación comercial."
+        },
+        logistique: {
+          title: "Logística y Preparación de Pedidos",
+          description: "Recogida, escaneo, empaquetado, organización de rutas de entrega y optimización de flujos."
+        },
+        experience_terrain: {
+          title: "Experiencia de Campo y Gestión de Obras",
+          description: "Albañilería, lectura de planos, seguridad, presupuestos y seguimiento de proyectos."
+        },
+        entrepreneur: {
+          title: "Emprendedor Multi-Proyectos",
+          description: "Creación y gestión de múltiples negocios (transporte, restauración, lavado de autos)."
+        },
+        automatisation: {
+          title: "Automatización e Inteligencia Artificial",
+          description: "Desarrollo de agentes de IA, automatización de procesos y mejora de la productividad."
+        },
+        marketing: {
+          title: "Marketing Digital y Creación de Contenidos",
+          description: "Creación visual (Canva), videos de TikTok, estrategia de presencia en línea."
+        },
+        developpement_web: {
+          title: "Desarrollo Web",
+          description: "Codificación moderna, creación de sitios web dinámicos, componentes interactivos."
+        },
+        competences_humaines: {
+          title: "Habilidades Blandas",
+          description: "Escucha, autonomía, trabajo en equipo, resiliencia, aprendizaje continuo."
+        }
       },
       experience: {
         title: "Experiencia",
         professional: "Experiencia Profesional",
         personal: "Proyectos Personales",
+        professional_exp: {
+          exp1: {
+            title: "Desarrollador Full Stack",
+            company: "Raphtech Solutions",
+            period: "2023 - Presente",
+            description: "Desarrollo de aplicaciones web modernas con React, Node.js y MongoDB. Integración de IA para automatizar procesos internos."
+          },
+        },
+        personal_projects: {
+          proj1: {
+            title: "Portafolio Personal",
+            company: "Proyecto Solo",
+            period: "2023",
+            description: "Creación de un portafolio interactivo con React, Three.js y Tailwind CSS para destacar mis habilidades y proyectos."
+          },
+        }
       },
       contact: {
         title: "Contacto",
@@ -223,11 +369,59 @@ export const resources = {
         title: "مهاراتي",
         subtitle: "ما أقدمه",
         bot: "اسحب يمينًا أو يسارًا لرؤية مهاراتي الأخرى",
+        relation_client: {
+          title: "علاقات العملاء والتفاوض",
+          description: "التنقيب، متابعة العملاء، المواعيد، إدارة خدمة ما بعد البيع، والتدريب التجاري."
+        },
+        logistique: {
+          title: "اللوجستيات وتجهيز الطلبات",
+          description: "الجمع، المسح، التغليف، تنظيم مسارات التسليم، وتحسين التدفقات."
+        },
+        experience_terrain: {
+          title: "الخبرة الميدانية وإدارة المشاريع",
+          description: "البناء، قراءة المخططات، السلامة، تقدير التكاليف، ومتابعة المشاريع."
+        },
+        entrepreneur: {
+          title: "رائد أعمال متعدد المشاريع",
+          description: "إنشاء وإدارة عدة أعمال (النقل، الطعام، غسيل السيارات)."
+        },
+        automatisation: {
+          title: "الأتمتة والذكاء الاصطناعي",
+          description: "تطوير وكلاء الذكاء الاصطناعي، أتمتة العمليات، وتعزيز الإنتاجية."
+        },
+        marketing: {
+          title: "التسويق الرقمي وإنشاء المحتوى",
+          description: "إنشاء بصري (Canva)، فيديوهات تيك توك، استراتيجية التواجد عبر الإنترنت."
+        },
+        developpement_web: {
+          title: "تطوير الويب",
+          description: "البرمجة الحديثة، إنشاء مواقع ويب ديناميكية، مكونات تفاعلية."
+        },
+        competences_humaines: {
+          title: "المهارات الناعمة",
+          description: "الاستماع، الاستقلالية، العمل الجماعي، الصمود، التعلم المستمر."
+        }
       },
       experience: {
         title: "الخبرة",
         professional: "الخبرات المهنية",
         personal: "المشاريع الشخصية",
+        professional_exp: {
+          exp1: {
+            title: "مطور Full Stack",
+            company: "حلول رافاييل",
+            period: "2023 - الحالي",
+            description: "تطوير تطبيقات ويب حديثة باستخدام React وNode.js وMongoDB. دمج الذكاء الاصطناعي لأتمتة العمليات الداخلية."
+          },
+        },
+        personal_projects: {
+          proj1: {
+            title: "محفظة شخصية",
+            company: "مشروع فردي",
+            period: "2023",
+            description: "إنشاء محفظة تفاعلية باستخدام React وThree.js وTailwind CSS لعرض مهاراتي ومشاريعي."
+          },
+        }
       },
       contact: {
         title: "تواصل معي",

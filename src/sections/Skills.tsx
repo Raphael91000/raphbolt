@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
+import { useTranslation } from 'react-i18next';
 import {
   FaCode,
   FaRobot,
@@ -13,56 +14,25 @@ import {
 } from 'react-icons/fa';
 import AnimatedBot from '../components/ui/AnimatedBot';
 
-const skills = [
-  {
-    id: 1,
-    title: 'Relation client & négociation',
-    description: 'Prospection, suivi client, rendez-vous, gestion SAV et formation commerciale.',
-    icon: <FaHandshake />, },
-  {
-    id: 2,
-    title: 'Logistique & préparation de commandes',
-    description: 'Picking, scan, emballage, organisation des tournées et optimisation des flux.',
-    icon: <FaBoxes />, },
-  {
-    id: 3,
-    title: 'Expérience terrain & gestion de chantier',
-    description: 'Maçonnerie, lecture de plans, sécurité, devis, suivi chantiers.',
-    icon: <FaHardHat />, },
-  {
-    id: 4,
-    title: 'Entrepreneur multi-projets',
-    description: 'Création et gestion de plusieurs entreprises (transport, restauration, lavage auto).',
-    icon: <FaLightbulb />, },
-  {
-    id: 5,
-    title: 'Automatisation & intelligence artificielle',
-    description: 'Création d’agents IA, automatisation de processus, productivité augmentée.',
-    icon: <FaRobot />, },
-  {
-    id: 6,
-    title: 'Marketing digital & contenus',
-    description: 'Création visuelle (Canva), vidéos TikTok, stratégie de présence en ligne.',
-    icon: <FaBullhorn />, },
-  {
-    id: 7,
-    title: 'Développement web',
-    description: 'Codage moderne, création de sites dynamiques, composants interactifs.',
-    icon: <FaCode />, },
-  {
-    id: 8,
-    title: 'Compétences humaines',
-    description: 'Écoute, autonomie, travail d’équipe, résilience, apprentissage continu.',
-    icon: <FaUserFriends />, },
-];
-
 const Skills: React.FC = () => {
+  const { t } = useTranslation();
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 });
   const [currentPage, setCurrentPage] = useState(0);
   const [visibleCount, setVisibleCount] = useState(3);
   const [isMobile, setIsMobile] = useState(false);
   const touchStartX = useRef(0);
   const touchEndX = useRef(0);
+
+  const skills = [
+    { id: 1, key: 'relation_client', icon: <FaHandshake /> },
+    { id: 2, key: 'logistique', icon: <FaBoxes /> },
+    { id: 3, key: 'experience_terrain', icon: <FaHardHat /> },
+    { id: 4, key: 'entrepreneur', icon: <FaLightbulb /> },
+    { id: 5, key: 'automatisation', icon: <FaRobot /> },
+    { id: 6, key: 'marketing', icon: <FaBullhorn /> },
+    { id: 7, key: 'developpement_web', icon: <FaCode /> },
+    { id: 8, key: 'competences_humaines', icon: <FaUserFriends /> },
+  ];
 
   useEffect(() => {
     const updateVisibleCount = () => {
@@ -133,7 +103,7 @@ const Skills: React.FC = () => {
           animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           transition={{ duration: 0.8, delay: 0.2 }}
         >
-          Compétences
+          {t('skills.title')}
         </motion.h2>
 
         <div
@@ -141,7 +111,6 @@ const Skills: React.FC = () => {
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
         >
-          {/* Navigation arrows */}
           <div className="absolute left-0 top-1/2 transform -translate-y-1/2 -ml-4 md:ml-0 z-10">
             <button
               onClick={handlePrev}
@@ -181,14 +150,13 @@ const Skills: React.FC = () => {
               >
                 <div className="flex flex-col items-center text-center space-y-4">
                   <div className="text-4xl text-[#22eaff]">{skill.icon}</div>
-                  <h3 className="text-[#22eaff] font-bold text-xl">{skill.title}</h3>
-                  <p className="text-white text-sm">{skill.description}</p>
+                  <h3 className="text-[#22eaff] font-bold text-xl">{t(`skills.${skill.key}.title`)}</h3>
+                  <p className="text-white text-sm">{t(`skills.${skill.key}.description`)}</p>
                 </div>
               </motion.div>
             ))}
           </div>
 
-          {/* Navigation dots */}
           <div className="flex justify-center mt-8 space-x-2">
             {Array.from({ length: totalPages }).map((_, idx) => (
               <button
