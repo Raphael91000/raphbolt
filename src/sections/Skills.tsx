@@ -18,64 +18,65 @@ const skills = [
     id: 1,
     title: 'Relation client & négociation',
     description: 'Prospection, suivi client, rendez-vous, gestion SAV et formation commerciale.',
-    icon: <FaHandshake />,
-  },
+    icon: <FaHandshake />, },
   {
     id: 2,
     title: 'Logistique & préparation de commandes',
     description: 'Picking, scan, emballage, organisation des tournées et optimisation des flux.',
-    icon: <FaBoxes />,
-  },
+    icon: <FaBoxes />, },
   {
     id: 3,
     title: 'Expérience terrain & gestion de chantier',
     description: 'Maçonnerie, lecture de plans, sécurité, devis, suivi chantiers.',
-    icon: <FaHardHat />,
-  },
+    icon: <FaHardHat />, },
   {
     id: 4,
     title: 'Entrepreneur multi-projets',
     description: 'Création et gestion de plusieurs entreprises (transport, restauration, lavage auto).',
-    icon: <FaLightbulb />,
-  },
+    icon: <FaLightbulb />, },
   {
     id: 5,
     title: 'Automatisation & intelligence artificielle',
     description: 'Création d’agents IA, automatisation de processus, productivité augmentée.',
-    icon: <FaRobot />,
-  },
+    icon: <FaRobot />, },
   {
     id: 6,
     title: 'Marketing digital & contenus',
     description: 'Création visuelle (Canva), vidéos TikTok, stratégie de présence en ligne.',
-    icon: <FaBullhorn />,
-  },
+    icon: <FaBullhorn />, },
   {
     id: 7,
     title: 'Développement web',
     description: 'Codage moderne, création de sites dynamiques, composants interactifs.',
-    icon: <FaCode />,
-  },
+    icon: <FaCode />, },
   {
     id: 8,
     title: 'Compétences humaines',
     description: 'Écoute, autonomie, travail d’équipe, résilience, apprentissage continu.',
-    icon: <FaUserFriends />,
-  },
+    icon: <FaUserFriends />, },
 ];
 
 const Skills: React.FC = () => {
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 });
   const [currentPage, setCurrentPage] = useState(0);
   const [visibleCount, setVisibleCount] = useState(3);
+  const [isMobile, setIsMobile] = useState(false);
   const touchStartX = useRef(0);
   const touchEndX = useRef(0);
 
   useEffect(() => {
     const updateVisibleCount = () => {
-      if (window.innerWidth < 768) setVisibleCount(1);
-      else if (window.innerWidth < 1024) setVisibleCount(2);
-      else setVisibleCount(3);
+      const width = window.innerWidth;
+      if (width < 768) {
+        setVisibleCount(1);
+        setIsMobile(true);
+      } else if (width < 1024) {
+        setVisibleCount(2);
+        setIsMobile(false);
+      } else {
+        setVisibleCount(3);
+        setIsMobile(false);
+      }
     };
     updateVisibleCount();
     window.addEventListener('resize', updateVisibleCount);
@@ -85,16 +86,20 @@ const Skills: React.FC = () => {
   const totalPages = Math.ceil(skills.length / visibleCount);
 
   const handleTouchStart = (e: React.TouchEvent) => {
-    touchStartX.current = e.targetTouches[0].clientX;
+    if (!isMobile) return;
+    touchStartX.current = e.changedTouches[0].clientX;
   };
-  const handleTouchMove = (e: React.TouchEvent) => {
-    touchEndX.current = e.targetTouches[0].clientX;
-  };
-  const handleTouchEnd = () => {
-    if (touchStartX.current - touchEndX.current > 50) {
-      handleNext();
-    } else if (touchEndX.current - touchStartX.current > 50) {
-      handlePrev();
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (!isMobile) return;
+    touchEndX.current = e.changedTouches[0].clientX;
+    const deltaX = touchEndX.current - touchStartX.current;
+    if (Math.abs(deltaX) > 50) {
+      if (deltaX > 0) {
+        handlePrev();
+      } else {
+        handleNext();
+      }
     }
   };
 
@@ -110,6 +115,10 @@ const Skills: React.FC = () => {
     }
   };
 
+  const handleDotClick = (index: number) => {
+    setCurrentPage(index);
+  };
+
   const visibleSkills = () => {
     const startIndex = currentPage * visibleCount;
     return skills.slice(startIndex, startIndex + visibleCount);
@@ -118,12 +127,43 @@ const Skills: React.FC = () => {
   return (
     <section id="skills" className="relative py-20 px-4 md:px-10">
       <div ref={ref} className="max-w-6xl mx-auto">
+        <motion.h2
+          className="text-4xl md:text-5xl font-bold text-white text-center mb-16"
+          initial={{ opacity: 0, y: 20 }}
+          animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+        >
+          Compétences
+        </motion.h2>
+
         <div
           className="relative"
           onTouchStart={handleTouchStart}
-          onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}
         >
+          {/* Navigation arrows */}
+          <div className="absolute left-0 top-1/2 transform -translate-y-1/2 -ml-4 md:ml-0 z-10">
+            <button
+              onClick={handlePrev}
+              disabled={currentPage === 0}
+              className="p-2 rounded-full bg-gray-800 hover:bg-[#22eaff]/20 transition-colors disabled:opacity-30"
+              aria-label="Previous skill"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6" /></svg>
+            </button>
+          </div>
+
+          <div className="absolute right-0 top-1/2 transform -translate-y-1/2 -mr-4 md:mr-0 z-10">
+            <button
+              onClick={handleNext}
+              disabled={currentPage >= totalPages - 1}
+              className="p-2 rounded-full bg-gray-800 hover:bg-[#22eaff]/20 transition-colors disabled:opacity-30"
+              aria-label="Next skill"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6" /></svg>
+            </button>
+          </div>
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center">
             {visibleSkills().map((skill, index) => (
               <motion.div
@@ -148,35 +188,14 @@ const Skills: React.FC = () => {
             ))}
           </div>
 
-          {/* Swipe Buttons */}
-          <div className="absolute left-0 top-1/2 transform -translate-y-1/2 -ml-4 md:ml-0">
-            <button
-              onClick={handlePrev}
-              disabled={currentPage === 0}
-              className="p-2 rounded-full bg-gray-800 hover:bg-[#22eaff]/20 transition-colors disabled:opacity-30"
-              aria-label="Previous skill"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6" /></svg>
-            </button>
-          </div>
-
-          <div className="absolute right-0 top-1/2 transform -translate-y-1/2 -mr-4 md:mr-0">
-            <button
-              onClick={handleNext}
-              disabled={currentPage >= totalPages - 1}
-              className="p-2 rounded-full bg-gray-800 hover:bg-[#22eaff]/20 transition-colors disabled:opacity-30"
-              aria-label="Next skill"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6" /></svg>
-            </button>
-          </div>
-
           {/* Navigation dots */}
           <div className="flex justify-center mt-8 space-x-2">
             {Array.from({ length: totalPages }).map((_, idx) => (
-              <span
+              <button
                 key={idx}
+                onClick={() => handleDotClick(idx)}
                 className={`w-3 h-3 rounded-full ${idx === currentPage ? 'bg-[#22eaff]' : 'bg-gray-500'} transition-all duration-300`}
+                aria-label={`Go to page ${idx + 1}`}
               />
             ))}
           </div>
