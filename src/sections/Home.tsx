@@ -8,8 +8,9 @@ import SplitRevealText from "../components/animations/SplitRevealText";
 const WORDS = ["text.learn", "text.enterprise", "text.create", "text.innovate", "text.share"];
 
 const Home: React.FC = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [motIndex, setMotIndex] = useState(0);
+  const isRtl = i18n.dir(i18n.language) === 'rtl';
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -68,12 +69,12 @@ const Home: React.FC = () => {
           </motion.p>
         </div>
 
-        {/* Boutons réseaux */}
+        {/* Boutons réseaux - Responsive & RTL compatible */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 1 }}
-          className="flex flex-col md:flex-row items-center justify-center gap-4 mt-8"
+          className={`flex flex-col md:flex-row items-center justify-center gap-4 mt-8 ${isRtl ? 'md:flex-row-reverse' : ''}`}
         >
           <a
             href="/CV-Raph-2025.pdf"
@@ -83,7 +84,8 @@ const Home: React.FC = () => {
           >
             {t('homeSection.cv')}
           </a>
-          <div className="flex items-center space-x-4 mt-4 md:mt-0">
+          {/* Icônes réseaux */}
+          <div className="flex items-center gap-4 mt-4 md:mt-0">
             <a
               href="https://github.com/Raphael91000"
               target="_blank"
