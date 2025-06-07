@@ -72,7 +72,7 @@ function App() {
           <NeuralBeamsBackground />
         </div>
       )}
-      <NavBar />
+      <Navbar />
       <main>
         <Home />
         <About />
