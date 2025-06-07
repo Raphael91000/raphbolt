@@ -13,7 +13,6 @@ const LanguageSelector: React.FC = () => {
   const { i18n } = useTranslation();
   const [isOpen, setIsOpen] = React.useState(false);
 
-  // Log pour déboguer les changements de langue
   useEffect(() => {
     console.log("LanguageSelector - Langue actuelle :", i18n.language);
   }, [i18n.language]);
@@ -23,13 +22,11 @@ const LanguageSelector: React.FC = () => {
   const changeLanguage = (langCode: string) => {
     console.log("Changement de langue vers :", langCode);
     i18n.changeLanguage(langCode);
-    // Forcer la persistance dans localStorage
     localStorage.setItem('i18nextLng', langCode);
     setIsOpen(false);
   };
 
-  // Ajuster la position du menu déroulant en fonction de la direction
-  const dropdownPosition = i18n.language === 'ar' ? "left-0 origin-top-left" : "right-0 origin-top-right";
+  const dropdownPosition = i18n.dir(i18n.language) === 'rtl' ? 'left-0 origin-top-left' : 'right-0 origin-top-right';
 
   return (
     <div className="relative z-50">
@@ -45,7 +42,7 @@ const LanguageSelector: React.FC = () => {
       {isOpen && (
         <div
           className={`absolute ${dropdownPosition} mt-2 w-40 rounded-md shadow-lg bg-black/90 backdrop-blur-sm ring-1 ring-black ring-opacity-5 transform transition-transform duration-200`}
-          dir={i18n.language === 'ar' ? 'rtl' : 'ltr'}
+          dir={i18n.dir(i18n.language)}
         >
           <div className="py-1" role="menu" aria-orientation="vertical">
             {languages.map((lang) => (

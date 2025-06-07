@@ -20,10 +20,17 @@ i18n
     react: {
       useSuspense: false,
     },
+    // Définition explicite des directions
+    direction: {
+      ar: 'rtl',
+      en: 'ltr',
+      fr: 'ltr',
+    },
   });
 
 i18n.on('languageChanged', (lng) => {
   console.log('i18n - Langue changée vers :', lng);
+  document.documentElement.dir = i18n.dir(lng); // Met à jour la direction globalement
 });
 
 export default i18n;
