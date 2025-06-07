@@ -33,7 +33,7 @@ const Navbar: React.FC = () => {
     setIsOpen(false);
   };
 
-  // Fermer le menu mobile quand on clique dehors
+  // Fermer menu mobile : clic dehors ou scroll
   useEffect(() => {
     if (!isOpen) return;
 
@@ -48,9 +48,15 @@ const Navbar: React.FC = () => {
       }
     };
 
+    const handleScroll = () => setIsOpen(false);
+
     document.addEventListener("mousedown", handleClickOutside);
-    return () =>
+    window.addEventListener("scroll", handleScroll, { passive: true });
+
+    return () => {
       document.removeEventListener("mousedown", handleClickOutside);
+      window.removeEventListener("scroll", handleScroll);
+    };
   }, [isOpen]);
 
   return (
