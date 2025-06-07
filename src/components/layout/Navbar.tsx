@@ -32,7 +32,7 @@ const Navbar: React.FC = () => {
   };
 
   return (
-    <nav className="fixed top-0 left-0 w-full z-50 bg-black/40 backdrop-blur-md border-b border-white/60 py-2 px-2" dir={isRtl ? "rtl" : "ltr"}>
+    <nav className="fixed top-0 left-0 w-full z-50 bg-black/40 backdrop-blur-md border-b border-white/60 py-3 px-2" dir={isRtl ? "rtl" : "ltr"}>
       <div className="relative max-w-7xl mx-auto flex items-center h-12 lg:h-16">
         {/* Globe */}
         <div
@@ -60,14 +60,14 @@ const Navbar: React.FC = () => {
           </button>
         </div>
 
-        {/* Liens (desktop uniquement, espacés) */}
+        {/* Liens (desktop uniquement, espacés et décalés) */}
         <div className="flex-1 flex justify-center">
-          <div className="hidden lg:flex gap-8 justify-center">
+          <div className={`hidden lg:flex gap-14 justify-center ${isRtl ? "pl-24" : "pr-24"}`}>
             {(isRtl ? sections.slice().reverse() : sections).map((section) => (
               <a
                 key={section.id}
                 href={`#${section.id}`}
-                className="text-white text-base font-bold hover:text-[#22eaff] transition-colors py-2 px-2 text-center"
+                className="text-white text-base font-bold hover:text-[#22eaff] transition-colors py-2 px-6 text-center"
                 style={{ minWidth: 0 }}
                 onClick={(e) => handleLinkClick(e, section.id)}
               >
