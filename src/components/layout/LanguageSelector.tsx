@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Globe } from 'lucide-react';
 
@@ -12,14 +12,34 @@ const languages = [
 const LanguageSelector: React.FC = () => {
   const { i18n, t } = useTranslation();
   const [isOpen, setIsOpen] = React.useState(false);
+  const buttonRef = useRef<HTMLButtonElement>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const toggleDropdown = () => setIsOpen(!isOpen);
+  const toggleDropdown = () => setIsOpen((open) => !open);
 
   const changeLanguage = (langCode: string) => {
     i18n.changeLanguage(langCode);
     localStorage.setItem('i18nextLng', langCode);
     setIsOpen(false);
   };
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node) &&
+        buttonRef.current &&
+        !buttonRef.current.contains(event.target as Node)
+      ) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [isOpen]);
 
   const dropdownPosition =
     i18n.dir(i18n.language) === 'rtl'
@@ -29,6 +49,7 @@ const LanguageSelector: React.FC = () => {
   return (
     <div className="relative z-50">
       <button
+        ref={buttonRef}
         onClick={toggleDropdown}
         className="flex items-center bg-black/60 hover:bg-black/80 p-2 rounded-full backdrop-blur-sm"
         aria-label={t('selectLanguage')}
@@ -39,6 +60,7 @@ const LanguageSelector: React.FC = () => {
 
       {isOpen && (
         <div
+          ref={dropdownRef}
           className={`absolute ${dropdownPosition} mt-2 w-44 rounded-md shadow-lg bg-black/90 backdrop-blur-sm ring-1 ring-black ring-opacity-5 transform transition-transform duration-200`}
           dir={i18n.dir(i18n.language)}
         >

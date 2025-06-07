@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import LanguageSelector from "./LanguageSelector";
 
@@ -14,7 +14,9 @@ const sections = [
 const Navbar: React.FC = () => {
   const { t, i18n } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
-  const isRtl = i18n.dir(i18n.language) === "rtl";
+  const isRtl = i18n.language === "ar";
+  const menuRef = useRef<HTMLDivElement>(null);
+  const burgerRef = useRef<HTMLButtonElement>(null);
 
   const toggleMenu = () => setIsOpen((prev) => !prev);
 
@@ -31,65 +33,151 @@ const Navbar: React.FC = () => {
     setIsOpen(false);
   };
 
+  // Fermer le menu mobile quand on clique dehors
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        menuRef.current &&
+        !menuRef.current.contains(event.target as Node) &&
+        burgerRef.current &&
+        !burgerRef.current.contains(event.target as Node)
+      ) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () =>
+      document.removeEventListener("mousedown", handleClickOutside);
+  }, [isOpen]);
+
   return (
-    <nav className="fixed top-0 left-0 w-full z-50 bg-black/40 backdrop-blur-md border-b border-white/60 py-3 px-2" dir={isRtl ? "rtl" : "ltr"}>
-      <div className="relative max-w-7xl mx-auto flex items-center h-12 lg:h-16">
-        {/* Globe */}
-        <div
-          className={`absolute top-1/2 transform -translate-y-1/2 ${isRtl ? "left-2" : "right-2"} z-20`}
-        >
-          <LanguageSelector />
-        </div>
-
-        {/* Menu burger mobile */}
-        <div
-          className={`absolute top-1/2 transform -translate-y-1/2 ${isRtl ? "right-2" : "left-2"} z-20 lg:hidden`}
-        >
-          <button
-            className="text-white focus:outline-none"
-            onClick={toggleMenu}
-            aria-label={isOpen ? t("closeMenu") : t("openMenu")}
-          >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              {isOpen ? (
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              ) : (
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-              )}
-            </svg>
-          </button>
-        </div>
-
-        {/* Liens (desktop uniquement, espacés et décalés) */}
-        <div className="flex-1 flex justify-center">
-          <div className={`hidden lg:flex gap-14 justify-center ${isRtl ? "pl-24" : "pr-24"}`}>
-            {(isRtl ? sections.slice().reverse() : sections).map((section) => (
-              <a
-                key={section.id}
-                href={`#${section.id}`}
-                className="text-white text-base font-bold hover:text-[#22eaff] transition-colors py-2 px-6 text-center"
-                style={{ minWidth: 0 }}
-                onClick={(e) => handleLinkClick(e, section.id)}
+    <nav
+      className={`fixed top-0 left-0 w-full z-50 bg-black/40 backdrop-blur-md border-b border-white/60 ${
+        isRtl ? "py-2 px-2" : "py-3 px-4"
+      }`}
+      dir={isRtl ? "rtl" : "ltr"}
+    >
+      {/* Barre mobile */}
+      <div
+        className={`max-w-7xl mx-auto flex items-center ${
+          isRtl ? "flex-row-reverse justify-between" : "justify-between"
+        } ${isRtl ? "block" : "lg:hidden"}`}
+      >
+        {isRtl ? (
+          <>
+            {/* RTL : Sélecteur à gauche, burger à droite */}
+            <LanguageSelector />
+            <button
+              ref={burgerRef}
+              className="text-white focus:outline-none"
+              onClick={toggleMenu}
+              aria-label={isOpen ? t("closeMenu") : t("openMenu")}
+            >
+              <svg
+                className="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
               >
-                {t(section.key)}
-              </a>
-            ))}
-          </div>
-        </div>
+                {isOpen ? (
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                ) : (
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M4 6h16M4 12h16M4 18h16"
+                  />
+                )}
+              </svg>
+            </button>
+          </>
+        ) : (
+          <>
+            {/* LTR : Burger à gauche, sélecteur à droite */}
+            <button
+              ref={burgerRef}
+              className="text-white focus:outline-none"
+              onClick={toggleMenu}
+              aria-label={isOpen ? t("closeMenu") : t("openMenu")}
+            >
+              <svg
+                className="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                {isOpen ? (
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                ) : (
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M4 6h16M4 12h16M4 18h16"
+                  />
+                )}
+              </svg>
+            </button>
+            <LanguageSelector />
+          </>
+        )}
       </div>
 
-      {/* Menu déroulant mobile */}
-      <div className={`transition-all duration-300 ease-in-out lg:hidden ${isOpen ? "block" : "hidden"}`}>
-        <div
-          className={`flex flex-col gap-2 bg-black/90 px-4 py-3 backdrop-blur-md w-full mt-2 ${
-            isRtl ? "items-end text-right" : "items-start"
-          }`}
-        >
-          {(isRtl ? sections.slice().reverse() : sections).map((section) => (
+      {/* Barre desktop */}
+      <div
+        className={`max-w-7xl mx-auto items-center ${
+          isRtl ? "flex flex-row-reverse justify-between" : "hidden lg:flex justify-between"
+        } ${isRtl ? "py-2 px-2" : "py-3 px-4"}`}
+      >
+        {/* Liens de navigation */}
+        <div className="flex flex-1 justify-center">
+          {sections.map((section) => (
             <a
               key={section.id}
               href={`#${section.id}`}
-              className="text-white text-lg font-medium hover:text-[#22eaff] py-2 transition-colors"
+              className="flex-1 text-center text-white text-base font-bold hover:text-[#22eaff] transition-colors py-2"
+              style={{ minWidth: 0 }}
+              onClick={(e) => handleLinkClick(e, section.id)}
+            >
+              {t(section.key)}
+            </a>
+          ))}
+        </div>
+        {/* Sélecteur de langue en desktop */}
+        <LanguageSelector />
+      </div>
+
+      {/* Menu déroulant mobile */}
+      <div
+        ref={menuRef}
+        className={`transition-all duration-300 ease-in-out ${
+          isRtl ? "block" : "lg:hidden"
+        } ${isOpen ? "block" : "hidden"}`}
+      >
+        <div
+          className={`flex flex-col gap-2 bg-black/90 px-4 py-3 backdrop-blur-md w-full ${
+            isRtl ? "items-end text-right" : "items-start"
+          }`}
+        >
+          {sections.map((section) => (
+            <a
+              key={section.id}
+              href={`#${section.id}`}
+              className={`text-white text-lg font-medium hover:text-[#22eaff] py-2 transition-colors`}
               onClick={(e) => handleLinkClick(e, section.id)}
             >
               {t(section.key)}
