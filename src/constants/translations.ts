@@ -1,7 +1,6 @@
 export const resources = {
   fr: {
     translation: {
-      // Clés simples pour la navbar
       home: "Accueil",
       about: "À propos de moi",
       professionalExperiences: "Expériences",
@@ -10,7 +9,13 @@ export const resources = {
       contact: "Contact",
       openMenu: "Ouvrir le menu",
       closeMenu: "Fermer le menu",
-      // Clés pour les sections (avec préfixe pour éviter les conflits)
+      lang: {
+        en: "Anglais",
+        fr: "Français",
+        es: "Espagnol",
+        ar: "Arabe"
+      },
+      selectLanguage: "Changer la langue",
       app: {
         title: "Raphael Theuillon - Portfolio",
       },
@@ -25,7 +30,7 @@ export const resources = {
         create: "Je crée",
         enterprise: "J'entreprends",
         innovate: "J'innove",
-        share: "Je partage", // Ajouté pour correspondre à WORDS dans Home.tsx
+        share: "Je partage"
       },
       aboutSection: {
         title: "À propos de moi",
@@ -65,6 +70,13 @@ export const resources = {
       contact: "Contact",
       openMenu: "Open the menu",
       closeMenu: "Close the menu",
+      lang: {
+        en: "English",
+        fr: "French",
+        es: "Spanish",
+        ar: "Arabic"
+      },
+      selectLanguage: "Select language",
       app: {
         title: "Raphael Theuillon - Portfolio",
       },
@@ -79,7 +91,7 @@ export const resources = {
         create: "I create",
         enterprise: "I enterprise",
         innovate: "I innovate",
-        share: "I share",
+        share: "I share"
       },
       aboutSection: {
         title: "About Me",
@@ -119,6 +131,13 @@ export const resources = {
       contact: "Contacto",
       openMenu: "Abrir el menú",
       closeMenu: "Cerrar el menú",
+      lang: {
+        en: "Inglés",
+        fr: "Francés",
+        es: "Español",
+        ar: "Árabe"
+      },
+      selectLanguage: "Cambiar idioma",
       app: {
         title: "Raphael Theuillon - Portfolio",
       },
@@ -133,7 +152,7 @@ export const resources = {
         create: "Creo",
         enterprise: "Emprendo",
         innovate: "Innovo",
-        share: "Comparto",
+        share: "Comparto"
       },
       aboutSection: {
         title: "Sobre Mí",
@@ -173,6 +192,13 @@ export const resources = {
       contact: "اتصل بي",
       openMenu: "فتح القائمة",
       closeMenu: "إغلاق القائمة",
+      lang: {
+        en: "إنجليزي",
+        fr: "فرنسي",
+        es: "إسباني",
+        ar: "العربية"
+      },
+      selectLanguage: "تغيير اللغة",
       app: {
         title: "رافاييل تويون - المحفظة",
       },
@@ -187,7 +213,7 @@ export const resources = {
         create: "أخلق",
         enterprise: "أبادر",
         innovate: "أبتكر",
-        share: "أشارك",
+        share: "أشارك"
       },
       aboutSection: {
         title: "عني",

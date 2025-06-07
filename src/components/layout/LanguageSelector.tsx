@@ -3,24 +3,19 @@ import { useTranslation } from 'react-i18next';
 import { Globe } from 'lucide-react';
 
 const languages = [
-  { code: 'en', name: 'English' },
-  { code: 'fr', name: 'Français' },
-  { code: 'es', name: 'Español' },
-  { code: 'ar', name: 'العربية' },
+  { code: 'en', key: 'lang.en' },
+  { code: 'fr', key: 'lang.fr' },
+  { code: 'es', key: 'lang.es' },
+  { code: 'ar', key: 'lang.ar' },
 ];
 
 const LanguageSelector: React.FC = () => {
-  const { i18n } = useTranslation();
+  const { i18n, t } = useTranslation();
   const [isOpen, setIsOpen] = React.useState(false);
-
-  useEffect(() => {
-    console.log("LanguageSelector - Langue actuelle :", i18n.language);
-  }, [i18n.language]);
 
   const toggleDropdown = () => setIsOpen(!isOpen);
 
   const changeLanguage = (langCode: string) => {
-    console.log("Changement de langue vers :", langCode);
     i18n.changeLanguage(langCode);
     localStorage.setItem('i18nextLng', langCode);
     setIsOpen(false);
@@ -33,7 +28,7 @@ const LanguageSelector: React.FC = () => {
       <button
         onClick={toggleDropdown}
         className="flex items-center bg-black/60 hover:bg-black/80 p-2 rounded-full backdrop-blur-sm"
-        aria-label="Select language"
+        aria-label={t('selectLanguage')}
         type="button"
       >
         <Globe size={20} color="#22eaff" />
@@ -54,7 +49,7 @@ const LanguageSelector: React.FC = () => {
                 } block w-full text-left px-4 py-2 text-sm hover:bg-black/70`}
                 role="menuitem"
               >
-                {lang.name}
+                {t(lang.key)}
               </button>
             ))}
           </div>
