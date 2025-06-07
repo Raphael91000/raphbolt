@@ -137,43 +137,27 @@ section {
   transform: rotateY(5deg) rotateX(5deg);
 }
 
-/* ===== Effet de clic souris ===== */
-
-.mouse-click-circle {
+/* ===== EFFET ONDE AU CLIC ===== */
+.click-wave {
   position: fixed;
   pointer-events: none;
-  width: 50px;
-  height: 50px;
-  left: 0;
-  top: 0;
-  transform: translate(-50%, -50%);
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
-  background: radial-gradient(
-    circle at 60% 40%,
-    #fff 0%,
-    #22eaff 30%,
-    #1fff8a 60%,
-    transparent 100%
-  );
-  box-shadow: 0 0 25px 10px #22eaff99, 0 0 55px 25px #fff7;
-  opacity: 0.8;
-  animation: mouse-circle-expand 0.45s cubic-bezier(0.26,1,0.48,1.13) forwards;
+  background: radial-gradient(circle at center, #22eaff 0%, #ffffff 100%);
+  opacity: 0.6; /* Subtile pour ne pas être trop flashy */
+  transform: translate(-50%, -50%) scale(0);
+  animation: waveSpread 0.5s ease-out forwards;
   z-index: 9999;
-  backdrop-filter: blur(2px);
 }
 
-@keyframes mouse-circle-expand {
+@keyframes waveSpread {
   0% {
-    transform: translate(-50%, -50%) scale(0.5);
-    opacity: 0.9;
-  }
-  70% {
-    opacity: 1;
-    box-shadow: 0 0 50px 30px #7fffd4bb, 0 0 80px 40px #fff6;
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0.6;
   }
   100% {
-    transform: translate(-50%, -50%) scale(1.2);
+    transform: translate(-50%, -50%) scale(2);
     opacity: 0;
-    box-shadow: none;
   }
 }
