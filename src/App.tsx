@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import NeuralBeamsBackground from './components/layout/CircuitBoardBackground';
-import NavBar from './components/layout/NavBar';
+import Navbar from './components/layout/Navbar';
 import Home from './sections/Home';
 import About from './sections/About';
 import Skills from './sections/Skills';
