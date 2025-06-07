@@ -1,12 +1,12 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Globe } from 'lucide-react';
 
 const languages = [
-  { code: 'en', key: 'lang.en' },
-  { code: 'fr', key: 'lang.fr' },
-  { code: 'es', key: 'lang.es' },
-  { code: 'ar', key: 'lang.ar' },
+  { code: 'en', key: 'lang.en', emoji: '🇬🇧' },
+  { code: 'fr', key: 'lang.fr', emoji: '🇫🇷' },
+  { code: 'es', key: 'lang.es', emoji: '🇪🇸' },
+  { code: 'ar', key: 'lang.ar', emoji: '🇸🇦' },
 ];
 
 const LanguageSelector: React.FC = () => {
@@ -21,7 +21,10 @@ const LanguageSelector: React.FC = () => {
     setIsOpen(false);
   };
 
-  const dropdownPosition = i18n.dir(i18n.language) === 'rtl' ? 'left-0 origin-top-left' : 'right-0 origin-top-right';
+  const dropdownPosition =
+    i18n.dir(i18n.language) === 'rtl'
+      ? 'left-0 origin-top-left'
+      : 'right-0 origin-top-right';
 
   return (
     <div className="relative z-50">
@@ -36,7 +39,7 @@ const LanguageSelector: React.FC = () => {
 
       {isOpen && (
         <div
-          className={`absolute ${dropdownPosition} mt-2 w-40 rounded-md shadow-lg bg-black/90 backdrop-blur-sm ring-1 ring-black ring-opacity-5 transform transition-transform duration-200`}
+          className={`absolute ${dropdownPosition} mt-2 w-44 rounded-md shadow-lg bg-black/90 backdrop-blur-sm ring-1 ring-black ring-opacity-5 transform transition-transform duration-200`}
           dir={i18n.dir(i18n.language)}
         >
           <div className="py-1" role="menu" aria-orientation="vertical">
@@ -46,9 +49,10 @@ const LanguageSelector: React.FC = () => {
                 onClick={() => changeLanguage(lang.code)}
                 className={`${
                   i18n.language === lang.code ? 'text-[#22eaff]' : 'text-white'
-                } block w-full text-left px-4 py-2 text-sm hover:bg-black/70`}
+                } flex items-center gap-2 w-full text-left px-4 py-2 text-sm hover:bg-black/70`}
                 role="menuitem"
               >
+                <span className="text-base">{lang.emoji}</span>
                 {t(lang.key)}
               </button>
             ))}
