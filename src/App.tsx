@@ -8,13 +8,13 @@ import Skills from './sections/Skills';
 import Experience from './sections/Experience';
 import PersonalProjects from './sections/PersonalProjects';
 import Contact from './sections/Contact';
-import IntroScanner from './components/IntroScanner'; // <-- Ajoute cette ligne
+import IntroScanner from './components/IntroScanner';
 import './lib/i18n';
 
 function App() {
   const { t, i18n } = useTranslation();
   const [showCircuitBg, setShowCircuitBg] = useState(true);
-  const [accessGranted, setAccessGranted] = useState(false); // <-- Nouvel état pour l'intro
+  const [accessGranted, setAccessGranted] = useState(false);
   const isRtl = i18n.language === 'ar';
 
   useEffect(() => {
@@ -49,11 +49,14 @@ function App() {
     document.title = t('app.title');
   }, [t]);
 
-  // ------ AFFICHAGE ------
+  // ----------- INTRO ----------- //
   if (!accessGranted) {
-    return <IntroScanner onAccess={() => setAccessGranted(true)} />;
+    return (
+      <IntroScanner onAccess={() => setAccessGranted(true)} />
+    );
   }
 
+  // ----------- PORTFOLIO ----------- //
   return (
     <div className="relative min-h-screen overflow-hidden" style={{ height: "600vh" }}>
       {showCircuitBg && (

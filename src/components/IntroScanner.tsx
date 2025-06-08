@@ -1,48 +1,48 @@
-import React, { useEffect, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import Robot3D from './Robot3D';
+import React, { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import Robot3D from "./Robot3D";
 
-type IntroScannerProps = {
-  onAccess: () => void;
-};
+const IntroScanner = ({ onAccess }) => {
+  const [step, setStep] = useState("scan");
+  const [scanProgress, setScanProgress] = useState(0);
 
-const IntroScanner: React.FC<IntroScannerProps> = ({ onAccess }) => {
-  const [step, setStep] = useState<"scan" | "authorized" | "ready">("scan");
+  // Animation du scan (progression 0 → 1)
+  useEffect(() => {
+    let animId;
+    let start;
+    if (step === "scan") {
+      const duration = 2200;
+      function animateScan(ts) {
+        if (!start) start = ts;
+        const elapsed = ts - start;
+        const progress = Math.min(elapsed / duration, 1);
+        setScanProgress(progress);
+        if (progress < 1) {
+          animId = requestAnimationFrame(animateScan);
+        } else {
+          setStep("authorized");
+        }
+      }
+      animId = requestAnimationFrame(animateScan);
+    }
+    return () => cancelAnimationFrame(animId);
+  }, [step]);
 
   useEffect(() => {
-    // Lance l’animation du scan, puis passe à l’état "authorized", puis "ready"
-    const timers = [
-      setTimeout(() => setStep("authorized"), 2500),  // scan terminé
-      setTimeout(() => setStep("ready"), 4000),       // bouton apparaît
-    ];
-    return () => timers.forEach(clearTimeout);
-  }, []);
+    if (step === "authorized") {
+      const t = setTimeout(() => setStep("ready"), 1200);
+      return () => clearTimeout(t);
+    }
+  }, [step]);
 
   return (
     <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#013C47]">
-      <div className="w-80 h-80 relative flex items-center justify-center">
-        <Robot3D />
-        {/* Effet scanner */}
-        <AnimatePresence>
-          {step === "scan" && (
-            <motion.div
-              initial={{ top: 0, opacity: 0 }}
-              animate={{ top: '85%', opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 2.2, ease: "easeInOut" }}
-              className="absolute left-1/2 -translate-x-1/2 w-52 h-5 pointer-events-none"
-              style={{
-                background: "linear-gradient(90deg, rgba(32,224,255,0.6), rgba(255,255,255,0.85), rgba(32,224,255,0.6))",
-                borderRadius: "999px",
-                filter: "blur(1px) brightness(1.2)",
-                boxShadow: "0 0 28px 10px #10B5C4, 0 2px 12px #fff4",
-              }}
-            />
-          )}
-        </AnimatePresence>
+      {/* Robot 3D animé avec scan */}
+      <div className="w-80 h-80 relative flex items-center justify-center z-10">
+        <Robot3D scanProgress={scanProgress} />
       </div>
 
-      {/* Message Access authorized */}
+      {/* Texte & bouton */}
       <AnimatePresence>
         {step !== "scan" && (
           <motion.div
@@ -56,8 +56,6 @@ const IntroScanner: React.FC<IntroScannerProps> = ({ onAccess }) => {
           </motion.div>
         )}
       </AnimatePresence>
-
-      {/* Bouton d’accès */}
       <AnimatePresence>
         {step === "ready" && (
           <motion.button
