@@ -2,6 +2,68 @@ import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Robot3D from "./Robot3D";
 
+// Scan IA ultra fin, full screen
+function ScanBackground({ scanProgress }) {
+  const top = `calc(${scanProgress * 100}vh - 2px)`;
+  return (
+    <div
+      style={{
+        pointerEvents: "none",
+        position: "fixed",
+        left: 0,
+        top: 0,
+        width: "100vw",
+        height: "100vh",
+        zIndex: 0,
+        overflow: "hidden",
+      }}
+    >
+      {/* Faisceau central fin */}
+      <div
+        style={{
+          position: "absolute",
+          left: 0,
+          width: "100vw",
+          height: "5px", // Ultra fin
+          top,
+          background:
+            "linear-gradient(90deg, transparent 0%, #19f6ffcc 45%, #fff 50%, #19f6ffcc 55%, transparent 100%)",
+          opacity: 0.92,
+          borderRadius: "2px",
+        }}
+      />
+      {/* Réticule latéral gauche fin */}
+      <div
+        style={{
+          position: "absolute",
+          left: 0,
+          width: "10px",
+          height: "18px",
+          top: `calc(${scanProgress * 100}vh - 9px)`,
+          background:
+            "linear-gradient(180deg, #19f6ffcc 0%, #fff 60%, #19f6ff44 100%)",
+          opacity: 0.88,
+          borderRadius: "0 6px 6px 0",
+        }}
+      />
+      {/* Réticule latéral droit fin */}
+      <div
+        style={{
+          position: "absolute",
+          right: 0,
+          width: "10px",
+          height: "18px",
+          top: `calc(${scanProgress * 100}vh - 9px)`,
+          background:
+            "linear-gradient(180deg, #19f6ffcc 0%, #fff 60%, #19f6ff44 100%)",
+          opacity: 0.88,
+          borderRadius: "6px 0 0 6px",
+        }}
+      />
+    </div>
+  );
+}
+
 const IntroScanner = ({ onAccess }) => {
   const [step, setStep] = useState("scan");
   const [scanProgress, setScanProgress] = useState(0);
@@ -37,6 +99,9 @@ const IntroScanner = ({ onAccess }) => {
 
   return (
     <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#013C47]">
+      {/* Scan IA ultra fin */}
+      <ScanBackground scanProgress={scanProgress} />
+
       {/* Robot 3D animé avec scan */}
       <div className="w-80 h-80 relative flex items-center justify-center z-10">
         <Robot3D scanProgress={scanProgress} />
