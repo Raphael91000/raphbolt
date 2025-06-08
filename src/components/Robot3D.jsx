@@ -1,6 +1,6 @@
 import React, { Suspense, useRef, useLayoutEffect } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { useGLTF } from "@react-three/drei";
+import { useGLTF, OrbitControls } from "@react-three/drei";
 import * as THREE from "three";
 
 // Réglages zone visage & animation
@@ -116,6 +116,14 @@ export default function Robot3D({ scanProgress = 0 }) {
           <RobotModel scanProgress={scanProgress} />
           <ScanBar progress={scanProgress} />
         </Suspense>
+        {/* === OrbitControls pour manipulation souris === */}
+        <OrbitControls
+          enableZoom={false} // ou true si tu veux autoriser le zoom
+          enablePan={false}
+          minPolarAngle={Math.PI / 3}
+          maxPolarAngle={(2 * Math.PI) / 3}
+          dampingFactor={0.13}
+        />
       </Canvas>
     </div>
   );
