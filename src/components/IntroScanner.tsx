@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Robot3D from "./Robot3D";
+import CodeLinesOverlay from "./CodeLinesOverlay";
 
-// Scan IA ultra fin, full screen
 function ScanBackground({ scanProgress }) {
-  const top = `calc(${scanProgress * 100}vh - 2px)`;
+  const top = scanProgress * 100;
   return (
     <div
       style={{
@@ -14,7 +14,7 @@ function ScanBackground({ scanProgress }) {
         top: 0,
         width: "100vw",
         height: "100vh",
-        zIndex: 0,
+        zIndex: 2,
         overflow: "hidden",
       }}
     >
@@ -24,8 +24,8 @@ function ScanBackground({ scanProgress }) {
           position: "absolute",
           left: 0,
           width: "100vw",
-          height: "5px", // Ultra fin
-          top,
+          height: "5px",
+          top: `calc(${top}vh - 2px)`,
           background:
             "linear-gradient(90deg, transparent 0%, #19f6ffcc 45%, #fff 50%, #19f6ffcc 55%, transparent 100%)",
           opacity: 0.92,
@@ -39,7 +39,7 @@ function ScanBackground({ scanProgress }) {
           left: 0,
           width: "10px",
           height: "18px",
-          top: `calc(${scanProgress * 100}vh - 9px)`,
+          top: `calc(${top}vh - 9px)`,
           background:
             "linear-gradient(180deg, #19f6ffcc 0%, #fff 60%, #19f6ff44 100%)",
           opacity: 0.88,
@@ -53,7 +53,7 @@ function ScanBackground({ scanProgress }) {
           right: 0,
           width: "10px",
           height: "18px",
-          top: `calc(${scanProgress * 100}vh - 9px)`,
+          top: `calc(${top}vh - 9px)`,
           background:
             "linear-gradient(180deg, #19f6ffcc 0%, #fff 60%, #19f6ff44 100%)",
           opacity: 0.88,
@@ -64,30 +64,70 @@ function ScanBackground({ scanProgress }) {
   );
 }
 
+const FACE_ZONE_START = 0.38;
+const FACE_ZONE_END = 0.62;
+
 const IntroScanner = ({ onAccess }) => {
   const [step, setStep] = useState("scan");
   const [scanProgress, setScanProgress] = useState(0);
+  const rafRef = useRef();
 
-  // Animation du scan (progression 0 → 1)
   useEffect(() => {
-    let animId;
-    let start;
-    if (step === "scan") {
-      const duration = 2200;
-      function animateScan(ts) {
-        if (!start) start = ts;
-        const elapsed = ts - start;
-        const progress = Math.min(elapsed / duration, 1);
-        setScanProgress(progress);
-        if (progress < 1) {
-          animId = requestAnimationFrame(animateScan);
-        } else {
-          setStep("authorized");
+    function animateScan(tsStart) {
+      const durationFast = 900;
+      const durationSlow = 1400;
+
+      let phase = 0;
+      let start = tsStart;
+
+      function stepAnim(ts) {
+        let t = ts - start;
+        let progress = 0;
+
+        if (phase === 0) {
+          if (t < durationFast) {
+            progress = (t / durationFast) * FACE_ZONE_START;
+            setScanProgress(progress);
+            rafRef.current = requestAnimationFrame(stepAnim);
+          } else {
+            phase = 1;
+            start = ts;
+            setScanProgress(FACE_ZONE_START);
+            rafRef.current = requestAnimationFrame(stepAnim);
+          }
+        } else if (phase === 1) {
+          if (t < durationSlow) {
+            const progressOnFace = (t / durationSlow) * (FACE_ZONE_END - FACE_ZONE_START);
+            progress = FACE_ZONE_START + progressOnFace;
+            setScanProgress(progress);
+            rafRef.current = requestAnimationFrame(stepAnim);
+          } else {
+            phase = 2;
+            start = ts;
+            setScanProgress(FACE_ZONE_END);
+            rafRef.current = requestAnimationFrame(stepAnim);
+          }
+        } else if (phase === 2) {
+          if (t < durationFast) {
+            const progressEnd = (t / durationFast) * (1 - FACE_ZONE_END);
+            progress = FACE_ZONE_END + progressEnd;
+            setScanProgress(progress);
+            rafRef.current = requestAnimationFrame(stepAnim);
+          } else {
+            setScanProgress(1);
+            setStep("authorized");
+          }
         }
       }
-      animId = requestAnimationFrame(animateScan);
+
+      rafRef.current = requestAnimationFrame(stepAnim);
     }
-    return () => cancelAnimationFrame(animId);
+
+    if (step === "scan") {
+      setScanProgress(0);
+      rafRef.current = requestAnimationFrame(animateScan);
+    }
+    return () => cancelAnimationFrame(rafRef.current);
   }, [step]);
 
   useEffect(() => {
@@ -99,10 +139,11 @@ const IntroScanner = ({ onAccess }) => {
 
   return (
     <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#013C47]">
-      {/* Scan IA ultra fin */}
-      <ScanBackground scanProgress={scanProgress} />
+      {/* Code lines responsive en fond */}
+      <CodeLinesOverlay scanProgress={scanProgress} />
 
-      {/* Robot 3D animé avec scan */}
+      {/* Scan et robot */}
+      <ScanBackground scanProgress={scanProgress} />
       <div className="w-80 h-80 relative flex items-center justify-center z-10">
         <Robot3D scanProgress={scanProgress} />
       </div>
