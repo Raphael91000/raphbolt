@@ -22,10 +22,9 @@ const Home: React.FC = () => {
   return (
     <section
       id="home"
-      className="flex flex-col justify-center items-center relative min-h-screen overflow-hidden bg-black"
+      className="flex flex-col justify-center items-center relative min-h-screen overflow-hidden"
     >
       <CircuitBoardBackground />
-
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -33,8 +32,7 @@ const Home: React.FC = () => {
         className="z-10 text-center px-4 w-full"
       >
         <div className="flex flex-col items-center gap-7 md:gap-12">
-
-          {/* Texte dynamique avec effet split horizontal */}
+          {/* Texte dynamique */}
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -49,7 +47,6 @@ const Home: React.FC = () => {
               {t(WORDS[motIndex])}
             </SplitRevealText>
           </motion.div>
-
           {/* Slogan, tagline, etc */}
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -68,8 +65,7 @@ const Home: React.FC = () => {
             {t('homeSection.slogan')}
           </motion.p>
         </div>
-
-        {/* Boutons réseaux - Responsive & RTL compatible */}
+        {/* Boutons réseaux */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -84,37 +80,16 @@ const Home: React.FC = () => {
           >
             {t('homeSection.cv')}
           </a>
-          {/* Icônes réseaux */}
           <div className="flex items-center gap-4 mt-4 md:mt-0">
-            <a
-              href="https://github.com/Raphael91000"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="p-3 border border-white bg-white text-black rounded-full transition-colors hover:bg-[#22eaff] hover:text-white hover:border-[#22eaff]"
-              aria-label="GitHub"
-            >
+            <a href="https://github.com/Raphael91000" target="_blank" rel="noopener noreferrer"
+              className="p-3 border border-white bg-white text-black rounded-full transition-colors hover:bg-[#22eaff] hover:text-white hover:border-[#22eaff]" aria-label="GitHub">
               <Github size={24} />
             </a>
-            <a
-              href="https://www.linkedin.com/in/raphael-theuillon-689139261/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="p-3 border border-white bg-white text-black rounded-full transition-colors hover:bg-[#22eaff] hover:text-white hover:border-[#22eaff]"
-              aria-label="LinkedIn"
-            >
+            <a href="https://www.linkedin.com/in/raphael-theuillon-689139261/" target="_blank" rel="noopener noreferrer"
+              className="p-3 border border-white bg-white text-black rounded-full transition-colors hover:bg-[#22eaff] hover:text-white hover:border-[#22eaff]" aria-label="LinkedIn">
               <Linkedin size={24} />
             </a>
-            <a
-              href="https://www.fiverr.com/users/raph910/seller_dashboard"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="p-3 border border-white bg-white text-black rounded-full transition-colors hover:bg-[#22eaff] hover:text-white hover:border-[#22eaff]"
-              aria-label="Fiverr"
-            >
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M16.25 16.25v-10h-10v10h10m0-11.25c.69 0 1.25.56 1.25 1.25v10c0 .69-.56 1.25-1.25 1.25h-10c-.69 0-1.25-.56-1.25-1.25v-10c0-.69.56-1.25 1.25-1.25h10m-7.5 3.75v1.25h1.25v-1.25h-1.25m3.75 0v1.25h1.25v-1.25h-1.25m-3.75 2.5v1.25h1.25v-1.25h-1.25m3.75 0v1.25h1.25v-1.25h-1.25m-3.75 2.5v1.25h1.25v-1.25h-1.25m3.75 0v1.25h1.25v-1.25h-1.25z" />
-              </svg>
-            </a>
+            {/* ...autres boutons réseaux si besoin */}
           </div>
         </motion.div>
       </motion.div>

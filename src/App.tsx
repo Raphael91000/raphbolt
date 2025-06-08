@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import NeuralBeamsBackground from './components/layout/CircuitBoardBackground';
+import CircuitBoardBackground from './components/layout/CircuitBoardBackground';
 import Navbar from './components/layout/Navbar';
 import Home from './sections/Home';
 import About from './sections/About';
@@ -15,13 +15,10 @@ function App() {
   const [showCircuitBg, setShowCircuitBg] = useState(true);
   const isRtl = i18n.language === 'ar';
 
-  // Gérer la direction globale
   useEffect(() => {
     document.documentElement.dir = isRtl ? 'rtl' : 'ltr';
-    console.log("App - Applique dir :", isRtl ? 'rtl' : 'ltr', "pour langue :", i18n.language);
   }, [isRtl]);
 
-  // Met à jour le background selon l'ancre de l'URL
   useEffect(() => {
     const handleHashChange = () => {
       setShowCircuitBg(!window.location.hash.includes('about'));
@@ -31,19 +28,14 @@ function App() {
     return () => window.removeEventListener('hashchange', handleHashChange);
   }, []);
 
-  // Effet clic souris
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {
       const circle = document.createElement('span');
       circle.className = 'mouse-click-circle';
       document.body.appendChild(circle);
-
       circle.style.left = `${e.clientX}px`;
       circle.style.top = `${e.clientY}px`;
-
-      circle.addEventListener('animationend', () => {
-        circle.remove();
-      });
+      circle.addEventListener('animationend', () => { circle.remove(); });
     };
     document.addEventListener('click', handleClick);
     return () => {
@@ -56,7 +48,7 @@ function App() {
   }, [t]);
 
   return (
-    <div className="relative min-h-screen overflow-hidden">
+    <div className="relative min-h-screen overflow-hidden" style={{ height: "600vh" }}> {/* Hauteur ajustée pour toutes les sections */}
       {showCircuitBg && (
         <div
           style={{
@@ -65,11 +57,11 @@ function App() {
             left: 0,
             top: 0,
             width: '100vw',
-            height: '100vh',
+            height: '600vh', // Correspond à la hauteur totale estimée
             pointerEvents: 'none',
           }}
         >
-          <NeuralBeamsBackground />
+          <CircuitBoardBackground />
         </div>
       )}
       <Navbar />
