@@ -8,7 +8,6 @@ import Skills from './sections/Skills';
 import Experience from './sections/Experience';
 import PersonalProjects from './sections/PersonalProjects';
 import Contact from './sections/Contact';
-import IntroScanner from './components/IntroScanner';
 import './lib/i18n';
 
 function App() {
@@ -49,13 +48,7 @@ function App() {
     document.title = t('app.title');
   }, [t]);
 
-  // ----------- INTRO ----------- //
-  if (!accessGranted) {
-    return (
-      <IntroScanner onAccess={() => setAccessGranted(true)} />
-    );
-  }
-
+ 
   // ----------- PORTFOLIO ----------- //
   return (
     <div className="relative min-h-screen overflow-hidden" style={{ height: "600vh" }}>
