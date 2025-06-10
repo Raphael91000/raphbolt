@@ -13,9 +13,12 @@ const Experience: React.FC = () => {
   return (
     <section
       id="experiences"
-      className="py-16 px-4 sm:px-6 lg:px-8" // Supprimé bg-background-dark
       ref={ref}
-      style={{ background: "none" }} // Fond transparent pour laisser le canvas de Home dominer si visible
+      className="py-16 px-4 sm:px-6 lg:px-8 bg-black"
+      // Pour un léger dégradé sombre, tu peux remplacer bg-black par bg-gradient-to-b from-black via-[#191929] to-[#22223b]
+      style={{
+        // background: "linear-gradient(to bottom, #0c1929, #1a334a)",
+      }}
     >
       <div className="max-w-7xl mx-auto text-center">
         <h2
@@ -30,19 +33,21 @@ const Experience: React.FC = () => {
             {professionalExperiences.map((exp, index) => (
               <div
                 key={exp.id}
-                className={`bg-black/50 backdrop-blur-sm p-6 rounded-lg border border-white/10 transition-all duration-1000 ${
+                className={`bg-black/60 backdrop-blur-sm p-6 rounded-lg border border-white/10 transition-all duration-1000 ${
                   inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
                 }`}
                 style={{ transitionDelay: `${index * 200}ms` }}
               >
-                <h3 className="text-xl font-semibold text-white mb-2">{exp.title} - {exp.company}</h3>
-                <p className="text-gray-300">{exp.description} ({exp.period})</p>
+                <h3 className="text-xl font-semibold text-white mb-2">
+                  {exp.title} - {exp.company}
+                </h3>
+                <p className="text-gray-300">{exp.description} <span className="opacity-70">({exp.period})</span></p>
               </div>
             ))}
           </div>
         ) : (
           <p className="text-lg text-gray-300">
-            {t('experienceSection.professional')} - Section en cours de développement.
+            {t('experienceSection.professional')} – Section en cours de développement.
           </p>
         )}
       </div>

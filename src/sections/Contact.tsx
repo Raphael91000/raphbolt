@@ -13,11 +13,14 @@ const Contact: React.FC = () => {
   });
 
   return (
-    <section id="contact" className="py-20 px-4 md:px-10">
-      <div
-        ref={ref}
-        className="max-w-6xl mx-auto"
-      >
+    <section
+      id="contact"
+      ref={ref}
+      className="py-20 px-4 md:px-10 bg-black"
+      // Pour une variante plus subtile :
+      // style={{ background: "linear-gradient(to bottom, #16161f, #222235)" }}
+    >
+      <div className="max-w-6xl mx-auto">
         <div className="text-center mb-16">
           <motion.div
             initial={{ width: 0 }}
@@ -26,7 +29,7 @@ const Contact: React.FC = () => {
             className="h-1 bg-primary mx-auto mb-6"
           />
           <motion.h2
-            className="text-4xl md:text-5xl font-bold mb-4"
+            className="text-4xl md:text-5xl font-bold mb-4 text-white"
             initial={{ opacity: 0, y: 20 }}
             animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
             transition={{ duration: 0.8, delay: 0.2 }}
@@ -52,31 +55,31 @@ const Contact: React.FC = () => {
           >
             <div className="space-y-8">
               <div className="flex items-start space-x-4">
-                <div className="bg-background-light p-3 rounded-lg">
+                <div className="bg-black/40 p-3 rounded-lg">
                   <Mail size={24} className="text-primary" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-medium mb-1">Email</h3>
+                  <h3 className="text-lg font-medium mb-1 text-white">Email</h3>
                   <p className="text-gray-300">contact@raphtech.com</p>
                 </div>
               </div>
 
               <div className="flex items-start space-x-4">
-                <div className="bg-background-light p-3 rounded-lg">
+                <div className="bg-black/40 p-3 rounded-lg">
                   <Phone size={24} className="text-primary" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-medium mb-1">Phone</h3>
+                  <h3 className="text-lg font-medium mb-1 text-white">Phone</h3>
                   <p className="text-gray-300">+33 6 12 34 56 78</p>
                 </div>
               </div>
 
               <div className="flex items-start space-x-4">
-                <div className="bg-background-light p-3 rounded-lg">
+                <div className="bg-black/40 p-3 rounded-lg">
                   <MapPin size={24} className="text-primary" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-medium mb-1">Location</h3>
+                  <h3 className="text-lg font-medium mb-1 text-white">Location</h3>
                   <p className="text-gray-300">Paris, France</p>
                 </div>
               </div>

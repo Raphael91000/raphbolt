@@ -36,7 +36,7 @@ function App() {
         <PersonalProjects />
         <Contact />
       </main>
-      <footer className="py-6 px-4 text-center text-sm text-gray-400 z-10 relative">
+      <footer className="py-6 px-4 text-center text-sm text-gray-400 z-10 relative bg-black">
         <p>© {new Date().getFullYear()} Raphael Theuillon. All rights reserved.</p>
       </footer>
     </div>

@@ -74,3 +74,6 @@ section {
 @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap');
 html[dir="rtl"] { font-family: 'Amiri', serif; }
 [dir="rtl"] * { font-family: 'Amiri', serif !important; }
+body {
+  background: #000 !important;
+}

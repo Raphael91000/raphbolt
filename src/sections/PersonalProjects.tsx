@@ -13,8 +13,10 @@ const PersonalProjects: React.FC = () => {
   return (
     <section
       id="projets-perso"
-      className="py-16 px-4 sm:px-6 lg:px-8 bg-background-dark"
       ref={ref}
+      className="py-16 px-4 sm:px-6 lg:px-8 bg-black"
+      // Pour un style plus dynamique, tu peux aussi essayer :
+      // style={{ background: "linear-gradient(to bottom, #191929, #1a334a)" }}
     >
       <div className="max-w-7xl mx-auto text-center">
         <h2
@@ -29,19 +31,23 @@ const PersonalProjects: React.FC = () => {
             {personalProjects.map((project, index) => (
               <div
                 key={project.id}
-                className={`bg-black/50 backdrop-blur-sm p-6 rounded-lg border border-white/10 transition-all duration-1000 ${
+                className={`bg-black/60 backdrop-blur-sm p-6 rounded-lg border border-white/10 transition-all duration-1000 ${
                   inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
                 }`}
                 style={{ transitionDelay: `${index * 200}ms` }}
               >
-                <h3 className="text-xl font-semibold text-white mb-2">{project.title} - {project.company}</h3>
-                <p className="text-gray-300">{project.description} ({project.period})</p>
+                <h3 className="text-xl font-semibold text-white mb-2">
+                  {project.title} - {project.company}
+                </h3>
+                <p className="text-gray-300">
+                  {project.description} <span className="opacity-70">({project.period})</span>
+                </p>
               </div>
             ))}
           </div>
         ) : (
           <p className="text-lg text-gray-300">
-            {t('experienceSection.personal')} - Section en cours de développement.
+            {t('experienceSection.personal')} – Section en cours de développement.
           </p>
         )}
       </div>
