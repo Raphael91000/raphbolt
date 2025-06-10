@@ -7,10 +7,8 @@ const About: React.FC = () => {
   return (
     <section
       id="about"
-      className="relative flex flex-col items-center justify-center min-h-[100vh] py-20 px-4 overflow-hidden"
-      style={{
-        background: "linear-gradient(to bottom, #0c1929, #1a334a)",
-      }}
+      className="relative flex flex-col items-center justify-center min-h-[100vh] py-20 px-4 overflow-hidden bg-black"
+      // Si tu veux un petit effet de lumière subtile : remplace bg-black par bg-gradient-to-b from-black via-[#0c1929] to-[#1a334a]
     >
       <div className="relative z-20 pt-[36vh] pb-8 flex flex-col items-center">
         <h2 className="text-5xl font-bold mb-7 text-white text-center drop-shadow-lg">

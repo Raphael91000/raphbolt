@@ -27,10 +27,8 @@ const Skills: React.FC = () => {
 
   const handleTouchEnd = () => {
     if (touchStartX.current - touchEndX.current > 50) {
-      // Swipe left
       handleNext();
     } else if (touchEndX.current - touchStartX.current > 50) {
-      // Swipe right
       handlePrev();
     }
   };
@@ -43,22 +41,17 @@ const Skills: React.FC = () => {
     setCurrentIndex((prevIndex) => (prevIndex - 1 + skills.length) % skills.length);
   };
 
-  // Calculate visible skills
+  // Cards responsive
   const visibleSkills = () => {
-    // For mobile, show 1 card
     if (typeof window !== 'undefined' && window.innerWidth < 768) {
       return [skills[currentIndex]];
     }
-
-    // For tablet, show up to 2 cards
     if (typeof window !== 'undefined' && window.innerWidth < 1024) {
       return [
         skills[currentIndex],
         skills[(currentIndex + 1) % skills.length]
       ];
     }
-
-    // For desktop, show up to 3 cards
     return [
       skills[currentIndex],
       skills[(currentIndex + 1) % skills.length],
@@ -67,11 +60,12 @@ const Skills: React.FC = () => {
   };
 
   return (
-    <section id="skills" className="relative py-20 px-4 md:px-10">
-      <div
-        ref={ref}
-        className="max-w-6xl mx-auto"
-      >
+    <section 
+      id="skills" 
+      className="relative py-20 px-4 md:px-10 bg-black"
+      // Option : pour un effet tech subtil tu peux remplacer bg-black par bg-gradient-to-b from-black via-[#161626] to-[#22223b]
+    >
+      <div ref={ref} className="max-w-6xl mx-auto">
         <div className="text-center mb-16">
           <motion.div
             initial={{ width: 0 }}
@@ -80,7 +74,7 @@ const Skills: React.FC = () => {
             className="h-1 bg-primary mx-auto mb-6"
           />
           <motion.h2
-            className="text-4xl md:text-5xl font-bold mb-4"
+            className="text-4xl md:text-5xl font-bold mb-4 text-white"
             initial={{ opacity: 0, y: 20 }}
             animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
             transition={{ duration: 0.8, delay: 0.2 }}
@@ -140,7 +134,6 @@ const Skills: React.FC = () => {
               </svg>
             </button>
           </div>
-
           <div className="absolute right-0 top-1/2 transform -translate-y-1/2 -mr-4 md:mr-0">
             <button
               onClick={handleNext}
@@ -154,7 +147,6 @@ const Skills: React.FC = () => {
           </div>
         </div>
       </div>
-
       <AnimatedBot />
     </section>
   );
