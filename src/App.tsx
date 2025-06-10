@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import Navbar from "./components/layout/Navbar";
 import Home from "./sections/Home";
@@ -13,10 +13,13 @@ function App() {
   const { t, i18n } = useTranslation();
   const isRtl = i18n.language === "ar";
 
+  // Met à jour le sens d’écriture (RTL/LTR)
   useEffect(() => {
     document.documentElement.dir = isRtl ? "rtl" : "ltr";
-  }, [isRtl]);
+    document.documentElement.lang = i18n.language || "fr";
+  }, [isRtl, i18n.language]);
 
+  // Met à jour le titre de la page
   useEffect(() => {
     document.title = t("app.title");
   }, [t]);
@@ -25,6 +28,7 @@ function App() {
     <div className="relative min-h-screen overflow-hidden" style={{ background: "none" }}>
       <Navbar />
       <main>
+        {/* Home uniquement : animation canvas */}
         <Home />
         <About />
         <Skills />

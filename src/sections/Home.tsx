@@ -4,9 +4,8 @@ import { motion } from "framer-motion";
 import { Github, Linkedin } from "lucide-react";
 
 // --- Animation fluid shapes ---
-const FluidShapesAnimation = () => {
-  const canvasRef = useRef(null);
-  const [scrollOpacity, setScrollOpacity] = useState(1);
+const FluidShapesAnimation = ({ opacity = 1 }: { opacity?: number }) => {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
   const [canvasSize, setCanvasSize] = useState(400);
 
   useEffect(() => {
@@ -21,28 +20,13 @@ const FluidShapesAnimation = () => {
   }, []);
 
   useEffect(() => {
-    const handleScroll = () => {
-      const scrollPosition = window.scrollY;
-      const windowHeight = window.innerHeight;
-      const fadeStart = windowHeight * 0.3;
-      const fadeEnd = windowHeight * 0.8;
-      let opacity = 1;
-      if (scrollPosition > fadeStart) {
-        opacity = Math.max(0, 1 - (scrollPosition - fadeStart) / (fadeEnd - fadeStart));
-      }
-      setScrollOpacity(opacity);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
     canvas.width = canvasSize;
     canvas.height = canvasSize;
-    let animationId;
+    let animationId: number;
+
     const drawFluidShapes = () => {
       ctx.clearRect(0, 0, canvasSize, canvasSize);
       ctx.save();
@@ -122,7 +106,7 @@ const FluidShapesAnimation = () => {
   return (
     <div 
       className="fixed right-2 sm:right-4 md:right-8 top-1/2 transform -translate-y-1/2 pointer-events-none transition-opacity duration-300" 
-      style={{ zIndex: 25, opacity: scrollOpacity }}
+      style={{ zIndex: 20, opacity }}
     >
       <canvas
         ref={canvasRef}
@@ -144,6 +128,22 @@ const Home: React.FC = () => {
   const { t, i18n } = useTranslation();
   const isRtl = i18n.dir(i18n.language) === "rtl";
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [canvasOpacity, setCanvasOpacity] = useState(1);
+
+  // Fade background Home quand on scroll
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollY = window.scrollY;
+      const h = window.innerHeight;
+      let o = 1;
+      if (scrollY > h * 0.2) {
+        o = Math.max(0, 1 - (scrollY - h * 0.2) / (h * 0.6));
+      }
+      setCanvasOpacity(o);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -166,6 +166,7 @@ const Home: React.FC = () => {
     let t = 0;
     function draw() {
       ctx.clearRect(0, 0, width, height);
+      ctx.globalAlpha = canvasOpacity;
       ctx.fillStyle = "#000000";
       ctx.fillRect(0, 0, width, height);
       const filamentHeight = height * 0.3;
@@ -181,7 +182,7 @@ const Home: React.FC = () => {
         ctx.beginPath();
         ctx.strokeStyle = gradient;
         ctx.lineWidth = 1.5;
-        ctx.globalAlpha = 0.7 - i * 0.08;
+        ctx.globalAlpha = canvasOpacity * (0.7 - i * 0.08);
         for (let x = 0; x <= width; x += 10) {
           const y = baseY + yOffset + Math.sin((x + t * 50) * 0.01 + i) * amplitude;
           if (x === 0) ctx.moveTo(x, y);
@@ -197,7 +198,7 @@ const Home: React.FC = () => {
     return () => {
       window.removeEventListener("resize", resize);
     };
-  }, []);
+  }, [canvasOpacity]);
 
   return (
     <section
@@ -205,9 +206,10 @@ const Home: React.FC = () => {
       className="flex flex-col justify-center items-center relative min-h-screen overflow-hidden"
       style={{ background: "none" }}
     >
-      {/* Animation formes fluides */}
-      <FluidShapesAnimation />
+      {/* Animation formes fluides par-dessus (z-20) */}
+      <FluidShapesAnimation opacity={canvasOpacity} />
 
+      {/* Fond canvas principal (z-10) */}
       <canvas
         ref={canvasRef}
         className="fixed inset-0 z-10 pointer-events-none"
@@ -219,6 +221,9 @@ const Home: React.FC = () => {
           left: 0,
           top: 0,
           background: "#000000",
+          opacity: canvasOpacity,
+          transition: "opacity 0.4s",
+          pointerEvents: "none"
         }}
         aria-hidden="true"
       />
