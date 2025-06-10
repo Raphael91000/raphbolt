@@ -13,8 +13,9 @@ const Experience: React.FC = () => {
   return (
     <section
       id="experiences"
-      className="py-16 px-4 sm:px-6 lg:px-8 bg-background-dark"
+      className="py-16 px-4 sm:px-6 lg:px-8" // Supprimé bg-background-dark
       ref={ref}
+      style={{ background: "none" }} // Fond transparent pour laisser le canvas de Home dominer si visible
     >
       <div className="max-w-7xl mx-auto text-center">
         <h2
