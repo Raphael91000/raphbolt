@@ -12,6 +12,210 @@ const WORDS = [
   "text.share"
 ];
 
+// Composant d'animation formes fluides intégré
+const FluidShapesAnimation = () => {
+  const canvasRef = useRef(null);
+  const [scrollOpacity, setScrollOpacity] = useState(1);
+  const [canvasSize, setCanvasSize] = useState(400);
+
+  // Gérer la taille responsive
+  useEffect(() => {
+    const updateSize = () => {
+      if (window.innerWidth < 480) {
+        setCanvasSize(200); // Mobile
+      } else if (window.innerWidth < 768) {
+        setCanvasSize(300); // Tablette
+      } else {
+        setCanvasSize(400); // Desktop
+      }
+    };
+
+    updateSize();
+    window.addEventListener('resize', updateSize);
+    return () => window.removeEventListener('resize', updateSize);
+  }, []);
+
+  // Gérer l'opacité basée sur le scroll
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollPosition = window.scrollY;
+      const windowHeight = window.innerHeight;
+      
+      // Calculer l'opacité : disparaît progressivement après 30% de scroll
+      const fadeStart = windowHeight * 0.3;
+      const fadeEnd = windowHeight * 0.8;
+      
+      let opacity = 1;
+      if (scrollPosition > fadeStart) {
+        opacity = Math.max(0, 1 - (scrollPosition - fadeStart) / (fadeEnd - fadeStart));
+      }
+      
+      setScrollOpacity(opacity);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    canvas.width = canvasSize;
+    canvas.height = canvasSize;
+
+    let animationId;
+
+    const drawFluidShapes = () => {
+      ctx.clearRect(0, 0, canvasSize, canvasSize);
+      ctx.save();
+      ctx.translate(canvasSize / 2, canvasSize / 2);
+      
+      const time = Date.now() * 0.001; // Animation lente et fluide
+      
+      // Ajuster la taille des formes selon la taille du canvas
+      const scaleFactor = canvasSize / 400;
+      
+      // Dessiner 3 formes fluides qui s'entrelacent
+      for (let shape = 0; shape < 3; shape++) {
+        const shapeOffset = (shape * Math.PI * 2) / 3;
+        const wavePhase = time + shape * 2;
+        
+        // Définir les couleurs pour chaque forme
+        let gradient;
+        if (shape === 0) {
+          // Orange vers rouge
+          gradient = ctx.createRadialGradient(0, 0, 20 * scaleFactor, 0, 0, 120 * scaleFactor);
+          gradient.addColorStop(0, 'rgba(255, 140, 0, 0.9)'); // Orange vif
+          gradient.addColorStop(0.7, 'rgba(255, 69, 0, 0.7)'); // Rouge-orange
+          gradient.addColorStop(1, 'rgba(255, 140, 0, 0.3)');
+        } else if (shape === 1) {
+          // Violet vers rouge
+          gradient = ctx.createRadialGradient(0, 0, 20 * scaleFactor, 0, 0, 120 * scaleFactor);
+          gradient.addColorStop(0, 'rgba(138, 43, 226, 0.9)'); // Violet
+          gradient.addColorStop(0.7, 'rgba(199, 21, 133, 0.7)'); // Violet-rouge
+          gradient.addColorStop(1, 'rgba(138, 43, 226, 0.3)');
+        } else {
+          // Rouge vers orange
+          gradient = ctx.createRadialGradient(0, 0, 20 * scaleFactor, 0, 0, 120 * scaleFactor);
+          gradient.addColorStop(0, 'rgba(220, 20, 60, 0.9)'); // Rouge crimson
+          gradient.addColorStop(0.7, 'rgba(255, 99, 71, 0.7)'); // Rouge-orange
+          gradient.addColorStop(1, 'rgba(220, 20, 60, 0.3)');
+        }
+        
+        // Créer une forme fluide organique
+        ctx.beginPath();
+        
+        const segments = 80;
+        const baseRadius = (60 + shape * 20) * scaleFactor;
+        
+        for (let i = 0; i <= segments; i++) {
+          const t = (i / segments) * Math.PI * 2;
+          
+          // Créer des ondulations complexes pour la forme fluide
+          const wave1 = Math.sin(t * 3 + wavePhase) * 15 * scaleFactor;
+          const wave2 = Math.cos(t * 5 + wavePhase * 0.7) * 8 * scaleFactor;
+          const wave3 = Math.sin(t * 2 + wavePhase * 1.3) * 12 * scaleFactor;
+          
+          // Position de base avec rotation
+          const baseAngle = t + shapeOffset + time * 0.1;
+          const radius = baseRadius + wave1 + wave2 + wave3;
+          
+          // Distorsion pour créer des formes organiques
+          const distortion = Math.sin(t * 4 + wavePhase) * 0.1;
+          
+          const x = Math.cos(baseAngle + distortion) * radius;
+          const y = Math.sin(baseAngle + distortion) * radius;
+          
+          if (i === 0) {
+            ctx.moveTo(x, y);
+          } else {
+            ctx.lineTo(x, y);
+          }
+        }
+        
+        ctx.closePath();
+        
+        // Remplir avec le gradient
+        ctx.fillStyle = gradient;
+        ctx.fill();
+        
+        // Ajouter un contour subtil avec effet de brillance
+        ctx.strokeStyle = gradient;
+        ctx.lineWidth = 2 * scaleFactor;
+        ctx.stroke();
+        
+        // Ajouter des reflets internes
+        ctx.beginPath();
+        for (let i = 0; i <= segments; i++) {
+          const t = (i / segments) * Math.PI * 2;
+          const wave1 = Math.sin(t * 3 + wavePhase) * 15 * scaleFactor;
+          const wave2 = Math.cos(t * 5 + wavePhase * 0.7) * 8 * scaleFactor;
+          const wave3 = Math.sin(t * 2 + wavePhase * 1.3) * 12 * scaleFactor;
+          
+          const baseAngle = t + shapeOffset + time * 0.1;
+          const radius = (baseRadius + wave1 + wave2 + wave3) * 0.6; // Plus petit pour l'effet interne
+          
+          const distortion = Math.sin(t * 4 + wavePhase) * 0.1;
+          const x = Math.cos(baseAngle + distortion) * radius;
+          const y = Math.sin(baseAngle + distortion) * radius;
+          
+          if (i === 0) {
+            ctx.moveTo(x, y);
+          } else {
+            ctx.lineTo(x, y);
+          }
+        }
+        
+        ctx.closePath();
+        
+        // Gradient pour l'effet de brillance interne
+        const innerGradient = ctx.createRadialGradient(0, 0, 0, 0, 0, 40 * scaleFactor);
+        innerGradient.addColorStop(0, 'rgba(255, 255, 255, 0.3)');
+        innerGradient.addColorStop(1, 'rgba(255, 255, 255, 0.05)');
+        
+        ctx.fillStyle = innerGradient;
+        ctx.fill();
+      }
+      
+      ctx.restore();
+      animationId = requestAnimationFrame(drawFluidShapes);
+    };
+
+    drawFluidShapes();
+
+    return () => {
+      if (animationId) {
+        cancelAnimationFrame(animationId);
+      }
+    };
+  }, [canvasSize]); // Dépendance sur canvasSize
+
+  return (
+    <div 
+      className="fixed right-2 sm:right-4 md:right-8 top-1/2 transform -translate-y-1/2 pointer-events-none transition-opacity duration-300" 
+      style={{ 
+        zIndex: 25,
+        opacity: scrollOpacity
+      }}
+    >
+      <canvas
+        ref={canvasRef}
+        width={canvasSize}
+        height={canvasSize}
+        className="block"
+        style={{
+          filter: 'blur(0.5px)',
+          mixBlendMode: 'screen',
+          width: canvasSize + 'px',
+          height: canvasSize + 'px'
+        }}
+      />
+    </div>
+  );
+};
+
 const Home: React.FC = () => {
   const { t, i18n } = useTranslation();
   const [motIndex, setMotIndex] = useState(0);
@@ -93,6 +297,9 @@ const Home: React.FC = () => {
       className="flex flex-col justify-center items-center relative min-h-screen overflow-hidden"
       style={{ background: "none" }}
     >
+      {/* Animation formes fluides */}
+      <FluidShapesAnimation />
+
       <canvas
         ref={canvasRef}
         className="fixed inset-0 z-10 pointer-events-none"
