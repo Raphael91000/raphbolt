@@ -3,7 +3,7 @@ import "./TopNavbarCards.css";
 
 const sections = [
   { id: "home", label: "Accueil" },
-  { id: "about", label: "À propos de moi" },
+  { id: "about", label: "À propos" },
   { id: "skills", label: "Compétences" },
   { id: "experiences", label: "Expériences" },
   { id: "projets-perso", label: "Projets Perso" },
@@ -11,24 +11,24 @@ const sections = [
 ];
 
 const TopNavbarCards: React.FC = () => {
-  const handleClick = (id: string) => {
+  const handleLinkClick = (e: React.MouseEvent<HTMLDivElement>, id: string) => {
+    e.preventDefault();
     const el = document.getElementById(id);
-    if (el) {
-      el.scrollIntoView({ behavior: "smooth", block: "start" });
-      window.location.hash = id;
-    }
+    if (el) el.scrollIntoView({ behavior: "smooth" });
+    window.location.hash = id;
   };
 
   return (
-    <nav className="top-navbar-cards">
+    <nav className="top-navbar-cards"> {/* Changé en top-navbar-cards */}
       {sections.map((section) => (
         <div
           key={section.id}
           className="package"
-          onClick={() => handleClick(section.id)}
+          onClick={(e) => handleLinkClick(e, section.id)}
+          style={{ cursor: "pointer" }}
         >
           <div className="package2">
-            <span className="text">{section.label}</span>
+            <p className="text">{section.label}</p>
           </div>
         </div>
       ))}
