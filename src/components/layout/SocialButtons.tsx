@@ -31,9 +31,8 @@ const buttons = [
     href: "https://www.fiverr.com/sellers/raph910/edit",
     label: "Fiverr",
     svg: (
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
-        <circle cx="200" cy="200" r="180" fill="currentColor" stroke="white" strokeWidth="8"/>
-        <text x="200" y="240" textAnchor="middle" fontSize="200" fontWeight="bold" fill="white">F</text>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+        <path d="M96 32h256c17.7 0 32 14.3 32 32v32H64V64c0-17.7 14.3-32 32-32zm256 96v64H96v-64h256zM64 224v64h192v-64H64zm0 96v64h160v-64H64z"/>
       </svg>
     ),
   },
