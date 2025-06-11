@@ -1,196 +1,190 @@
-.card {
+/* Configuration */
+.social-clock {
+  --count-buttons: 3;
+  --size-button: 4rem;
+  --size-clock: 16rem;
+  --size-padding: 0.5rem;
+}
+
+/* Container */
+.social-clock {
+  --size: var(--size-clock);
+  border-radius: var(--size);
+  cursor: default;
+  height: var(--size);
+  pointer-events: none;
   position: relative;
-  width: 150px; /* Réduit de 200px à 150px */
-  height: 150px; /* Réduit de 200px à 150px */
-  background: #19141d; /* Fond noir au centre */
-  border-radius: 20px; /* Réduit le rayon pour correspondre à la taille */
-  overflow: hidden;
-  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
-  transition: all 1s ease-in-out;
+  width: var(--size);
+  transition: all 0.5s linear;
+  margin: 0 auto;
 }
 
-@media (max-width: 768px) {
-  .card {
-    width: 120px;
-    height: 120px;
-    border-radius: 15px;
-  }
+.social-clock,
+.social-clock__trigger {
+  align-items: center;
+  display: flex;
+  justify-content: center;
 }
 
-@media (max-width: 480px) {
-  .card {
-    width: 100px;
-    height: 100px;
-    border-radius: 10px;
-  }
+/* Trigger (bouton central) */
+.social-clock__trigger {
+  --size: var(--size-button);
+  background: #000;
+  border: none;
+  border-radius: var(--size);
+  height: var(--size);
+  pointer-events: all;
+  width: var(--size);
+  z-index: 3;
+  cursor: pointer;
 }
 
-.background {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(45deg, #ffa500, #ff2244, #800080); /* Dégradé orange -> rouge -> violet */
-  opacity: 0;
-  transition: opacity 0.5s ease-in-out;
+/* Trigger - Icon */
+.social-clock__trigger svg {
+  --size: calc(0.65 * var(--size-button));
+  fill: #fff;
+  height: var(--size);
+  width: var(--size);
+  padding-right: calc(0.05 * var(--size-button));
 }
 
-.card:hover .background {
-  opacity: 0.3; /* Effet de lumière en arrière-plan au hover */
-}
-
-.logo {
-  position: absolute;
-  right: 50%;
-  bottom: 50%;
-  transform: translate(50%, 50%);
-  transition: all 0.6s ease-in-out;
-}
-
-.logo .logo-svg {
-  fill: white;
-  width: 20px; /* Réduit la taille du logo */
-  height: 20px;
-}
-
-@media (max-width: 768px) {
-  .logo .logo-svg {
-    width: 15px;
-    height: 15px;
-  }
-}
-
-@media (max-width: 480px) {
-  .logo .logo-svg {
-    width: 12px;
-    height: 12px;
-  }
-}
-
-.icon {
-  display: inline-block;
-  width: 15px; /* Réduit la taille des icônes */
-  height: 15px;
-}
-
-@media (max-width: 768px) {
-  .icon {
-    width: 12px;
-    height: 12px;
-  }
-}
-
-@media (max-width: 480px) {
-  .icon {
-    width: 10px;
-    height: 10px;
-  }
-}
-
-.icon .svg {
-  fill: rgba(255, 255, 255, 0.797);
-  width: 100%;
-  transition: all 0.5s ease-in-out;
-}
-
-.box {
-  position: absolute;
-  padding: 8px; /* Réduit le padding */
-  text-align: right;
-  background: rgba(255, 255, 255, 0.389);
-  border-top: 2px solid rgb(255, 255, 255);
-  border-right: 1px solid white;
-  border-radius: 10% 13% 42% 0%/10% 12% 75% 0%;
-  box-shadow: rgba(100, 100, 111, 0.364) -7px 7px 29px 0px;
-  transform-origin: bottom left;
-  transition: all 1s ease-in-out;
-}
-
-@media (max-width: 768px) {
-  .box {
-    padding: 6px;
-  }
-}
-
-@media (max-width: 480px) {
-  .box {
-    padding: 4px;
-  }
-}
-
-.box::before {
-  content: "";
-  position: absolute;
-  inset: 0;
+/* Wrapper des boutons */
+.social-clock__list {
+  --size: calc(var(--size-button) + var(--size-padding));
   border-radius: inherit;
-  opacity: 0;
-  transition: all 0.5s ease-in-out;
-  background: linear-gradient(45deg, #ffa500, #ff2244, #800080); /* Dégradé pour l'effet hover */
+  height: var(--size);
+  left: calc(50% - var(--size) / 2);
+  pointer-events: all;
+  position: absolute;
+  top: calc(50% - var(--size) / 2);
+  width: var(--size);
+  transition:
+    all 0.3s ease-in-out,
+    transform 0.3s linear;
 }
 
-.box:hover::before {
-  opacity: 0.5;
+/* Animation au hover - Wrapper s'agrandit et tourne */
+.social-clock:hover .social-clock__list {
+  --size: 100%;
+  transform: rotate(360deg);
 }
 
-.box:hover .svg {
-  fill: white;
-  filter: drop-shadow(0 0 5px white);
+/* Boutons sociaux */
+.social-clock__button {
+  --angle: calc(var(--index, 0) * 360deg / var(--count-buttons));
+  --height: calc(100% - var(--size-padding) * 2);
+  --size: var(--size-button);
+  
+  background: none;
+  border: none;
+  border-radius: var(--size);
+  box-sizing: content-box;
+  cursor: pointer;
+  height: var(--height);
+  left: calc(50% - var(--size) / 2);
+  pointer-events: none;
+  position: absolute;
+  top: calc(50% - var(--height) / 2);
+  transform: rotate(var(--angle));
+  width: var(--size);
+  text-decoration: none;
+  color: inherit;
 }
 
-.box1 {
-  width: 70%;
-  height: 70%;
-  bottom: -70%;
-  left: -70%;
+/* Background des boutons */
+.social-clock__button::after,
+.social-clock__button::before {
+  --size: var(--size-button);
+  border-radius: inherit;
+  box-sizing: border-box;
+  content: "";
+  left: calc(50% - var(--size) / 2);
+  position: absolute;
+  width: var(--size);
 }
 
-.box2 {
-  width: 50%;
-  height: 50%;
-  bottom: -50%;
-  left: -50%;
-  transition-delay: 0.2s;
+/* Background - Couleur de base */
+.social-clock__button::before {
+  --fill-opacity: 0.5;
+  background: rgba(var(--color), var(--fill-opacity));
+  height: var(--size);
+  pointer-events: all;
+  top: 0;
+  transition: background 0.3s linear;
 }
 
-.box3 {
-  width: 30%;
-  height: 30%;
-  bottom: -30%;
-  left: -30%;
-  transition-delay: 0.4s;
+/* Background - Interactions */
+.social-clock:hover .social-clock__button::before {
+  background: rgba(0, 0, 0, var(--fill-opacity));
 }
 
-.box4 {
-  width: 10%;
-  height: 10%;
-  bottom: -10%;
-  left: -10%;
-  transition-delay: 0.6s;
+.social-clock__button::after {
+  --fill-opacity: 0.7;
+  --fill-size: 0;
+  --height: calc(50% + var(--size) / 2);
+  
+  bottom: calc(100% - var(--height));
+  box-shadow: inset 0 var(--fill-size) 0 rgba(var(--color), var(--fill-opacity));
+  height: var(--height);
+  pointer-events: none;
+  transition: box-shadow 0.3s ease-in-out;
 }
 
-.card:hover {
-  transform: scale(1.1);
+/* Animation de remplissage au hover */
+.social-clock__button:hover::after {
+  --fill-size: calc(-0.5 * (var(--size-clock) + var(--size)));
+  pointer-events: all;
 }
 
-.card:hover .box {
-  bottom: -1px;
-  left: -1px;
+.social-clock__button:active::after {
+  --fill-opacity: 1;
 }
 
-.card:hover .logo {
-  transform: translate(0, 0);
-  bottom: 15px; /* Ajusté pour la nouvelle taille */
-  right: 15px;
+/* Icons des boutons */
+.social-clock__button svg {
+  --padding: calc((var(--size-button) - var(--size)) / 2);
+  --size: calc(0.65 * var(--size-button));
+  
+  fill: #fff;
+  height: var(--size);
+  left: var(--padding);
+  position: absolute;
+  top: var(--padding);
+  transform: rotate(calc(-1 * var(--angle)));
+  width: var(--size);
+  z-index: 2;
 }
 
-@media (max-width: 768px) {
-  .card:hover .logo {
-    bottom: 12px;
-    right: 12px;
-  }
+/* Couleurs et positions des réseaux sociaux */
+.social-clock__button.github {
+  --color: 255, 165, 0; /* Orange */
 }
 
-@media (max-width: 480px) {
-  .card:hover .logo {
-    bottom: 10px;
-    right: 10px;
+.social-clock__button.linkedin {
+  --color: 255, 255, 0; /* Jaune */
+}
+
+.social-clock__button.fiverr {
+  --color: 255, 69, 0; /* Rouge */
+}
+
+/* Positionnement des boutons (ordre) */
+.social-clock__button:nth-child(1) {
+  --index: 0;
+}
+
+.social-clock__button:nth-child(2) {
+  --index: 1;
+}
+
+.social-clock__button:nth-child(3) {
+  --index: 2;
+}
+
+/* Responsive */
+@media (max-width: 700px) {
+  .social-clock {
+    --size-clock: 12rem;
+    --size-button: 3rem;
   }
 }
