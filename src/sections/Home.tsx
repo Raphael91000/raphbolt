@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
-import { Github, Linkedin } from "lucide-react";
+import SocialButtons from "../components/layout/SocialButtons";
 
 // --- Animation fluid shapes ---
 const FluidShapesAnimation = ({ opacity = 1 }: { opacity?: number }) => {
@@ -10,19 +10,19 @@ const FluidShapesAnimation = ({ opacity = 1 }: { opacity?: number }) => {
 
   useEffect(() => {
     const updateSize = () => {
-      if (window.innerWidth < 480) setCanvasSize(200);
-      else if (window.innerWidth < 768) setCanvasSize(300);
+      if (window.innerWidth < 480) setCanvasSize(150); // Plus petit sur mobile
+      else if (window.innerWidth < 768) setCanvasSize(250);
       else setCanvasSize(400);
     };
     updateSize();
-    window.addEventListener('resize', updateSize);
-    return () => window.removeEventListener('resize', updateSize);
+    window.addEventListener("resize", updateSize);
+    return () => window.removeEventListener("resize", updateSize);
   }, []);
 
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext("2d");
     canvas.width = canvasSize;
     canvas.height = canvasSize;
     let animationId: number;
@@ -39,19 +39,22 @@ const FluidShapesAnimation = ({ opacity = 1 }: { opacity?: number }) => {
         let gradient;
         if (shape === 0) {
           gradient = ctx.createRadialGradient(0, 0, 20 * scaleFactor, 0, 0, 120 * scaleFactor);
-          gradient.addColorStop(0, 'rgba(255, 140, 0, 0.9)');
-          gradient.addColorStop(0.7, 'rgba(255, 69, 0, 0.7)');
-          gradient.addColorStop(1, 'rgba(255, 140, 0, 0.3)');
+          gradient.addColorStop(0, "rgba(255, 165, 0, 0.9)"); // Orange
+          gradient.addColorStop(0.3, "rgba(255, 34, 68, 0.7)"); // Rouge
+          gradient.addColorStop(0.6, "rgba(128, 0, 128, 0.7)"); // Violet
+          gradient.addColorStop(1, "rgba(255, 165, 0, 0.3)");
         } else if (shape === 1) {
           gradient = ctx.createRadialGradient(0, 0, 20 * scaleFactor, 0, 0, 120 * scaleFactor);
-          gradient.addColorStop(0, 'rgba(138, 43, 226, 0.9)');
-          gradient.addColorStop(0.7, 'rgba(199, 21, 133, 0.7)');
-          gradient.addColorStop(1, 'rgba(138, 43, 226, 0.3)');
+          gradient.addColorStop(0, "rgba(255, 34, 68, 0.9)"); // Rouge
+          gradient.addColorStop(0.3, "rgba(128, 0, 128, 0.7)"); // Violet
+          gradient.addColorStop(0.6, "rgba(255, 165, 0, 0.7)"); // Retour à orange
+          gradient.addColorStop(1, "rgba(255, 34, 68, 0.3)");
         } else {
           gradient = ctx.createRadialGradient(0, 0, 20 * scaleFactor, 0, 0, 120 * scaleFactor);
-          gradient.addColorStop(0, 'rgba(220, 20, 60, 0.9)');
-          gradient.addColorStop(0.7, 'rgba(255, 99, 71, 0.7)');
-          gradient.addColorStop(1, 'rgba(220, 20, 60, 0.3)');
+          gradient.addColorStop(0, "rgba(128, 0, 128, 0.9)"); // Violet
+          gradient.addColorStop(0.3, "rgba(255, 165, 0, 0.7)"); // Orange
+          gradient.addColorStop(0.6, "rgba(255, 34, 68, 0.7)"); // Rouge
+          gradient.addColorStop(1, "rgba(128, 0, 128, 0.3)");
         }
         ctx.beginPath();
         const segments = 80;
@@ -91,8 +94,8 @@ const FluidShapesAnimation = ({ opacity = 1 }: { opacity?: number }) => {
         }
         ctx.closePath();
         const innerGradient = ctx.createRadialGradient(0, 0, 0, 0, 0, 40 * scaleFactor);
-        innerGradient.addColorStop(0, 'rgba(255, 255, 255, 0.3)');
-        innerGradient.addColorStop(1, 'rgba(255, 255, 255, 0.05)');
+        innerGradient.addColorStop(0, "rgba(255, 255, 255, 0.3)");
+        innerGradient.addColorStop(1, "rgba(255, 255, 255, 0.05)");
         ctx.fillStyle = innerGradient;
         ctx.fill();
       }
@@ -114,10 +117,10 @@ const FluidShapesAnimation = ({ opacity = 1 }: { opacity?: number }) => {
         height={canvasSize}
         className="block"
         style={{
-          filter: 'blur(0.5px)',
-          mixBlendMode: 'screen',
-          width: canvasSize + 'px',
-          height: canvasSize + 'px'
+          filter: "blur(0.5px)",
+          mixBlendMode: "screen",
+          width: canvasSize + "px",
+          height: canvasSize + "px"
         }}
       />
     </div>
@@ -130,7 +133,6 @@ const Home: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [canvasOpacity, setCanvasOpacity] = useState(1);
 
-  // Fade background Home quand on scroll
   useEffect(() => {
     const handleScroll = () => {
       const scrollY = window.scrollY;
@@ -176,9 +178,10 @@ const Home: React.FC = () => {
       for (let i = 0; i < filamentCount; i++) {
         const yOffset = filamentHeight * (i / filamentCount);
         const gradient = ctx.createLinearGradient(0, baseY + yOffset, width, baseY + yOffset);
-        gradient.addColorStop(0, "#ff69b4");
-        gradient.addColorStop(0.5, "#ffa500");
-        gradient.addColorStop(1, "#800080");
+        gradient.addColorStop(0, "#ffa500"); // Orange
+        gradient.addColorStop(0.3, "#ff2244"); // Rouge
+        gradient.addColorStop(0.6, "#800080"); // Violet
+        gradient.addColorStop(1, "#ffa500"); // Retour à orange
         ctx.beginPath();
         ctx.strokeStyle = gradient;
         ctx.lineWidth = 1.5;
@@ -228,48 +231,14 @@ const Home: React.FC = () => {
         aria-hidden="true"
       />
 
-      {/* Boutons réseaux uniquement */}
+      {/* Boutons réseaux sociaux en bas */}
       <motion.div
-        initial={{ opacity: 0, y: 24 }}
+        initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.2 }}
-        className="z-20 text-center px-4 w-full"
+        className="z-20 w-full flex justify-center pb-8 sm:pb-6 md:pb-4"
       >
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 1 }}
-          className={`flex flex-col md:flex-row items-center justify-center gap-4 mt-8 ${isRtl ? "md:flex-row-reverse" : ""}`}
-        >
-          <a
-            href="/CV-Raph-2025.pdf"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="px-6 py-3 border border-white bg-white text-black font-medium rounded-lg transition-colors flex items-center justify-center min-w-[180px] hover:bg-[#ff69b4] hover:text-white hover:border-[#ff69b4]"
-          >
-            {t("homeSection.cv")}
-          </a>
-          <div className="flex items-center gap-4 mt-4 md:mt-0">
-            <a
-              href="https://github.com/Raphael91000"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="p-3 border border-white bg-white text-black rounded-full transition-colors hover:bg-[#ff69b4] hover:text-white hover:border-[#ff69b4]"
-              aria-label="GitHub"
-            >
-              <Github size={24} />
-            </a>
-            <a
-              href="https://www.linkedin.com/in/raphael-theuillon-689139261/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="p-3 border border-white bg-white text-black rounded-full transition-colors hover:bg-[#800080] hover:text-white hover:border-[#800080]"
-              aria-label="LinkedIn"
-            >
-              <Linkedin size={24} />
-            </a>
-          </div>
-        </motion.div>
+        <SocialButtons />
       </motion.div>
     </section>
   );
