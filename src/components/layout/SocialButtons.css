@@ -161,11 +161,11 @@
 }
 
 .social-clock__button.linkedin {
-  --color: 255, 255, 0; /* Jaune */
+  --color: 255, 0, 0; /* Rouge */
 }
 
 .social-clock__button.fiverr {
-  --color: 255, 69, 0; /* Rouge */
+  --color: 128, 0, 128; /* Violet */
 }
 
 /* Positionnement des boutons (ordre) */
