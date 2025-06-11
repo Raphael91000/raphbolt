@@ -231,6 +231,59 @@ const Home: React.FC = () => {
         aria-hidden="true"
       />
 
+      {/* Texte "Welcome to my World" - Version desktop et mobile différentes */}
+      <motion.div
+        initial={{ opacity: 0, x: -50 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 1, delay: 0.3 }}
+        className="absolute left-4 sm:left-8 md:left-12 lg:left-16 top-[20%] sm:top-[15%] md:top-[10%] lg:top-[8%] transform -translate-y-1/4 z-30 w-[85%] sm:w-[70%] md:w-[50%] lg:w-[45%]"
+        style={{ opacity: canvasOpacity }}
+      >
+        {/* Version Mobile/Tablette (caché sur desktop) */}
+        <div className="text-left leading-tight block md:hidden">
+          {/* Welcome to my */}
+          <div className="text-white text-3xl sm:text-4xl font-light tracking-wide mb-2">
+            Welcome to my
+          </div>
+          
+          {/* WORLD avec dégradé */}
+          <div 
+            className="text-5xl sm:text-6xl font-bold tracking-wide leading-none"
+            style={{
+              background: "linear-gradient(45deg, #FFD700, #FFA500, #FF6347, #800080)",
+              backgroundClip: "text",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              textShadow: "0 0 40px rgba(255, 165, 0, 0.6)"
+            }}
+          >
+            WORLD
+          </div>
+        </div>
+
+        {/* Version Desktop (caché sur mobile/tablette) */}
+        <div className="text-left leading-tight hidden md:block">
+          {/* Welcome to my */}
+          <div className="text-white text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-light tracking-wide mb-3 md:mb-4">
+            Welcome to my
+          </div>
+          
+          {/* WORLD avec dégradé */}
+          <div 
+            className="text-8xl lg:text-9xl xl:text-[10rem] 2xl:text-[12rem] font-bold tracking-wide leading-none"
+            style={{
+              background: "linear-gradient(45deg, #FFD700, #FFA500, #FF6347, #800080)",
+              backgroundClip: "text",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              textShadow: "0 0 40px rgba(255, 165, 0, 0.6)"
+            }}
+          >
+            WORLD
+          </div>
+        </div>
+      </motion.div>
+
       {/* Boutons réseaux sociaux en bas */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
