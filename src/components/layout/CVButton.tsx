@@ -2,26 +2,20 @@ import React from "react";
 import "./CVButton.css";
 
 const CVButton: React.FC = () => {
-  const handleDownload = () => {
-    // Remplacez par le lien vers votre CV
-    const cvUrl = "/path/to/your/CV-Raph_2025.pdf"; // Changez ce chemin
-    const link = document.createElement("a");
-    link.href = cvUrl;
-    link.download = "CV_Raphael_Theuillon.pdf";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+  const handleViewCV = () => {
+    const cvUrl = "/CV-Raph-2025.pdf";
+    window.open(cvUrl, '_blank');
   };
 
   return (
     <div className="cv-button-container">
       <div
         className="cv-package"
-        onClick={handleDownload}
+        onClick={handleViewCV}
         style={{ cursor: "pointer" }}
       >
         <div className="cv-package2">
-          <p className="cv-text">Téléchargez mon CV</p>
+          <p className="cv-text">Voir mon CV</p>
         </div>
       </div>
     </div>
