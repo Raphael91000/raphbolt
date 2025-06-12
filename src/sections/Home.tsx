@@ -133,6 +133,8 @@ const Home: React.FC = () => {
   const isRtl = i18n.dir(i18n.language) === "rtl";
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [canvasOpacity, setCanvasOpacity] = useState(1);
+  const worldRef = useRef<HTMLDivElement>(null);
+  const welcomeRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -146,6 +148,50 @@ const Home: React.FC = () => {
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // Fonction pour aligner les textes
+  useEffect(() => {
+    const alignTexts = () => {
+      if (worldRef.current && welcomeRef.current) {
+        const worldWidth = worldRef.current.getBoundingClientRect().width;
+        welcomeRef.current.style.width = `${worldWidth}px`;
+        
+        // Forcer le reflow pour s'assurer que les changements sont appliqués
+        welcomeRef.current.offsetHeight;
+      }
+    };
+
+    // Alignement initial avec plusieurs tentatives
+    const performAlignment = () => {
+      alignTexts();
+      // Plusieurs tentatives pour s'assurer que les polices sont chargées
+      setTimeout(alignTexts, 50);
+      setTimeout(alignTexts, 150);
+      setTimeout(alignTexts, 300);
+      setTimeout(alignTexts, 500);
+    };
+
+    performAlignment();
+    
+    // Réalignement lors du redimensionnement avec debounce
+    let resizeTimeout: NodeJS.Timeout;
+    const handleResize = () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(alignTexts, 100);
+    };
+    
+    window.addEventListener('resize', handleResize);
+    
+    // Alignement quand les polices sont chargées
+    if (document.fonts) {
+      document.fonts.ready.then(alignTexts);
+    }
+    
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      clearTimeout(resizeTimeout);
+    };
   }, []);
 
   useEffect(() => {
@@ -237,33 +283,36 @@ const Home: React.FC = () => {
         initial={{ opacity: 0, x: -50 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 1, delay: 0.3 }}
-        className="absolute left-4 sm:left-8 md:left-12 lg:left-16 top-[15%] sm:top-[12%] md:top-[10%] lg:top-[8%] transform -translate-y-1/2 z-30 w-[85%] sm:w-[70%] md:w-[50%] lg:w-[45%] text-left"
+        className="absolute left-4 sm:left-8 md:left-12 lg:left-16 xl:left-20 top-[10%] sm:top-[18%] md:top-[15%] lg:top-[12%] xl:top-[22%] transform -translate-y-0 sm:-translate-y-1/2 z-30"
         style={{ opacity: canvasOpacity }}
       >
         <div className="flex flex-col items-start">
-          {/* Welcome to my */}
+          {/* Welcome to my - aligné sur la largeur de WORLD */}
           <div 
-            className="text-white font-light tracking-wide mb-2 leading-tight inline-block" 
+            ref={welcomeRef}
+            className="text-white font-light tracking-wide mb-1 sm:mb-2 leading-tight text-left"
             style={{ 
-              fontSize: "clamp(1.875rem, 5vw, 2.25rem)",
-              minWidth: "match-parent", // Ajuste la largeur pour matcher "WORLD"
-              width: "fit-content",
-              display: "inline-block"
+              fontSize: "clamp(1.2rem, 4vw, 4.5rem)",
+              whiteSpace: "nowrap",
+              overflow: "hidden",
+              textAlign: "left"
             }}
           >
             Welcome to my
           </div>
           
-          {/* WORLD avec dégradé */}
+          {/* WORLD avec dégradé - référence pour l'alignement */}
           <div 
+            ref={worldRef}
             className="font-bold tracking-wide leading-none"
             style={{
-              fontSize: "clamp(3rem, 8vw, 12rem)", // Taille responsive mais constante pour "WORLD"
+              fontSize: "clamp(2.5rem, 8vw, 16rem)",
               background: "linear-gradient(45deg, #FFD700, #FFA500, #FF6347, #800080)",
               backgroundClip: "text",
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent",
-              textShadow: "0 0 40px rgba(255, 165, 0, 0.6)"
+              textShadow: "0 0 40px rgba(255, 165, 0, 0.6)",
+              whiteSpace: "nowrap"
             }}
           >
             WORLD
