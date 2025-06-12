@@ -283,7 +283,7 @@ const Home: React.FC = () => {
         initial={{ opacity: 0, x: -50 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 1, delay: 0.3 }}
-        className="absolute left-4 sm:left-8 md:left-12 lg:left-16 xl:left-20 top-[10%] sm:top-[18%] md:top-[15%] lg:top-[12%] xl:top-[22%] transform -translate-y-0 sm:-translate-y-1/2 z-30"
+        className="absolute left-4 sm:left-8 md:left-12 lg:left-16 xl:left-20 top-[10%] sm:top-[10%] md:top-[15%] lg:top-[12%] xl:top-[12%] transform -translate-y-0 sm:-translate-y-1/2 z-30"
         style={{ opacity: canvasOpacity }}
       >
         <div className="flex flex-col items-start">
