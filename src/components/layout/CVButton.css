@@ -1,0 +1,119 @@
+.cv-button-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin-top: 30px; /* Garde l'espacement normal */
+  transform: translateY(-76px); /* Remonte uniquement le bouton CV */
+  z-index: 20;
+}
+
+.cv-package {
+  width: 200px; /* Légèrement plus large pour "Téléchargez mon CV" */
+  height: 44px;
+  border-radius: 16px;
+  text-align: center;
+  transition: all 0.25s cubic-bezier(0, 0, 0, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  margin-bottom: 0.2rem;
+  background: #19141d; /* Fond noir au centre */
+  position: relative; /* Pour gérer l'effet de fond */
+  overflow: hidden;
+}
+
+.cv-package::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, #ff69b4, #ffa500, #800080); /* Dégradé fluide rose -> orange -> violet */
+  border-radius: 16px;
+  z-index: 0;
+  transition: opacity 0.3s ease;
+  opacity: 0; /* Invisible par défaut */
+  background-size: 200% 100%; /* Permet l'animation du dégradé */
+  animation: cvGradientShift 6s infinite alternate; /* Animation du dégradé */
+}
+
+@keyframes cvGradientShift {
+  0% { background-position: 0% 0%; }
+  100% { background-position: 100% 0%; }
+}
+
+.cv-package2 {
+  width: 196px; /* Ajusté pour la nouvelle largeur */
+  height: 40px;
+  background: transparent;
+  border-radius: 13px;
+  transition: all 0.22s cubic-bezier(0, 0, 0, 1);
+  padding: 0 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 1; /* Au-dessus de l'effet de fond */
+}
+
+.cv-package .cv-text {
+  color: #fff;
+  font-size: 1rem;
+  letter-spacing: 0.01em;
+  font-weight: 600;
+  z-index: 2;
+  position: relative; /* Assure que le texte reste au-dessus */
+  margin: 0px;
+}
+
+/* Hover & Active = effet de glow avec dégradé */
+.cv-package:hover::before,
+.cv-package.active::before {
+  opacity: 0.3; /* Active le dégradé en arrière-plan avec une légère opacité */
+}
+
+.cv-package:hover,
+.cv-package.active {
+  box-shadow: 0 0 16px 2px rgba(255, 105, 180, 0.5), 0 0 16px 4px rgba(255, 165, 0, 0.3), 0 0 16px 6px rgba(128, 0, 128, 0.3); /* Glow suivant le dégradé */
+  border: none;
+  background: #19141d; /* Garde le fond noir */
+}
+
+.cv-package:hover .cv-package2,
+.cv-package.active .cv-package2 {
+  background: rgba(0,0,0,0.81);
+  border-radius: 13px;
+  transition: all 0.18s cubic-bezier(0, 0, 0, 1);
+}
+
+@media (max-width: 700px) {
+  .cv-button-container {
+    margin-top: 20px; /* Garde l'espacement normal */
+    transform: translateY(-10px); /* Remonte le bouton CV sur mobile */
+  }
+  
+  .cv-package {
+    width: 160px;
+    height: 36px;
+    border-radius: 10px;
+  }
+  
+  .cv-package::before {
+    border-radius: 10px;
+  }
+  
+  .cv-package2 {
+    width: 156px;
+    height: 32px;
+    border-radius: 8px;
+    padding: 0 5px;
+  }
+  
+  .cv-package .cv-text {
+    font-size: 0.86rem;
+  }
+}

@@ -2,6 +2,7 @@ import React, { useRef, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
 import SocialButtons from "../components/layout/SocialButtons";
+import CVButton from "../components/layout/CVButton"; // Import du nouveau composant
 
 // --- Animation fluid shapes ---
 const FluidShapesAnimation = ({ opacity = 1 }: { opacity?: number }) => {
@@ -284,15 +285,28 @@ const Home: React.FC = () => {
         </div>
       </motion.div>
 
-      {/* Boutons réseaux sociaux en bas */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 0.2 }}
-        className="z-20 w-full flex justify-center pb-8 sm:pb-6 md:pb-4"
-      >
-        <SocialButtons />
-      </motion.div>
+      {/* Container pour les boutons en bas */}
+      <div className="absolute bottom-0 left-0 right-0 z-20 pb-8 sm:pb-6 md:pb-4">
+        {/* Boutons réseaux sociaux */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+          className="w-full flex justify-center"
+        >
+          <SocialButtons />
+        </motion.div>
+
+        {/* Bouton CV */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.4 }}
+          className="w-full flex justify-center"
+        >
+          <CVButton />
+        </motion.div>
+      </div>
     </section>
   );
 };
