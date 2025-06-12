@@ -11,9 +11,9 @@ const FluidShapesAnimation = ({ opacity = 1 }: { opacity?: number }) => {
 
   useEffect(() => {
     const updateSize = () => {
-      if (window.innerWidth < 480) setCanvasSize(150); // Plus petit sur mobile
-      else if (window.innerWidth < 768) setCanvasSize(250);
-      else setCanvasSize(400);
+      if (window.innerWidth < 480) setCanvasSize(120); // Réduit pour mobile
+      else if (window.innerWidth < 768) setCanvasSize(200); // Ajusté pour tablette
+      else setCanvasSize(400); // Desktop
     };
     updateSize();
     window.addEventListener("resize", updateSize);
@@ -109,7 +109,7 @@ const FluidShapesAnimation = ({ opacity = 1 }: { opacity?: number }) => {
 
   return (
     <div 
-      className="fixed right-2 sm:right-4 md:right-8 top-[10%] transform -translate-y-0 pointer-events-none transition-opacity duration-300" 
+      className="fixed right-2 sm:right-4 md:right-8 top-[10%] sm:top-[10%] md:top-[12%] lg:top-[10%] transform -translate-y-0 pointer-events-none transition-opacity duration-300" 
       style={{ zIndex: 20, opacity }}
     >
       <canvas
@@ -283,7 +283,7 @@ const Home: React.FC = () => {
         initial={{ opacity: 0, x: -50 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 1, delay: 0.3 }}
-        className="absolute left-4 sm:left-8 md:left-12 lg:left-16 xl:left-20 top-[10%] sm:top-[10%] md:top-[15%] lg:top-[12%] xl:top-[12%] transform -translate-y-0 sm:-translate-y-1/2 z-30"
+        className="absolute left-2 sm:left-10 md:left-8 lg:left-12 xl:left-16 top-[5%] sm:top-[6%] md:top-[10%] lg:top-[10%] xl:top-[10%] transform -translate-y-0 sm:-translate-y-1/2 z-30"
         style={{ opacity: canvasOpacity }}
       >
         <div className="flex flex-col items-start">
@@ -321,7 +321,7 @@ const Home: React.FC = () => {
       </motion.div>
 
       {/* Container pour les boutons en bas */}
-      <div className="absolute bottom-0 left-0 right-0 z-20 pb-8 sm:pb-6 md:pb-4">
+<div className="absolute bottom-0 lg:bottom-16 left-0 right-0 z-20 pb-8 lg:pb-4 md:pb-4 sm:pb-2 bottom-10 sm:bottom-8 md:bottom-6">
         {/* Boutons réseaux sociaux */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}

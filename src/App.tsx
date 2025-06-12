@@ -23,6 +23,8 @@ function App() {
 
   return (
     <div className="relative min-h-screen overflow-hidden" style={{ background: "none" }}>
+      {/* Arrière-plan d'étoiles couvrant toutes les pages */}
+     
       {/* Navbar horizontale en haut */}
       <TopNavbarCards />
       {/* Padding-top pour ne pas cacher les sections sous la navbar */}
