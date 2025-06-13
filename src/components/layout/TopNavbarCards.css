@@ -273,12 +273,12 @@
     position: relative;
   }
   
-  /* Cacher les éléments de navigation normaux sur mobile SAUF dans le dropdown */
+  /* Cacher TOUS les éléments de navigation normaux sur mobile */
   .top-navbar-cards .package {
     display: none !important;
   }
   
-  /* Afficher les packages dans le menu déroulant mobile */
+  /* Afficher SEULEMENT les packages dans le menu déroulant mobile */
   .mobile-dropdown .package {
     display: flex !important;
     width: 100% !important;
@@ -302,7 +302,7 @@
     display: block !important;
   }
   
-  /* Afficher le menu hamburger sur mobile */
+  /* Afficher SEULEMENT le menu hamburger sur mobile */
   .hamburger-menu {
     display: flex !important;
   }
