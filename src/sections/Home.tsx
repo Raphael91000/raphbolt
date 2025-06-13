@@ -25,6 +25,7 @@ const FluidShapesAnimation = ({ opacity = 1 }: { opacity?: number }) => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
+    if (!ctx) return;
     canvas.width = canvasSize;
     canvas.height = canvasSize;
     let animationId: number;
@@ -124,7 +125,7 @@ const FluidShapesAnimation = ({ opacity = 1 }: { opacity?: number }) => {
         ref={canvasRef}
         width={canvasSize}
         height={canvasSize}
-        className="block"
+        className="hidden sm:block" 
         style={{
           filter: "blur(0.5px)",
           mixBlendMode: "screen",
@@ -133,6 +134,116 @@ const FluidShapesAnimation = ({ opacity = 1 }: { opacity?: number }) => {
         }}
       />
     </div>
+  );
+};
+
+// --- Animation mobile séparée ---
+const MobileFluidAnimation = ({ opacity = 1 }: { opacity?: number }) => {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const canvasSize = 200;
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+    canvas.width = canvasSize;
+    canvas.height = canvasSize;
+    let animationId: number;
+
+    const drawFluidShapes = () => {
+      ctx.clearRect(0, 0, canvasSize, canvasSize);
+      ctx.save();
+      ctx.translate(canvasSize / 2, canvasSize / 2);
+      const time = Date.now() * 0.001;
+      const scaleFactor = canvasSize / 400;
+      for (let shape = 0; shape < 3; shape++) {
+        const shapeOffset = (shape * Math.PI * 2) / 3;
+        const wavePhase = time + shape * 2;
+        let gradient;
+        if (shape === 0) {
+          gradient = ctx.createRadialGradient(0, 0, 20 * scaleFactor, 0, 0, 120 * scaleFactor);
+          gradient.addColorStop(0, "rgba(255, 165, 0, 0.9)");
+          gradient.addColorStop(0.3, "rgba(255, 34, 68, 0.7)");
+          gradient.addColorStop(0.6, "rgba(128, 0, 128, 0.7)");
+          gradient.addColorStop(1, "rgba(255, 165, 0, 0.3)");
+        } else if (shape === 1) {
+          gradient = ctx.createRadialGradient(0, 0, 20 * scaleFactor, 0, 0, 120 * scaleFactor);
+          gradient.addColorStop(0, "rgba(255, 34, 68, 0.9)");
+          gradient.addColorStop(0.3, "rgba(128, 0, 128, 0.7)");
+          gradient.addColorStop(0.6, "rgba(255, 165, 0, 0.7)");
+          gradient.addColorStop(1, "rgba(255, 34, 68, 0.3)");
+        } else {
+          gradient = ctx.createRadialGradient(0, 0, 20 * scaleFactor, 0, 0, 120 * scaleFactor);
+          gradient.addColorStop(0, "rgba(128, 0, 128, 0.9)");
+          gradient.addColorStop(0.3, "rgba(255, 165, 0, 0.7)");
+          gradient.addColorStop(0.6, "rgba(255, 34, 68, 0.7)");
+          gradient.addColorStop(1, "rgba(128, 0, 128, 0.3)");
+        }
+        ctx.beginPath();
+        const segments = 80;
+        const baseRadius = (60 + shape * 20) * scaleFactor;
+        for (let i = 0; i <= segments; i++) {
+          const t = (i / segments) * Math.PI * 2;
+          const wave1 = Math.sin(t * 3 + wavePhase) * 15 * scaleFactor;
+          const wave2 = Math.cos(t * 5 + wavePhase * 0.7) * 8 * scaleFactor;
+          const wave3 = Math.sin(t * 2 + wavePhase * 1.3) * 12 * scaleFactor;
+          const baseAngle = t + shapeOffset + time * 0.1;
+          const radius = baseRadius + wave1 + wave2 + wave3;
+          const distortion = Math.sin(t * 4 + wavePhase) * 0.1;
+          const x = Math.cos(baseAngle + distortion) * radius;
+          const y = Math.sin(baseAngle + distortion) * radius;
+          if (i === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        }
+        ctx.closePath();
+        ctx.fillStyle = gradient;
+        ctx.fill();
+        ctx.strokeStyle = gradient;
+        ctx.lineWidth = 2 * scaleFactor;
+        ctx.stroke();
+        ctx.beginPath();
+        for (let i = 0; i <= segments; i++) {
+          const t = (i / segments) * Math.PI * 2;
+          const wave1 = Math.sin(t * 3 + wavePhase) * 15 * scaleFactor;
+          const wave2 = Math.cos(t * 5 + wavePhase * 0.7) * 8 * scaleFactor;
+          const wave3 = Math.sin(t * 2 + wavePhase * 1.3) * 12 * scaleFactor;
+          const baseAngle = t + shapeOffset + time * 0.1;
+          const radius = (baseRadius + wave1 + wave2 + wave3) * 0.6;
+          const distortion = Math.sin(t * 4 + wavePhase) * 0.1;
+          const x = Math.cos(baseAngle + distortion) * radius;
+          const y = Math.sin(baseAngle + distortion) * radius;
+          if (i === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        }
+        ctx.closePath();
+        const innerGradient = ctx.createRadialGradient(0, 0, 0, 0, 0, 40 * scaleFactor);
+        innerGradient.addColorStop(0, "rgba(255, 255, 255, 0.3)");
+        innerGradient.addColorStop(1, "rgba(255, 255, 255, 0.05)");
+        ctx.fillStyle = innerGradient;
+        ctx.fill();
+      }
+      ctx.restore();
+      animationId = requestAnimationFrame(drawFluidShapes);
+    };
+    drawFluidShapes();
+    return () => { if (animationId) cancelAnimationFrame(animationId); };
+  }, []);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      width={canvasSize}
+      height={canvasSize}
+      className="block pointer-events-none"
+      style={{
+        filter: "blur(0.5px)",
+        mixBlendMode: "screen",
+        width: canvasSize + "px",
+        height: canvasSize + "px",
+        opacity
+      }}
+    />
   );
 };
 
@@ -413,8 +524,8 @@ const Home: React.FC = () => {
         </div>
       </div>
 
-      {/* Layout Mobile - texte centré en haut */}
-      <div className="relative z-30 w-full px-4 pt-12 sm:hidden">
+      {/* Layout Mobile - texte centré en haut - tout en haut de l'écran */}
+      <div className="relative z-30 w-full px-4 pt-2 sm:hidden">
         
         {/* Texte "Welcome to my World" centré pour mobile */}
         <motion.div
@@ -424,11 +535,11 @@ const Home: React.FC = () => {
           className="flex flex-col items-center text-center"
           style={{ opacity: canvasOpacity }}
         >
-          {/* Welcome to my - centré */}
+          {/* Welcome to my - centré avec même police que texte animé */}
           <div 
-            className="text-white font-light tracking-wide mb-2 leading-tight"
+            className="text-white font-medium tracking-wide mb-1 leading-tight"
             style={{ 
-              fontSize: "clamp(1.5rem, 6vw, 2.5rem)"
+              fontSize: "clamp(2rem, 7vw, 3rem)"
             }}
           >
             Welcome to my
@@ -436,9 +547,9 @@ const Home: React.FC = () => {
           
           {/* WORLD avec dégradé - plus gros et centré */}
           <div 
-            className="font-bold tracking-wide leading-none mb-4"
+            className="font-bold tracking-wide leading-none mb-1"
             style={{
-              fontSize: "clamp(3rem, 12vw, 6rem)",
+              fontSize: "clamp(4rem, 15vw, 8rem)",
               background: "linear-gradient(45deg, #FFD700, #FFA500, #FF6347, #800080)",
               backgroundClip: "text",
               WebkitBackgroundClip: "text",
@@ -449,11 +560,11 @@ const Home: React.FC = () => {
             WORLD
           </div>
           
-          {/* Texte animé machine à écrire - centré */}
+          {/* Texte animé machine à écrire - centré avec même espacement */}
           <div 
             className="text-white font-medium tracking-wide flex items-center justify-center"
             style={{ 
-              fontSize: "clamp(1.2rem, 4vw, 1.8rem)",
+              fontSize: "clamp(1.5rem, 5vw, 2.2rem)",
               minHeight: "3rem"
             }}
           >
@@ -469,7 +580,7 @@ const Home: React.FC = () => {
               className="ml-1 animate-pulse" 
               style={{ 
                 color: "#ffa500",
-                fontSize: "clamp(1.2rem, 4vw, 1.8rem)"
+                fontSize: "clamp(1.5rem, 5vw, 2.2rem)"
               }}
             >
               |
@@ -477,23 +588,29 @@ const Home: React.FC = () => {
           </div>
         </motion.div>
 
-        {/* Animation fluide plus grosse pour mobile - sous le texte */}
-        <div className="flex justify-center mt-8">
-          <div style={{ transform: 'scale(1.2)' }}>
-            <FluidShapesAnimation opacity={canvasOpacity} />
+        {/* Animation fluide plus grosse pour mobile - sous le texte - collée au texte */}
+        <div className="flex justify-center mt-2">
+          <div 
+            className="pointer-events-none"
+            style={{ 
+              transform: 'scale(1.2)',
+              opacity: canvasOpacity
+            }}
+          >
+            <MobileFluidAnimation opacity={canvasOpacity} />
           </div>
         </div>
       </div>
 
-      {/* Container pour les boutons en bas - Remontés sur mobile */}
-      <div className="absolute left-0 right-0 z-40" style={{ bottom: 'clamp(4rem, 15vh, 8rem)' }}>
+      {/* Container pour les boutons en bas - Très remontés et quasi-collés */}
+      <div className="absolute left-0 right-0 z-40 bottom-16">
         {/* Boutons réseaux sociaux */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="w-full flex justify-center mb-4"
-          style={{ opacity: canvasOpacity, pointerEvents: 'auto' }}
+          className="w-full flex justify-center"
+          style={{ opacity: canvasOpacity, pointerEvents: 'auto', marginBottom: '4px' }}
         >
           <SocialButtons />
         </motion.div>
@@ -504,7 +621,7 @@ const Home: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.4 }}
           className="w-full flex justify-center"
-          style={{ opacity: canvasOpacity, pointerEvents: 'auto' }}
+          style={{ opacity: canvasOpacity, pointerEvents: 'auto', marginTop: '-34px' }}
         >
           <CVButton />
         </motion.div>
