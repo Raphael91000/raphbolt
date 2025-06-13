@@ -588,8 +588,8 @@ const Home: React.FC = () => {
           </div>
         </motion.div>
 
-        {/* Animation fluide plus grosse pour mobile - sous le texte - collée au texte */}
-        <div className="flex justify-center mt-2">
+        {/* Animation fluide plus grosse pour mobile - sous le texte - remontée un peu */}
+        <div className="flex justify-center mt-1">
           <div 
             className="pointer-events-none"
             style={{ 
@@ -602,15 +602,50 @@ const Home: React.FC = () => {
         </div>
       </div>
 
-      {/* Container pour les boutons en bas - Très remontés et quasi-collés */}
-      <div className="absolute left-0 right-0 z-40 bottom-16">
+      {/* Mobile : Bouton réseaux sociaux - plus bas et sans fond blanc */}
+      <div className="sm:hidden absolute z-50" style={{ 
+        left: '50%', 
+        transform: 'translateX(-50%)', 
+        bottom: '20%' // Plus bas qu'avant (35% → 32%)
+      }}>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+          style={{ 
+            opacity: 1,
+            pointerEvents: 'auto'
+          }}
+        >
+          <SocialButtons />
+        </motion.div>
+      </div>
+
+      {/* Mobile : Bouton CV centré au milieu de l'écran, même hauteur que le robot */}
+      <div className="sm:hidden absolute z-40" style={{ 
+        left: '50%', 
+        transform: 'translateX(-50%)', 
+        top: '73%' // Position que vous avez modifiée
+      }}>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.4 }}
+          style={{ opacity: canvasOpacity, pointerEvents: 'auto' }}
+        >
+          <CVButton />
+        </motion.div>
+      </div>
+
+      {/* Desktop : boutons empilés comme avant */}
+      <div className="hidden sm:block absolute left-0 right-0 z-40 bottom-8 md:bottom-12 lg:bottom-16">
         {/* Boutons réseaux sociaux */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="w-full flex justify-center"
-          style={{ opacity: canvasOpacity, pointerEvents: 'auto', marginBottom: '4px' }}
+          className="w-full flex justify-center mb-4"
+          style={{ opacity: canvasOpacity, pointerEvents: 'auto' }}
         >
           <SocialButtons />
         </motion.div>
@@ -621,7 +656,7 @@ const Home: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.4 }}
           className="w-full flex justify-center"
-          style={{ opacity: canvasOpacity, pointerEvents: 'auto', marginTop: '-34px' }}
+          style={{ opacity: canvasOpacity, pointerEvents: 'auto' }}
         >
           <CVButton />
         </motion.div>
