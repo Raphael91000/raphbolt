@@ -606,7 +606,7 @@ const Home: React.FC = () => {
       <div className="sm:hidden fixed z-[9999]" style={{ 
         left: '50%', 
         transform: 'translateX(-50%)', 
-        bottom: '10%',
+        bottom: '8%',
         pointerEvents: 'auto'
       }}>
         <motion.div
