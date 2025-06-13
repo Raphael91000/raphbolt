@@ -602,11 +602,12 @@ const Home: React.FC = () => {
         </div>
       </div>
 
-      {/* Mobile : Bouton réseaux sociaux - plus bas et sans fond blanc */}
-      <div className="sm:hidden absolute z-50" style={{ 
+      {/* Mobile : Bouton réseaux sociaux - Zone cliquable élargie avec CSS */}
+      <div className="sm:hidden fixed z-[9999]" style={{ 
         left: '50%', 
         transform: 'translateX(-50%)', 
-        bottom: '20%' // Plus bas qu'avant (35% → 32%)
+        bottom: '10%',
+        pointerEvents: 'auto'
       }}>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -614,10 +615,33 @@ const Home: React.FC = () => {
           transition={{ duration: 0.8, delay: 0.2 }}
           style={{ 
             opacity: 1,
-            pointerEvents: 'auto'
+            pointerEvents: 'auto',
+            position: 'relative'
           }}
         >
-          <SocialButtons />
+          <div style={{ 
+            opacity: 1,
+            pointerEvents: 'auto',
+            position: 'relative',
+            zIndex: 10000,
+            // Élargir la zone cliquable avec CSS
+            padding: '20px',
+            margin: '-20px',
+            cursor: 'pointer'
+          }}>
+            <div style={{
+              // Rendre TOUT cliquable
+              width: '100%',
+              height: '100%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              cursor: 'pointer',
+              userSelect: 'none'
+            }}>
+              <SocialButtons />
+            </div>
+          </div>
         </motion.div>
       </div>
 
