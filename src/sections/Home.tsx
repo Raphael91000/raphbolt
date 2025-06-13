@@ -308,15 +308,8 @@ const Home: React.FC = () => {
       className="relative min-h-screen overflow-hidden"
       style={{ background: "none" }}
     >
-      {/* Animation formes fluides par-dessus (z-20) - Maintenant positionnée en haut et visible sur mobile */}
+      {/* Animation formes fluides par-dessus (z-20) - UNE SEULE ANIMATION */}
       <FluidShapesAnimation opacity={canvasOpacity} />
-
-      {/* Animation fluide supplémentaire pour mobile - centrée sous le texte */}
-      <div className="sm:hidden absolute z-20 left-1/2 transform -translate-x-1/2" style={{ top: 'clamp(15rem, 40vh, 25rem)', opacity: canvasOpacity }}>
-        <div style={{ transform: 'scale(0.7)' }}>
-          <FluidShapesAnimation opacity={canvasOpacity} />
-        </div>
-      </div>
 
       {/* Fond canvas principal (z-10) */}
       <canvas
@@ -412,18 +405,11 @@ const Home: React.FC = () => {
             </div>
           </motion.div>
 
-          {/* Espace pour l'animation fluide - Partie droite - maintenant visible sur mobile aussi */}
+          {/* Espace pour l'animation fluide - Partie droite */}
           <div className="flex-1 relative flex items-start justify-end h-96 hidden sm:block">
             {/* L'animation est positionnée via le CSS dans FluidShapesAnimation */}
           </div>
 
-        </div>
-
-        {/* Animation fluide pour mobile - positionnée en dessous du texte */}
-        <div className="flex justify-center mt-8 sm:hidden">
-          <div style={{ transform: 'scale(0.6)' }}>
-            {/* Version réduite de l'animation pour mobile */}
-          </div>
         </div>
       </div>
 
