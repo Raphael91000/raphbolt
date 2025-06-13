@@ -330,8 +330,8 @@ const Home: React.FC = () => {
         aria-hidden="true"
       />
 
-      {/* Container principal pour le contenu en haut - remonté légèrement */}
-      <div className="relative z-30 w-full px-4 sm:px-8 md:px-12 lg:px-16 pt-8 sm:pt-12 md:pt-16">
+      {/* Layout Desktop - côte à côte */}
+      <div className="relative z-30 w-full px-4 sm:px-8 md:px-12 lg:px-16 pt-8 sm:pt-12 md:pt-16 hidden sm:block">
         
         {/* Container flex pour aligner texte et animation - parfaitement alignés horizontalement */}
         <div className="flex items-start justify-between w-full max-w-7xl mx-auto">
@@ -406,15 +406,87 @@ const Home: React.FC = () => {
           </motion.div>
 
           {/* Espace pour l'animation fluide - Partie droite */}
-          <div className="flex-1 relative flex items-start justify-end h-96 hidden sm:block">
+          <div className="flex-1 relative flex items-start justify-end h-96">
             {/* L'animation est positionnée via le CSS dans FluidShapesAnimation */}
           </div>
 
         </div>
       </div>
 
-      {/* Container pour les boutons en bas - Rendu fonctionnel */}
-      <div className="absolute bottom-8 sm:bottom-12 md:bottom-16 left-0 right-0 z-40">
+      {/* Layout Mobile - texte centré en haut */}
+      <div className="relative z-30 w-full px-4 pt-12 sm:hidden">
+        
+        {/* Texte "Welcome to my World" centré pour mobile */}
+        <motion.div
+          initial={{ opacity: 0, y: -30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, delay: 0.3 }}
+          className="flex flex-col items-center text-center"
+          style={{ opacity: canvasOpacity }}
+        >
+          {/* Welcome to my - centré */}
+          <div 
+            className="text-white font-light tracking-wide mb-2 leading-tight"
+            style={{ 
+              fontSize: "clamp(1.5rem, 6vw, 2.5rem)"
+            }}
+          >
+            Welcome to my
+          </div>
+          
+          {/* WORLD avec dégradé - plus gros et centré */}
+          <div 
+            className="font-bold tracking-wide leading-none mb-4"
+            style={{
+              fontSize: "clamp(3rem, 12vw, 6rem)",
+              background: "linear-gradient(45deg, #FFD700, #FFA500, #FF6347, #800080)",
+              backgroundClip: "text",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              textShadow: "0 0 40px rgba(255, 165, 0, 0.6)"
+            }}
+          >
+            WORLD
+          </div>
+          
+          {/* Texte animé machine à écrire - centré */}
+          <div 
+            className="text-white font-medium tracking-wide flex items-center justify-center"
+            style={{ 
+              fontSize: "clamp(1.2rem, 4vw, 1.8rem)",
+              minHeight: "3rem"
+            }}
+          >
+            <span
+              style={{
+                color: "#ffffff",
+                textShadow: "0 0 20px rgba(255, 255, 255, 0.3)"
+              }}
+            >
+              {currentText}
+            </span>
+            <span 
+              className="ml-1 animate-pulse" 
+              style={{ 
+                color: "#ffa500",
+                fontSize: "clamp(1.2rem, 4vw, 1.8rem)"
+              }}
+            >
+              |
+            </span>
+          </div>
+        </motion.div>
+
+        {/* Animation fluide plus grosse pour mobile - sous le texte */}
+        <div className="flex justify-center mt-8">
+          <div style={{ transform: 'scale(1.2)' }}>
+            <FluidShapesAnimation opacity={canvasOpacity} />
+          </div>
+        </div>
+      </div>
+
+      {/* Container pour les boutons en bas - Remontés sur mobile */}
+      <div className="absolute left-0 right-0 z-40" style={{ bottom: 'clamp(4rem, 15vh, 8rem)' }}>
         {/* Boutons réseaux sociaux */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
