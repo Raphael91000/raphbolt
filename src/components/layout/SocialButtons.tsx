@@ -41,6 +41,7 @@ const buttons = [
 const SocialButtons: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
   const socialClockRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -52,6 +53,44 @@ const SocialButtons: React.FC = () => {
     window.addEventListener('resize', checkMobile);
 
     return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // Gestion de la visibilité basée sur le scroll et la page
+  useEffect(() => {
+    const handleScrollAndRoute = () => {
+      const scrollY = window.scrollY;
+      const currentHash = window.location.hash;
+      
+      // Visible seulement sur la page d'accueil (pas de hash ou #home)
+      const isHomePage = currentHash === '' || currentHash === '#home';
+      
+      // Sur desktop : toujours visible si on est sur la home
+      // Sur mobile : cacher après 150px de scroll
+      let shouldShow;
+      if (window.innerWidth > 700) {
+        // Desktop : visible si on est sur l'accueil, peu importe le scroll
+        shouldShow = isHomePage;
+      } else {
+        // Mobile : visible si on est sur l'accueil ET pas trop scrollé
+        shouldShow = isHomePage && scrollY < 150;
+      }
+      
+      setIsVisible(shouldShow);
+    };
+
+    // Vérifier au chargement
+    handleScrollAndRoute();
+
+    // Écouter les changements de scroll
+    window.addEventListener('scroll', handleScrollAndRoute);
+    
+    // Écouter les changements de hash (navigation)
+    window.addEventListener('hashchange', handleScrollAndRoute);
+
+    return () => {
+      window.removeEventListener('scroll', handleScrollAndRoute);
+      window.removeEventListener('hashchange', handleScrollAndRoute);
+    };
   }, []);
 
   useEffect(() => {
@@ -77,6 +116,11 @@ const SocialButtons: React.FC = () => {
       setIsOpen(!isOpen);
     }
   };
+
+  // Si pas visible, ne pas rendre le composant
+  if (!isVisible) {
+    return null;
+  }
 
   return (
     <div 

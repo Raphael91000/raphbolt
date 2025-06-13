@@ -92,11 +92,11 @@ const TopNavbarCards: React.FC = () => {
         {sections.map((section) => (
           <div
             key={section.id}
-            className="mobile-package"
+            className="package" // Utilise la même classe que desktop
             onClick={(e) => handleLinkClick(e, section.id)}
             style={{ cursor: "pointer" }}
           >
-            <div className="mobile-package2">
+            <div className="package2">
               <p className="text">{section.label}</p>
             </div>
           </div>

@@ -1,6 +1,6 @@
 .top-navbar-cards {
   display: flex !important;
-  justify-content: flex-start !important;
+  justify-content: flex-end !important;
   align-items: center;
   gap: 1rem;
   width: 100vw;
@@ -141,7 +141,7 @@
   border: 1px solid rgba(255, 105, 180, 0.3);
   position: absolute;
   top: 12px;
-  left: 12px;
+  left: 0; /* Collé à l'angle gauche */
   z-index: 101;
 }
 
@@ -170,14 +170,14 @@
 .mobile-dropdown {
   position: fixed;
   top: 70px;
-  left: 12px; /* Aligné avec le hamburger */
+  left: 0; /* Collé à l'angle gauche */
   background: rgba(0, 0, 0, 0.95);
   border-radius: 16px;
   padding: 1rem;
   display: none;
   flex-direction: column;
   gap: 0.8rem;
-  z-index: 99;
+  z-index: 102; /* Plus élevé que la navbar */
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 105, 180, 0.2);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.8);
@@ -193,7 +193,7 @@
   width: 100vw;
   height: 100vh;
   background: rgba(0, 0, 0, 0.3);
-  z-index: 98;
+  z-index: 101; /* Entre la navbar et le dropdown */
   display: none;
 }
 
@@ -273,9 +273,33 @@
     position: relative;
   }
   
-  /* Cacher les éléments de navigation normaux sur mobile */
-  .package {
+  /* Cacher les éléments de navigation normaux sur mobile SAUF dans le dropdown */
+  .top-navbar-cards .package {
     display: none !important;
+  }
+  
+  /* Afficher les packages dans le menu déroulant mobile */
+  .mobile-dropdown .package {
+    display: flex !important;
+    width: 100% !important;
+    height: 44px !important;
+    margin-bottom: 0.5rem !important;
+    background: #19141d !important;
+    border-radius: 12px !important;
+  }
+  
+  .mobile-dropdown .package .package2 {
+    width: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+  
+  .mobile-dropdown .package .text {
+    color: #fff !important;
+    font-size: 0.95rem !important;
+    font-weight: 600 !important;
+    display: block !important;
   }
   
   /* Afficher le menu hamburger sur mobile */
