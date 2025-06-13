@@ -55,41 +55,30 @@ const SocialButtons: React.FC = () => {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  // Gestion de la visibilité basée sur le scroll et la page
+  // CORRECTION: Logique de visibilité améliorée
   useEffect(() => {
-    const handleScrollAndRoute = () => {
-      const scrollY = window.scrollY;
+    const handlePageChange = () => {
       const currentHash = window.location.hash;
+      const currentPath = window.location.pathname;
       
-      // Visible seulement sur la page d'accueil (pas de hash ou #home)
-      const isHomePage = currentHash === '' || currentHash === '#home';
+      // Visible SEULEMENT sur la home page
+      const isHomePage = (currentPath === '/' || currentPath === '/index.html') && 
+                        (!currentHash || currentHash === '' || currentHash === '#' || currentHash === '#home');
       
-      // Sur desktop : toujours visible si on est sur la home
-      // Sur mobile : cacher après 150px de scroll
-      let shouldShow;
-      if (window.innerWidth > 700) {
-        // Desktop : visible si on est sur l'accueil, peu importe le scroll
-        shouldShow = isHomePage;
-      } else {
-        // Mobile : visible si on est sur l'accueil ET pas trop scrollé
-        shouldShow = isHomePage && scrollY < 150;
-      }
-      
-      setIsVisible(shouldShow);
+      console.log('Path:', currentPath, 'Hash:', currentHash, 'Is Home:', isHomePage);
+      setIsVisible(isHomePage);
     };
 
     // Vérifier au chargement
-    handleScrollAndRoute();
+    handlePageChange();
 
-    // Écouter les changements de scroll
-    window.addEventListener('scroll', handleScrollAndRoute);
-    
-    // Écouter les changements de hash (navigation)
-    window.addEventListener('hashchange', handleScrollAndRoute);
+    // Écouter les changements de navigation (hash et popstate pour les vraies pages)
+    window.addEventListener('hashchange', handlePageChange);
+    window.addEventListener('popstate', handlePageChange);
 
     return () => {
-      window.removeEventListener('scroll', handleScrollAndRoute);
-      window.removeEventListener('hashchange', handleScrollAndRoute);
+      window.removeEventListener('hashchange', handlePageChange);
+      window.removeEventListener('popstate', handlePageChange);
     };
   }, []);
 

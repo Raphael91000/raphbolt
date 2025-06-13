@@ -255,6 +255,9 @@ const Home: React.FC = () => {
   const worldRef = useRef<HTMLDivElement>(null);
   const welcomeRef = useRef<HTMLDivElement>(null);
   
+  // AJOUT: État pour détecter si on est sur la home
+  const [isOnHomePage, setIsOnHomePage] = useState(true);
+  
   // État pour l'effet machine à écrire
   const [currentText, setCurrentText] = useState("");
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -266,6 +269,42 @@ const Home: React.FC = () => {
     "Digital Marketing",
     "Réseaux Sociaux"
   ];
+
+  // AJOUT: Détecter quand on est sur la home page basé sur le scroll ET le hash
+  useEffect(() => {
+    const handlePageChange = () => {
+      const currentHash = window.location.hash;
+      const homeSection = document.getElementById('home');
+      
+      if (!homeSection) return;
+      
+      const rect = homeSection.getBoundingClientRect();
+      const isInHomeViewport = rect.top <= 100 && rect.bottom >= 100;
+      
+      // On est sur la home si : pas de hash OU hash = home OU on est dans le viewport de la home
+      const isHomePage = (!currentHash || currentHash === '' || currentHash === '#home') ||
+                        (isInHomeViewport && window.scrollY < window.innerHeight);
+      
+      setIsOnHomePage(isHomePage);
+      
+      // Mettre à jour l'URL si on scroll sur la home
+      if (isInHomeViewport && currentHash !== '#home') {
+        window.history.replaceState(null, '', '#home');
+      }
+    };
+
+    // Vérifier au chargement
+    handlePageChange();
+
+    // Écouter les changements
+    window.addEventListener('hashchange', handlePageChange);
+    window.addEventListener('scroll', handlePageChange);
+
+    return () => {
+      window.removeEventListener('hashchange', handlePageChange);
+      window.removeEventListener('scroll', handlePageChange);
+    };
+  }, []);
 
   // Effet machine à écrire
   useEffect(() => {
@@ -602,89 +641,94 @@ const Home: React.FC = () => {
         </div>
       </div>
 
-      {/* Mobile : Bouton réseaux sociaux - Zone cliquable élargie avec CSS */}
-      <div className="sm:hidden fixed z-[9999]" style={{ 
-        left: '50%', 
-        transform: 'translateX(-50%)', 
-        bottom: '8%',
-        pointerEvents: 'auto'
-      }}>
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          style={{ 
-            opacity: 1,
-            pointerEvents: 'auto',
-            position: 'relative'
-          }}
-        >
-          <div style={{ 
-            opacity: 1,
-            pointerEvents: 'auto',
-            position: 'relative',
-            zIndex: 10000,
-            // Élargir la zone cliquable avec CSS
-            padding: '20px',
-            margin: '-20px',
-            cursor: 'pointer'
+      {/* CORRECTION: Boutons réseaux sociaux - Visible SEULEMENT quand on est sur la home */}
+      {isOnHomePage && (
+        <>
+          {/* Mobile : Bouton réseaux sociaux - Zone cliquable élargie avec CSS */}
+          <div className="sm:hidden fixed z-[9999]" style={{ 
+            left: '50%', 
+            transform: 'translateX(-50%)', 
+            bottom: '8%',
+            pointerEvents: 'auto'
           }}>
-            <div style={{
-              // Rendre TOUT cliquable
-              width: '100%',
-              height: '100%',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              cursor: 'pointer',
-              userSelect: 'none'
-            }}>
-              <SocialButtons />
-            </div>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              style={{ 
+                opacity: 1,
+                pointerEvents: 'auto',
+                position: 'relative'
+              }}
+            >
+              <div style={{ 
+                opacity: 1,
+                pointerEvents: 'auto',
+                position: 'relative',
+                zIndex: 10000,
+                // Élargir la zone cliquable avec CSS
+                padding: '20px',
+                margin: '-20px',
+                cursor: 'pointer'
+              }}>
+                <div style={{
+                  // Rendre TOUT cliquable
+                  width: '100%',
+                  height: '100%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  cursor: 'pointer',
+                  userSelect: 'none'
+                }}>
+                  <SocialButtons />
+                </div>
+              </div>
+            </motion.div>
           </div>
-        </motion.div>
-      </div>
 
-      {/* Mobile : Bouton CV centré au milieu de l'écran, même hauteur que le robot */}
-      <div className="sm:hidden absolute z-40" style={{ 
-        left: '50%', 
-        transform: 'translateX(-50%)', 
-        top: '73%' // Position que vous avez modifiée
-      }}>
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.4 }}
-          style={{ opacity: canvasOpacity, pointerEvents: 'auto' }}
-        >
-          <CVButton />
-        </motion.div>
-      </div>
+          {/* Mobile : Bouton CV centré au milieu de l'écran, même hauteur que le robot */}
+          <div className="sm:hidden absolute z-40" style={{ 
+            left: '50%', 
+            transform: 'translateX(-50%)', 
+            top: '63%' // Position que vous avez modifiée
+          }}>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
+              style={{ opacity: canvasOpacity, pointerEvents: 'auto' }}
+            >
+              <CVButton />
+            </motion.div>
+          </div>
 
-      {/* Desktop : boutons empilés comme avant */}
-      <div className="hidden sm:block absolute left-0 right-0 z-40 bottom-8 md:bottom-12 lg:bottom-16">
-        {/* Boutons réseaux sociaux */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          className="w-full flex justify-center mb-4"
-          style={{ opacity: canvasOpacity, pointerEvents: 'auto' }}
-        >
-          <SocialButtons />
-        </motion.div>
+          {/* Desktop : boutons empilés comme avant */}
+          <div className="hidden sm:block absolute left-0 right-0 z-40 bottom-8 md:bottom-12 lg:bottom-16">
+            {/* Boutons réseaux sociaux */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="w-full flex justify-center mb-4"
+              style={{ opacity: canvasOpacity, pointerEvents: 'auto' }}
+            >
+              <SocialButtons />
+            </motion.div>
 
-        {/* Bouton CV */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.4 }}
-          className="w-full flex justify-center"
-          style={{ opacity: canvasOpacity, pointerEvents: 'auto' }}
-        >
-          <CVButton />
-        </motion.div>
-      </div>
+            {/* Bouton CV */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
+              className="w-full flex justify-center"
+              style={{ opacity: canvasOpacity, pointerEvents: 'auto' }}
+            >
+              <CVButton />
+            </motion.div>
+          </div>
+        </>
+      )}
     </section>
   );
 };

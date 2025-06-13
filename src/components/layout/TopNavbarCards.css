@@ -4,7 +4,7 @@
   align-items: center;
   gap: 1rem;
   width: 100vw;
-  padding: 14px 0 0 0 !important; /* Force le padding à 0 à gauche */
+  padding: 14px 0 0 0 !important;
   background: rgba(0,0,0,0.92);
   position: fixed;
   top: 0;
@@ -14,31 +14,6 @@
   backdrop-filter: blur(3px);
   height: 70px;
 }
-
-/* Alternative 1: Centrer la navbar */
-/* 
-.top-navbar-cards {
-  justify-content: center;
-  padding: 14px 1rem 0 1rem;
-}
-*/
-
-/* Alternative 2: Répartir uniformément */
-/* 
-.top-navbar-cards {
-  justify-content: space-evenly;
-  padding: 14px 1rem 0 1rem;
-}
-*/
-
-/* Alternative 3: Coller complètement à gauche */
-/* 
-.top-navbar-cards {
-  justify-content: flex-start;
-  padding: 14px 0 0 0;
-  gap: 0.8rem;
-}
-*/
 
 .top-navbar-cards::-webkit-scrollbar {
   display: none;
@@ -125,12 +100,7 @@
   transition: all 0.18s cubic-bezier(0, 0, 0, 1);
 }
 
-/* Titre mobile - SUPPRIMÉ */
-.mobile-title {
-  display: none !important;
-}
-
-/* Menu hamburger - en haut à gauche */
+/* CORRECTION: Menu hamburger repositionné dans l'angle */
 .hamburger-menu {
   display: none;
   flex-direction: column;
@@ -139,9 +109,9 @@
   background: rgba(25, 20, 29, 0.9);
   border-radius: 8px;
   border: 1px solid rgba(255, 105, 180, 0.3);
-  position: absolute;
+  position: fixed; /* CHANGÉ en fixed pour être dans l'angle absolu */
   top: 12px;
-  left: 0; /* Collé à l'angle gauche */
+  left: 12px; /* AJOUTÉ 12px de marge pour ne pas coller au bord */
   z-index: 101;
 }
 
@@ -166,18 +136,18 @@
   transform: rotate(-45deg) translate(6px, -6px);
 }
 
-/* Menu déroulant mobile */
+/* CORRECTION: Menu déroulant mobile repositionné */
 .mobile-dropdown {
   position: fixed;
   top: 70px;
-  left: 0; /* Collé à l'angle gauche */
+  left: 12px; /* ALIGNÉ avec le hamburger */
   background: rgba(0, 0, 0, 0.95);
   border-radius: 16px;
   padding: 1rem;
   display: none;
   flex-direction: column;
   gap: 0.8rem;
-  z-index: 102; /* Plus élevé que la navbar */
+  z-index: 102;
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 105, 180, 0.2);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.8);
@@ -193,7 +163,7 @@
   width: 100vw;
   height: 100vh;
   background: rgba(0, 0, 0, 0.3);
-  z-index: 101; /* Entre la navbar et le dropdown */
+  z-index: 101;
   display: none;
 }
 
@@ -315,10 +285,6 @@
   }
   
   .mobile-dropdown {
-    display: none !important;
-  }
-  
-  .mobile-title {
     display: none !important;
   }
 }

@@ -12,6 +12,35 @@ const sections = [
 
 const TopNavbarCards: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  // AJOUT: État pour le marginLeft responsive
+  const [navbarMargin, setNavbarMargin] = useState('0px');
+
+  // AJOUT: Fonction pour calculer le margin responsive
+  const updateNavbarMargin = () => {
+    if (window.innerWidth > 768) {
+      setNavbarMargin('80px'); // Aligné avec le texte "Welcome to my"
+    } else {
+      setNavbarMargin('0px'); // Pas de margin sur mobile
+    }
+  };
+
+  // AJOUT: Effet pour gérer le responsive
+  useEffect(() => {
+    // Calcul initial
+    updateNavbarMargin();
+
+    // Listener pour le redimensionnement
+    const handleResize = () => {
+      updateNavbarMargin();
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    // Nettoyage
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   const handleLinkClick = (e: React.MouseEvent<HTMLDivElement>, id: string) => {
     e.preventDefault();
@@ -53,7 +82,7 @@ const TopNavbarCards: React.FC = () => {
       <nav 
         className="top-navbar-cards"
         style={{ 
-          marginLeft: window.innerWidth > 768 ? '80px' : '0'
+          marginLeft: navbarMargin // CHANGÉ: Utilise l'état dynamique
         }}
       >
         {/* Menu hamburger - en haut à gauche */}
