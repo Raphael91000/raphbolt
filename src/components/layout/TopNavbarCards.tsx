@@ -50,7 +50,12 @@ const TopNavbarCards: React.FC = () => {
 
   return (
     <>
-      <nav className="top-navbar-cards">
+      <nav 
+        className="top-navbar-cards"
+        style={{ 
+          marginLeft: window.innerWidth > 768 ? '80px' : '0'
+        }}
+      >
         {/* Menu hamburger - en haut à gauche */}
         <div 
           className={`hamburger-menu ${isMenuOpen ? 'open' : ''}`}

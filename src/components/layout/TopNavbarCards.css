@@ -1,10 +1,10 @@
 .top-navbar-cards {
-  display: flex;
-  justify-content: flex-start;
+  display: flex !important;
+  justify-content: flex-start !important;
   align-items: center;
-  gap: 1.1rem;
+  gap: 1rem;
   width: 100vw;
-  padding: 14px 0 0 1rem; /* Décalé à gauche */
+  padding: 14px 0 0 0 !important; /* Force le padding à 0 à gauche */
   background: rgba(0,0,0,0.92);
   position: fixed;
   top: 0;
@@ -14,6 +14,31 @@
   backdrop-filter: blur(3px);
   height: 70px;
 }
+
+/* Alternative 1: Centrer la navbar */
+/* 
+.top-navbar-cards {
+  justify-content: center;
+  padding: 14px 1rem 0 1rem;
+}
+*/
+
+/* Alternative 2: Répartir uniformément */
+/* 
+.top-navbar-cards {
+  justify-content: space-evenly;
+  padding: 14px 1rem 0 1rem;
+}
+*/
+
+/* Alternative 3: Coller complètement à gauche */
+/* 
+.top-navbar-cards {
+  justify-content: flex-start;
+  padding: 14px 0 0 0;
+  gap: 0.8rem;
+}
+*/
 
 .top-navbar-cards::-webkit-scrollbar {
   display: none;
