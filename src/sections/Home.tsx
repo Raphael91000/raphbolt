@@ -116,7 +116,7 @@ const FluidShapesAnimation = ({ opacity = 1 }: { opacity?: number }) => {
         opacity,
         // Positionnement responsive aligné avec le texte - maintenant en haut
         right: 'clamp(1rem, 5vw, 4rem)',
-        top: 'clamp(-2rem, -8vh, -2rem)', // Aligné en haut au lieu du centre
+        top: 'clamp(2rem, 8vh, 6rem)', // Aligné en haut au lieu du centre
         transform: 'none' // Supprimé le translateY(-50%)
       }}
     >
@@ -261,7 +261,7 @@ const Home: React.FC = () => {
   return (
     <section
       id="home"
-      className="relative min-h-screen overflow-hidden"
+      className="flex flex-col justify-center items-center relative min-h-screen overflow-hidden"
       style={{ background: "none" }}
     >
       {/* Animation formes fluides par-dessus (z-20) - Maintenant positionnée en haut */}
@@ -286,11 +286,11 @@ const Home: React.FC = () => {
         aria-hidden="true"
       />
 
-      {/* Container principal pour le contenu en haut */}
-      <div className="relative z-30 w-full px-4 sm:px-8 md:px-12 lg:px-16 pt-8 sm:pt-12 md:pt-16">
+      {/* Container principal pour le contenu - maintenant centré verticalement */}
+      <div className="relative z-30 w-full h-full flex items-center justify-center px-4 sm:px-8 md:px-12 lg:px-16">
         
-        {/* Container flex pour aligner texte et animation - maintenant en haut */}
-        <div className="flex items-start justify-between w-full max-w-7xl mx-auto">
+        {/* Container flex pour aligner texte et animation */}
+        <div className="flex items-center justify-between w-full max-w-7xl">
           
           {/* Texte "Welcome to my World" - Partie gauche */}
           <motion.div
