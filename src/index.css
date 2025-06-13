@@ -354,7 +354,7 @@ html[dir="rtl"] { font-family: 'Amiri', serif; }
     height: 70px !important;
     position: fixed !important;
     top: 0 !important;
-    left: 80px !important;
+    left: 10px !important;
     right: auto !important;
     bottom: auto !important;
     transform: none !important;
