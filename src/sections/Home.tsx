@@ -11,9 +11,10 @@ const FluidShapesAnimation = ({ opacity = 1 }: { opacity?: number }) => {
 
   useEffect(() => {
     const updateSize = () => {
-      if (window.innerWidth < 480) setCanvasSize(120); // Réduit pour mobile
-      else if (window.innerWidth < 768) setCanvasSize(200); // Ajusté pour tablette
-      else setCanvasSize(400); // Desktop
+      if (window.innerWidth < 480) setCanvasSize(140); // Mobile
+      else if (window.innerWidth < 768) setCanvasSize(220); // Tablette
+      else if (window.innerWidth < 1024) setCanvasSize(300); // Petit desktop
+      else setCanvasSize(400); // Desktop large
     };
     updateSize();
     window.addEventListener("resize", updateSize);
@@ -109,8 +110,15 @@ const FluidShapesAnimation = ({ opacity = 1 }: { opacity?: number }) => {
 
   return (
     <div 
-      className="fixed right-2 sm:right-4 md:right-8 top-[10%] sm:top-[10%] md:top-[12%] lg:top-[10%] transform -translate-y-0 pointer-events-none transition-opacity duration-300" 
-      style={{ zIndex: 20, opacity }}
+      className="absolute pointer-events-none transition-opacity duration-300" 
+      style={{ 
+        zIndex: 20, 
+        opacity,
+        // Positionnement responsive aligné avec le texte - maintenant en haut
+        right: 'clamp(1rem, 5vw, 4rem)',
+        top: 'clamp(-2rem, -8vh, -2rem)', // Aligné en haut au lieu du centre
+        transform: 'none' // Supprimé le translateY(-50%)
+      }}
     >
       <canvas
         ref={canvasRef}
@@ -253,10 +261,10 @@ const Home: React.FC = () => {
   return (
     <section
       id="home"
-      className="flex flex-col justify-center items-center relative min-h-screen overflow-hidden"
+      className="relative min-h-screen overflow-hidden"
       style={{ background: "none" }}
     >
-      {/* Animation formes fluides par-dessus (z-20) */}
+      {/* Animation formes fluides par-dessus (z-20) - Maintenant positionnée en haut */}
       <FluidShapesAnimation opacity={canvasOpacity} />
 
       {/* Fond canvas principal (z-10) */}
@@ -278,56 +286,71 @@ const Home: React.FC = () => {
         aria-hidden="true"
       />
 
-      {/* Texte "Welcome to my World" - Aligné et responsive */}
-      <motion.div
-        initial={{ opacity: 0, x: -50 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 1, delay: 0.3 }}
-        className="absolute left-2 sm:left-10 md:left-8 lg:left-12 xl:left-16 top-[5%] sm:top-[6%] md:top-[10%] lg:top-[10%] xl:top-[10%] transform -translate-y-0 sm:-translate-y-1/2 z-30"
-        style={{ opacity: canvasOpacity }}
-      >
-        <div className="flex flex-col items-start">
-          {/* Welcome to my - aligné sur la largeur de WORLD */}
-          <div 
-            ref={welcomeRef}
-            className="text-white font-light tracking-wide mb-1 sm:mb-2 leading-tight text-left"
-            style={{ 
-              fontSize: "clamp(1.2rem, 4vw, 4.5rem)",
-              whiteSpace: "nowrap",
-              overflow: "hidden",
-              textAlign: "left"
-            }}
-          >
-            Welcome to my
-          </div>
+      {/* Container principal pour le contenu en haut */}
+      <div className="relative z-30 w-full px-4 sm:px-8 md:px-12 lg:px-16 pt-8 sm:pt-12 md:pt-16">
+        
+        {/* Container flex pour aligner texte et animation - maintenant en haut */}
+        <div className="flex items-start justify-between w-full max-w-7xl mx-auto">
           
-          {/* WORLD avec dégradé - référence pour l'alignement */}
-          <div 
-            ref={worldRef}
-            className="font-bold tracking-wide leading-none"
-            style={{
-              fontSize: "clamp(2.5rem, 8vw, 16rem)",
-              background: "linear-gradient(45deg, #FFD700, #FFA500, #FF6347, #800080)",
-              backgroundClip: "text",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              textShadow: "0 0 40px rgba(255, 165, 0, 0.6)",
-              whiteSpace: "nowrap"
-            }}
+          {/* Texte "Welcome to my World" - Partie gauche */}
+          <motion.div
+            initial={{ opacity: 0, x: -50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 1, delay: 0.3 }}
+            className="flex-1 flex flex-col items-start"
+            style={{ opacity: canvasOpacity }}
           >
-            WORLD
-          </div>
-        </div>
-      </motion.div>
+            <div className="flex flex-col items-start">
+              {/* Welcome to my - aligné sur la largeur de WORLD */}
+              <div 
+                ref={welcomeRef}
+                className="text-white font-light tracking-wide mb-1 sm:mb-2 leading-tight text-left"
+                style={{ 
+                  fontSize: "clamp(1rem, 3.5vw, 4rem)",
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textAlign: "left"
+                }}
+              >
+                Welcome to my
+              </div>
+              
+              {/* WORLD avec dégradé - référence pour l'alignement */}
+              <div 
+                ref={worldRef}
+                className="font-bold tracking-wide leading-none"
+                style={{
+                  fontSize: "clamp(2rem, 7vw, 14rem)",
+                  background: "linear-gradient(45deg, #FFD700, #FFA500, #FF6347, #800080)",
+                  backgroundClip: "text",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  textShadow: "0 0 40px rgba(255, 165, 0, 0.6)",
+                  whiteSpace: "nowrap"
+                }}
+              >
+                WORLD
+              </div>
+            </div>
+          </motion.div>
 
-      {/* Container pour les boutons en bas */}
-<div className="absolute bottom-0 lg:bottom-16 left-0 right-0 z-20 pb-8 lg:pb-4 md:pb-4 sm:pb-2 bottom-10 sm:bottom-8 md:bottom-6">
+          {/* Espace pour l'animation fluide - Partie droite */}
+          <div className="flex-1 relative h-96 hidden sm:block">
+            {/* L'animation est positionnée via le CSS dans FluidShapesAnimation */}
+          </div>
+
+        </div>
+      </div>
+
+      {/* Container pour les boutons en bas - Rendu fonctionnel */}
+      <div className="absolute bottom-8 sm:bottom-12 md:bottom-16 left-0 right-0 z-40">
         {/* Boutons réseaux sociaux */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="w-full flex justify-center"
+          className="w-full flex justify-center mb-4"
+          style={{ opacity: canvasOpacity, pointerEvents: 'auto' }}
         >
           <SocialButtons />
         </motion.div>
@@ -338,6 +361,7 @@ const Home: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.4 }}
           className="w-full flex justify-center"
+          style={{ opacity: canvasOpacity, pointerEvents: 'auto' }}
         >
           <CVButton />
         </motion.div>
