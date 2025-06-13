@@ -115,8 +115,8 @@ const FluidShapesAnimation = ({ opacity = 1 }: { opacity?: number }) => {
         zIndex: 20, 
         opacity,
         // Positionnement responsive aligné avec le texte - maintenant en haut
-        right: 'clamp(1rem, 5vw, 4rem)',
-        top: 'clamp(2rem, 8vh, 6rem)', // Aligné en haut au lieu du centre
+        right: 'clamp(1rem, 5vw, 10rem)',
+        top: 'clamp(-1rem, 0vh, 0rem)', // Aligné en haut au lieu du centre
         transform: 'none' // Supprimé le translateY(-50%)
       }}
     >
@@ -261,7 +261,7 @@ const Home: React.FC = () => {
   return (
     <section
       id="home"
-      className="flex flex-col justify-center items-center relative min-h-screen overflow-hidden"
+      className="relative min-h-screen overflow-hidden"
       style={{ background: "none" }}
     >
       {/* Animation formes fluides par-dessus (z-20) - Maintenant positionnée en haut */}
@@ -286,11 +286,11 @@ const Home: React.FC = () => {
         aria-hidden="true"
       />
 
-      {/* Container principal pour le contenu - maintenant centré verticalement */}
-      <div className="relative z-30 w-full h-full flex items-center justify-center px-4 sm:px-8 md:px-12 lg:px-16">
+      {/* Container principal pour le contenu en haut - remonté légèrement */}
+      <div className="relative z-30 w-full px-4 sm:px-8 md:px-12 lg:px-16 pt-8 sm:pt-12 md:pt-16">
         
-        {/* Container flex pour aligner texte et animation */}
-        <div className="flex items-center justify-between w-full max-w-7xl">
+        {/* Container flex pour aligner texte et animation - parfaitement alignés horizontalement */}
+        <div className="flex items-start justify-between w-full max-w-7xl mx-auto">
           
           {/* Texte "Welcome to my World" - Partie gauche */}
           <motion.div
@@ -334,8 +334,8 @@ const Home: React.FC = () => {
             </div>
           </motion.div>
 
-          {/* Espace pour l'animation fluide - Partie droite */}
-          <div className="flex-1 relative h-96 hidden sm:block">
+          {/* Espace pour l'animation fluide - Partie droite - parfaitement alignée */}
+          <div className="flex-1 relative flex items-start justify-end h-96 hidden sm:block">
             {/* L'animation est positionnée via le CSS dans FluidShapesAnimation */}
           </div>
 
