@@ -12,10 +12,10 @@ const sections = [
 
 const TopNavbarCards: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  // AJOUT: État pour le marginLeft responsive
+  // État pour le marginLeft responsive
   const [navbarMargin, setNavbarMargin] = useState('0px');
 
-  // AJOUT: Fonction pour calculer le margin responsive
+  // Fonction pour calculer le margin responsive
   const updateNavbarMargin = () => {
     if (window.innerWidth > 768) {
       setNavbarMargin('80px'); // Aligné avec le texte "Welcome to my"
@@ -24,7 +24,7 @@ const TopNavbarCards: React.FC = () => {
     }
   };
 
-  // AJOUT: Effet pour gérer le responsive
+  // Effet pour gérer le responsive
   useEffect(() => {
     // Calcul initial
     updateNavbarMargin();
@@ -82,7 +82,7 @@ const TopNavbarCards: React.FC = () => {
       <nav 
         className="top-navbar-cards"
         style={{ 
-          marginLeft: navbarMargin // CHANGÉ: Utilise l'état dynamique
+          marginLeft: navbarMargin // Utilise l'état dynamique
         }}
       >
         {/* Menu hamburger - en haut à gauche */}

@@ -82,27 +82,46 @@ const SocialButtons: React.FC = () => {
     };
   }, []);
 
+  // AJOUT: Fermer au scroll ET au touch sur mobile
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (isMobile && isOpen && socialClockRef.current && !socialClockRef.current.contains(event.target as Node)) {
+    const handleScroll = () => {
+      if (isMobile && isOpen) {
+        setIsOpen(false);
+      }
+    };
+
+    const handleTouchOutside = (e: TouchEvent) => {
+      if (isMobile && isOpen && socialClockRef.current && !socialClockRef.current.contains(e.target as Node)) {
         setIsOpen(false);
       }
     };
 
     if (isMobile && isOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
-      document.addEventListener('touchstart', handleClickOutside);
+      window.addEventListener('scroll', handleScroll, { passive: true });
+      document.addEventListener('touchstart', handleTouchOutside, { passive: true });
     }
 
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-      document.removeEventListener('touchstart', handleClickOutside);
+      window.removeEventListener('scroll', handleScroll);
+      document.removeEventListener('touchstart', handleTouchOutside);
     };
   }, [isMobile, isOpen]);
 
-  const handleTriggerClick = () => {
+  // CORRIGÉ: Gestion des clics sur le bouton trigger - Amélioration tactile
+  const handleTriggerClick = (e: React.MouseEvent | React.TouchEvent) => {
+    e.preventDefault(); // Empêcher le comportement par défaut
     if (isMobile) {
       setIsOpen(!isOpen);
+    }
+  };
+
+  // CORRIGÉ: Gestion tactile pour les liens sociaux
+  const handleSocialClick = (e: React.MouseEvent | React.TouchEvent, href: string) => {
+    e.preventDefault(); // Empêcher le comportement par défaut
+    e.stopPropagation(); // Empêcher la propagation
+    window.open(href, '_blank', 'noopener,noreferrer');
+    if (isMobile) {
+      setIsOpen(false);
     }
   };
 
@@ -118,21 +137,39 @@ const SocialButtons: React.FC = () => {
     >
       <div className="social-clock__list">
         {buttons.map((btn, i) => (
-          <a
-            key={i}
-            href={btn.href}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={`social-clock__button ${btn.className}`}
-            aria-label={btn.label}
-          >
-            {btn.svg}
-          </a>
+          isMobile ? (
+            // Mobile : div cliquable avec gestion tactile améliorée
+            <div
+              key={i}
+              className={`social-clock__button ${btn.className}`}
+              onClick={(e) => handleSocialClick(e, btn.href)}
+              onTouchEnd={(e) => handleSocialClick(e, btn.href)}
+              aria-label={btn.label}
+              style={{ cursor: 'pointer', touchAction: 'manipulation' }}
+            >
+              {btn.svg}
+            </div>
+          ) : (
+            // Desktop : liens normaux avec hover
+            <a
+              key={i}
+              href={btn.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`social-clock__button ${btn.className}`}
+              aria-label={btn.label}
+            >
+              {btn.svg}
+            </a>
+          )
         ))}
       </div>
       <button 
         className="social-clock__trigger"
         onClick={handleTriggerClick}
+        onTouchEnd={handleTriggerClick}
+        aria-label={isOpen ? 'Fermer les réseaux sociaux' : 'Ouvrir les réseaux sociaux'}
+        style={{ touchAction: 'manipulation' }}
       >
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
           <path
