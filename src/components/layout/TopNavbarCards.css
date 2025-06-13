@@ -100,18 +100,18 @@
   transition: all 0.18s cubic-bezier(0, 0, 0, 1);
 }
 
-/* CORRECTION: Menu hamburger repositionné dans l'angle */
+/* Menu hamburger */
 .hamburger-menu {
   display: none;
   flex-direction: column;
   cursor: pointer;
   padding: 8px;
-  background: rgba(25, 20, 29, 0.9);
+  background: transparent;
   border-radius: 8px;
   border: 1px solid rgba(255, 105, 180, 0.3);
-  position: fixed; /* CHANGÉ en fixed pour être dans l'angle absolu */
+  position: fixed;
   top: 12px;
-  left: 12px; /* AJOUTÉ 12px de marge pour ne pas coller au bord */
+  left: 12px;
   z-index: 101;
 }
 
@@ -136,11 +136,11 @@
   transform: rotate(-45deg) translate(6px, -6px);
 }
 
-/* CORRECTION: Menu déroulant mobile repositionné */
+/* Menu déroulant mobile */
 .mobile-dropdown {
   position: fixed;
   top: 70px;
-  left: 12px; /* ALIGNÉ avec le hamburger */
+  left: 12px;
   background: rgba(0, 0, 0, 0.95);
   border-radius: 16px;
   padding: 1rem;
@@ -155,7 +155,7 @@
   max-width: 300px;
 }
 
-/* Overlay pour fermer le menu en cliquant ailleurs */
+/* Overlay pour fermer le menu */
 .mobile-overlay {
   position: fixed;
   top: 0;
@@ -175,7 +175,7 @@
   display: flex !important;
 }
 
-/* Styles spécifiques pour les éléments du menu mobile */
+/* Styles pour les éléments du menu mobile */
 .mobile-dropdown .mobile-package {
   width: 100%;
   height: 44px;
@@ -234,21 +234,31 @@
   position: relative;
 }
 
-/* MOBILE VERSION */
+/* MOBILE VERSION - MASQUER NAVBAR MAIS GARDER HAMBURGER */
 @media (max-width: 768px) {
   .top-navbar-cards {
-    justify-content: flex-start;
-    padding: 0;
-    gap: 0;
-    position: relative;
+    background: transparent !important; /* FOND TRANSPARENT */
+    height: auto !important; /* HAUTEUR AUTO */
+    padding: 0 !important; /* PLUS DE PADDING */
   }
   
-  /* Cacher TOUS les éléments de navigation normaux sur mobile */
+  /* Masquer TOUS les packages sur mobile */
   .top-navbar-cards .package {
     display: none !important;
   }
   
-  /* Afficher SEULEMENT les packages dans le menu déroulant mobile */
+  /* SEULEMENT le hamburger menu visible */
+  .hamburger-menu {
+    display: flex !important;
+    position: fixed !important;
+    top: 12px !important;
+    left: 12px !important;
+    z-index: 101 !important;
+    background: transparent !important;
+    visibility: visible !important;
+  }
+  
+  /* Afficher les packages dans le menu déroulant mobile */
   .mobile-dropdown .package {
     display: flex !important;
     width: 100% !important;
@@ -270,11 +280,6 @@
     font-size: 0.95rem !important;
     font-weight: 600 !important;
     display: block !important;
-  }
-  
-  /* Afficher SEULEMENT le menu hamburger sur mobile */
-  .hamburger-menu {
-    display: flex !important;
   }
 }
 

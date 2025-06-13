@@ -115,10 +115,9 @@ const FluidShapesAnimation = ({ opacity = 1 }: { opacity?: number }) => {
       style={{ 
         zIndex: 20, 
         opacity,
-        // Positionnement responsive aligné avec le texte - maintenant en haut
         right: 'clamp(1rem, 5vw, 4rem)',
-        top: 'clamp(-2rem, -1vh, 1rem)', // Aligné en haut au lieu du centre
-        transform: 'none' // Supprimé le translateY(-50%)
+        top: 'clamp(-2rem, -1vh, 1rem)',
+        transform: 'none'
       }}
     >
       <canvas
@@ -255,9 +254,6 @@ const Home: React.FC = () => {
   const worldRef = useRef<HTMLDivElement>(null);
   const welcomeRef = useRef<HTMLDivElement>(null);
   
-  // AJOUT: État pour détecter si on est sur la home - SIMPLIFIÉ
-  const [isOnHomePage, setIsOnHomePage] = useState(true);
-  
   // État pour l'effet machine à écrire
   const [currentText, setCurrentText] = useState("");
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -269,66 +265,6 @@ const Home: React.FC = () => {
     "Digital Marketing",
     "Réseaux Sociaux"
   ];
-
-  // AJOUT: Détecter quand on est sur la home page basé sur le scroll ET le hash
-  useEffect(() => {
-    const handlePageChange = () => {
-      const currentHash = window.location.hash;
-      const homeSection = document.getElementById('home');
-      
-      if (!homeSection) return;
-      
-      const rect = homeSection.getBoundingClientRect();
-      const viewportHeight = window.innerHeight;
-      
-      // CORRECTION: Logique plus stricte pour la détection de la home
-      // On est sur la home SEULEMENT si :
-      // 1. La section home occupe au moins 60% de l'écran
-      // 2. ET on n'a pas scrollé trop loin de la home
-      const homeSectionHeight = rect.height;
-      const visibleHomeHeight = Math.min(rect.bottom, viewportHeight) - Math.max(rect.top, 0);
-      const homeVisibilityRatio = visibleHomeHeight / viewportHeight;
-      
-      const isInHomeViewport = homeVisibilityRatio > 0.6 && rect.top <= viewportHeight * 0.3;
-      
-      // On est sur la home si : hash = home ET viewport OU pas de hash et viewport
-      const isHomePage = isInHomeViewport && (
-        !currentHash || 
-        currentHash === '' || 
-        currentHash === '#home'
-      );
-      
-      setIsOnHomePage(isHomePage);
-      
-      // Mettre à jour l'URL si on scroll sur la home
-      if (isInHomeViewport && currentHash !== '#home') {
-        window.history.replaceState(null, '', '#home');
-      }
-    };
-
-    // Vérifier au chargement
-    handlePageChange();
-
-    // Écouter les changements avec throttling pour les performances
-    let ticking = false;
-    const throttledHandlePageChange = () => {
-      if (!ticking) {
-        requestAnimationFrame(() => {
-          handlePageChange();
-          ticking = false;
-        });
-        ticking = true;
-      }
-    };
-
-    window.addEventListener('hashchange', handlePageChange);
-    window.addEventListener('scroll', throttledHandlePageChange);
-
-    return () => {
-      window.removeEventListener('hashchange', handlePageChange);
-      window.removeEventListener('scroll', throttledHandlePageChange);
-    };
-  }, []);
 
   // Effet machine à écrire
   useEffect(() => {
@@ -480,15 +416,15 @@ const Home: React.FC = () => {
     <section
       id="home"
       className="relative min-h-screen overflow-hidden"
-      style={{ background: "none" }}
+      style={{ background: "transparent" }} // FOND TRANSPARENT AU LIEU DE NOIR
     >
-      {/* Animation formes fluides par-dessus (z-20) - UNE SEULE ANIMATION */}
+      {/* Animation formes fluides - VISIBLE SUR TOUS LES ÉCRANS */}
       <FluidShapesAnimation opacity={canvasOpacity} />
 
-      {/* Fond canvas principal (z-10) */}
+      {/* Fond canvas principal - MASQUÉ SUR MOBILE */}
       <canvas
         ref={canvasRef}
-        className="fixed inset-0 z-10 pointer-events-none"
+        className="fixed inset-0 z-10 pointer-events-none hidden sm:block"
         style={{
           width: "100vw",
           height: "100vh",
@@ -504,11 +440,11 @@ const Home: React.FC = () => {
         aria-hidden="true"
       />
 
-      {/* Layout Desktop - côte à côte */}
+      {/* Layout Desktop - côte à côte - MASQUÉ SUR MOBILE */}
       <div className="relative z-30 w-full px-4 sm:px-8 md:px-12 lg:px-16 pt-8 sm:pt-12 md:pt-16 hidden sm:block">
         
         {/* Container flex pour aligner texte et animation - parfaitement alignés horizontalement */}
-        <div className="flex items-start justify-between w-full max-w-7xl mx-auto">
+        <div className="flex items-start justify-between w-full max-w-7xl mx-auto bg-transparent">
           
           {/* Texte "Welcome to my World" - Partie gauche */}
           <motion.div
@@ -587,16 +523,23 @@ const Home: React.FC = () => {
         </div>
       </div>
 
-      {/* Layout Mobile - texte centré en haut - tout en haut de l'écran */}
-      <div className="relative z-30 w-full px-4 pt-2 sm:hidden">
+      {/* Layout Mobile - NOUVEAU LAYOUT SANS DIV PROBLÉMATIQUE */}
+      <div className="sm:hidden absolute top-0 left-0 w-full h-full flex flex-col items-center justify-center z-30" style={{
+        background: 'transparent',
+        pointerEvents: 'none'
+      }}>
         
-        {/* Texte "Welcome to my World" centré pour mobile */}
+        {/* Texte "Welcome to my World" centré pour mobile - SANS CONTAINER */}
         <motion.div
           initial={{ opacity: 0, y: -30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.3 }}
           className="flex flex-col items-center text-center"
-          style={{ opacity: canvasOpacity }}
+          style={{ 
+            opacity: canvasOpacity,
+            marginTop: '-80px',
+            pointerEvents: 'none'
+          }}
         >
           {/* Welcome to my - centré avec même police que texte animé */}
           <div 
@@ -651,8 +594,8 @@ const Home: React.FC = () => {
           </div>
         </motion.div>
 
-        {/* Animation fluide plus grosse pour mobile - sous le texte - remontée un peu */}
-        <div className="flex justify-center mt-1">
+        {/* Animation fluide plus grosse pour mobile - sous le texte */}
+        <div className="flex justify-center" style={{ marginTop: '-20px', pointerEvents: 'none' }}>
           <div 
             className="pointer-events-none"
             style={{ 
@@ -665,13 +608,13 @@ const Home: React.FC = () => {
         </div>
       </div>
 
-      {/* Boutons réseaux sociaux et CV - Maintenant TOUS en position absolute */}
+      {/* Boutons réseaux sociaux et CV */}
       
-      {/* Mobile : Bouton réseaux sociaux - MÊME comportement que le CV */}
+      {/* Mobile : Bouton réseaux sociaux */}
       <div className="sm:hidden absolute z-[9999]" style={{ 
         left: '50%', 
         transform: 'translateX(-50%)', 
-        bottom: '12%', // Légèrement au-dessus du CV
+        bottom: '15%',
         pointerEvents: 'auto'
       }}>
         <motion.div
@@ -689,13 +632,11 @@ const Home: React.FC = () => {
             pointerEvents: 'auto',
             position: 'relative',
             zIndex: 10000,
-            // Élargir la zone cliquable avec CSS
             padding: '20px',
             margin: '-20px',
             cursor: 'pointer'
           }}>
             <div style={{
-              // Rendre TOUT cliquable
               width: '100%',
               height: '100%',
               display: 'flex',
@@ -710,11 +651,11 @@ const Home: React.FC = () => {
         </motion.div>
       </div>
 
-      {/* Mobile : Bouton CV centré au milieu de l'écran, même hauteur que le robot */}
+      {/* Mobile : Bouton CV */}
       <div className="sm:hidden absolute z-40" style={{ 
         left: '50%', 
         transform: 'translateX(-50%)', 
-        bottom: '8%' // Position du CV
+        bottom: '11%'
       }}>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -726,7 +667,7 @@ const Home: React.FC = () => {
         </motion.div>
       </div>
 
-      {/* Desktop : boutons empilés comme avant */}
+      {/* Desktop : boutons empilés */}
       <div className="hidden sm:block absolute left-0 right-0 z-40 bottom-8 md:bottom-12 lg:bottom-16">
         {/* Boutons réseaux sociaux */}
         <motion.div

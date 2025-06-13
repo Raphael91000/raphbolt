@@ -27,8 +27,8 @@ function App() {
      
       {/* Navbar horizontale en haut */}
       <TopNavbarCards />
-      {/* Padding-top pour ne pas cacher les sections sous la navbar */}
-      <main className="pt-[74px]">
+      {/* CORRIGÉ: Padding-top SEULEMENT sur desktop */}
+      <main className="sm:pt-[74px] pt-0">
         <Home />
         <About />
         <Skills />
