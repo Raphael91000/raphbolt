@@ -115,8 +115,8 @@ const FluidShapesAnimation = ({ opacity = 1 }: { opacity?: number }) => {
         zIndex: 20, 
         opacity,
         // Positionnement responsive aligné avec le texte - maintenant en haut
-        right: 'clamp(1rem, 5vw, 10rem)',
-        top: 'clamp(-1rem, 0vh, 0rem)', // Aligné en haut au lieu du centre
+        right: 'clamp(1rem, 5vw, 4rem)',
+        top: 'clamp(-2rem, -1vh, 1rem)', // Aligné en haut au lieu du centre
         transform: 'none' // Supprimé le translateY(-50%)
       }}
     >
@@ -143,6 +143,50 @@ const Home: React.FC = () => {
   const [canvasOpacity, setCanvasOpacity] = useState(1);
   const worldRef = useRef<HTMLDivElement>(null);
   const welcomeRef = useRef<HTMLDivElement>(null);
+  
+  // État pour l'effet machine à écrire
+  const [currentText, setCurrentText] = useState("");
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isDeleting, setIsDeleting] = useState(false);
+  
+  const roles = [
+    "Développeur Full-Stack",
+    "Commercial", 
+    "Digital Marketing",
+    "Réseaux Sociaux"
+  ];
+
+  // Effet machine à écrire
+  useEffect(() => {
+    const typeSpeed = 100;
+    const deleteSpeed = 50;
+    const pauseTime = 2000;
+    
+    const currentRole = roles[currentIndex];
+    
+    const timeout = setTimeout(() => {
+      if (!isDeleting) {
+        // Écriture
+        if (currentText.length < currentRole.length) {
+          setCurrentText(currentRole.slice(0, currentText.length + 1));
+        } else {
+          // Pause avant de commencer à effacer
+          setTimeout(() => setIsDeleting(true), pauseTime);
+        }
+      } else {
+        // Effacement
+        if (currentText.length > 0) {
+          setCurrentText(currentRole.slice(0, currentText.length - 1));
+        } else {
+          // Passer au suivant
+          setIsDeleting(false);
+          setCurrentIndex((prev) => (prev + 1) % roles.length);
+        }
+      }
+    }, isDeleting ? deleteSpeed : typeSpeed);
+    
+    return () => clearTimeout(timeout);
+  }, [currentText, currentIndex, isDeleting, roles]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -264,8 +308,15 @@ const Home: React.FC = () => {
       className="relative min-h-screen overflow-hidden"
       style={{ background: "none" }}
     >
-      {/* Animation formes fluides par-dessus (z-20) - Maintenant positionnée en haut */}
+      {/* Animation formes fluides par-dessus (z-20) - Maintenant positionnée en haut et visible sur mobile */}
       <FluidShapesAnimation opacity={canvasOpacity} />
+
+      {/* Animation fluide supplémentaire pour mobile - centrée sous le texte */}
+      <div className="sm:hidden absolute z-20 left-1/2 transform -translate-x-1/2" style={{ top: 'clamp(15rem, 40vh, 25rem)', opacity: canvasOpacity }}>
+        <div style={{ transform: 'scale(0.7)' }}>
+          <FluidShapesAnimation opacity={canvasOpacity} />
+        </div>
+      </div>
 
       {/* Fond canvas principal (z-10) */}
       <canvas
@@ -318,7 +369,7 @@ const Home: React.FC = () => {
               {/* WORLD avec dégradé - référence pour l'alignement */}
               <div 
                 ref={worldRef}
-                className="font-bold tracking-wide leading-none"
+                className="font-bold tracking-wide leading-none mb-1 sm:mb-2"
                 style={{
                   fontSize: "clamp(2rem, 7vw, 14rem)",
                   background: "linear-gradient(45deg, #FFD700, #FFA500, #FF6347, #800080)",
@@ -331,14 +382,48 @@ const Home: React.FC = () => {
               >
                 WORLD
               </div>
+              
+              {/* Texte animé machine à écrire */}
+              <div 
+                className="text-white font-medium tracking-wide flex items-center"
+                style={{ 
+                  fontSize: "clamp(1rem, 2.8vw, 2.2rem)",
+                  minHeight: "clamp(2rem, 5vw, 3rem)" // Hauteur fixe pour éviter les sautillements
+                }}
+              >
+                <span
+                  style={{
+                    color: "#ffffff",
+                    textShadow: "0 0 20px rgba(255, 255, 255, 0.3)"
+                  }}
+                >
+                  {currentText}
+                </span>
+                <span 
+                  className="ml-1 animate-pulse" 
+                  style={{ 
+                    color: "#ffa500",
+                    fontSize: "clamp(1rem, 2.8vw, 2.2rem)"
+                  }}
+                >
+                  |
+                </span>
+              </div>
             </div>
           </motion.div>
 
-          {/* Espace pour l'animation fluide - Partie droite - parfaitement alignée */}
+          {/* Espace pour l'animation fluide - Partie droite - maintenant visible sur mobile aussi */}
           <div className="flex-1 relative flex items-start justify-end h-96 hidden sm:block">
             {/* L'animation est positionnée via le CSS dans FluidShapesAnimation */}
           </div>
 
+        </div>
+
+        {/* Animation fluide pour mobile - positionnée en dessous du texte */}
+        <div className="flex justify-center mt-8 sm:hidden">
+          <div style={{ transform: 'scale(0.6)' }}>
+            {/* Version réduite de l'animation pour mobile */}
+          </div>
         </div>
       </div>
 
