@@ -100,19 +100,30 @@
   transition: all 0.18s cubic-bezier(0, 0, 0, 1);
 }
 
-/* Menu hamburger */
+/* Menu hamburger - TOUJOURS VISIBLE ET FIXE SUR TOUTES LES PAGES */
 .hamburger-menu {
   display: none;
   flex-direction: column;
   cursor: pointer;
-  padding: 8px;
-  background: transparent;
-  border-radius: 8px;
-  border: 1px solid rgba(255, 105, 180, 0.3);
-  position: fixed;
-  top: 12px;
-  left: 12px;
-  z-index: 101;
+  padding: 10px;
+  background: rgba(0, 0, 0, 0.9);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 105, 180, 0.4);
+  position: fixed !important;
+  top: 15px !important;
+  left: 15px !important;
+  z-index: 9999 !important; /* Z-index très élevé pour être au-dessus de TOUT */
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  transition: all 0.3s ease;
+  pointer-events: auto !important;
+  visibility: visible !important;
+}
+
+.hamburger-menu:hover {
+  background: rgba(0, 0, 0, 0.9);
+  border-color: rgba(255, 105, 180, 0.6);
+  box-shadow: 0 0 15px rgba(255, 105, 180, 0.3);
 }
 
 .hamburger-line {
@@ -138,33 +149,35 @@
 
 /* Menu déroulant mobile */
 .mobile-dropdown {
-  position: fixed;
-  top: 70px;
-  left: 12px;
+  position: fixed !important;
+  top: 75px !important;
+  left: 15px !important;
   background: rgba(0, 0, 0, 0.95);
   border-radius: 16px;
   padding: 1rem;
   display: none;
   flex-direction: column;
   gap: 0.8rem;
-  z-index: 102;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 105, 180, 0.2);
+  z-index: 9998 !important;
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 105, 180, 0.3);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.8);
   min-width: 250px;
   max-width: 300px;
+  pointer-events: auto !important;
 }
 
 /* Overlay pour fermer le menu */
 .mobile-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0, 0, 0, 0.3);
-  z-index: 101;
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 9997 !important;
   display: none;
+  pointer-events: auto !important;
 }
 
 .mobile-overlay.open {
@@ -234,31 +247,33 @@
   position: relative;
 }
 
-/* MOBILE VERSION - MASQUER NAVBAR MAIS GARDER HAMBURGER */
-@media (max-width: 768px) {
+/* MOBILE ET TABLETTE - HAMBURGER TOUJOURS VISIBLE */
+@media (max-width: 1024px) {
   .top-navbar-cards {
-    background: transparent !important; /* FOND TRANSPARENT */
-    height: auto !important; /* HAUTEUR AUTO */
-    padding: 0 !important; /* PLUS DE PADDING */
+    background: transparent !important;
+    height: auto !important;
+    padding: 0 !important;
   }
   
-  /* Masquer TOUS les packages sur mobile */
+  /* Masquer TOUS les packages sur mobile et tablette */
   .top-navbar-cards .package {
     display: none !important;
   }
   
-  /* SEULEMENT le hamburger menu visible */
+  /* HAMBURGER MENU TOUJOURS VISIBLE sur mobile et tablette */
   .hamburger-menu {
     display: flex !important;
     position: fixed !important;
-    top: 12px !important;
-    left: 12px !important;
-    z-index: 101 !important;
-    background: transparent !important;
+    top: 15px !important;
+    left: 15px !important;
+    z-index: 9999 !important;
     visibility: visible !important;
+    pointer-events: auto !important;
+    opacity: 1 !important;
+    transform: none !important;
   }
   
-  /* Afficher les packages dans le menu déroulant mobile */
+  /* Afficher les packages dans le menu déroulant */
   .mobile-dropdown .package {
     display: flex !important;
     width: 100% !important;
@@ -283,8 +298,8 @@
   }
 }
 
-/* DESKTOP VERSION */
-@media (min-width: 769px) {
+/* DESKTOP VERSION - Masquer le hamburger */
+@media (min-width: 1025px) {
   .hamburger-menu {
     display: none !important;
   }
