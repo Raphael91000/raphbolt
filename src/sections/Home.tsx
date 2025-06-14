@@ -634,7 +634,7 @@ const Home: React.FC = () => {
       </div>
 
       {/* Mobile : Bouton CV */}
-      <div className="sm:hidden absolute left-1/2 transform -translate-x-1/2 z-50" style={{ bottom: '12%' }}>
+      <div className="sm:hidden absolute left-1/2 transform -translate-x-1/2 z-50" style={{ bottom: '16%' }}>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
