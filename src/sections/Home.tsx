@@ -18,40 +18,47 @@ const useResponsivePositions = () => {
     const updatePositions = () => {
       const width = window.innerWidth;
       
-      console.log('Current width:', width); // Debug
+      console.log('🔍 LARGEUR DÉTECTÉE:', width, 'px');
       
       if (width <= 767) {
-        // MOBILE UNIQUEMENT - GARDER LES VALEURS ACTUELLES QUI FONCTIONNENT
-        console.log('Applying MOBILE layout');
+        console.log('📱 MOBILE - Positions 20% et 17%');
         setPositions({
           textMarginTop: '-490px',
           animationMarginTop: '-55px',
           animationScale: 1.2,
-          socialButtonsBottom: '20%',    // Position mobile OK
-          cvButtonBottom: '17%'          // Position mobile OK
+          socialButtonsBottom: '20%',
+          cvButtonBottom: '17%'
         });
-      } else if (width <= 1279) {
-        // TABLETTE UNIQUEMENT - REMONTER LES BOUTONS
-        console.log('Applying TABLET layout');
+      } else if (width < 1280) {
+        console.log('💻 TABLETTE/ÉCRAN DIVISÉ - Positions normales');
         setPositions({
           textMarginTop: '-640px',
           animationMarginTop: '-100px',
           animationScale: 1.2,
-          socialButtonsBottom: '30%',    // Remonter les boutons sociaux
-          cvButtonBottom: '20%'          // Remonter le bouton CV
+          socialButtonsBottom: '28%',    // Espacement normal
+          cvButtonBottom: '20%'          // Position CV
         });
+      } else {
+        console.log('🖥️ DESKTOP - Layout côte à côte');
       }
     };
 
+    // MULTIPLE LISTENERS POUR FORCER LE DÉCLENCHEMENT
     updatePositions();
-    window.addEventListener('resize', updatePositions);
     
-    // Force un update après 100ms pour s'assurer que ça prend effet
-    const timeoutId = setTimeout(updatePositions, 100);
+    window.addEventListener('resize', updatePositions);
+    window.addEventListener('orientationchange', updatePositions);
+    
+    // FORCE UPDATE TOUTES LES 500ms pendant 3 secondes
+    const intervals = [];
+    for (let i = 0; i < 6; i++) {
+      intervals.push(setTimeout(updatePositions, i * 500));
+    }
     
     return () => {
       window.removeEventListener('resize', updatePositions);
-      clearTimeout(timeoutId);
+      window.removeEventListener('orientationchange', updatePositions);
+      intervals.forEach(clearTimeout);
     };
   }, []);
 
@@ -197,9 +204,8 @@ const ResponsiveMobileAnimation = ({ opacity = 1, scale = 1.2 }: { opacity?: num
 
   useEffect(() => {
     const updateSize = () => {
-      // MÊME TAILLE POUR MOBILE ET TABLETTE
-      if (window.innerWidth <= 1279) setCanvasSize(160);  // Mobile ET tablette - même taille
-      else setCanvasSize(240);  // Desktop uniquement
+      if (window.innerWidth < 1024) setCanvasSize(160);
+      else setCanvasSize(240);
     };
     updateSize();
     window.addEventListener("resize", updateSize);
@@ -579,13 +585,13 @@ const Home: React.FC = () => {
         </div>
       </div>
 
-      {/* Layout MOBILE ET TABLETTE - DISPOSITION IDENTIQUE */}
+      {/* Layout MOBILE ET TABLETTE - DISPOSITION VERTICALE */}
       <div className="xl:hidden absolute top-0 left-0 w-full h-full flex flex-col items-center justify-center z-30" style={{
         background: 'transparent',
         pointerEvents: 'none'
       }}>
         
-        {/* Texte "Welcome to my World" avec position identique mobile/tablette */}
+        {/* Texte "Welcome to my World" avec position responsive */}
         <motion.div
           initial={{ opacity: 0, y: -30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -593,7 +599,7 @@ const Home: React.FC = () => {
           className="flex flex-col items-center text-center"
           style={{ 
             opacity: canvasOpacity,
-            marginTop: positions.textMarginTop, // MÊME POSITION POUR MOBILE ET TABLETTE
+            marginTop: positions.textMarginTop,
             pointerEvents: 'none'
           }}
         >
@@ -648,19 +654,19 @@ const Home: React.FC = () => {
         </motion.div>
       </div>
 
-      {/* Animation fluide avec position et scale identiques mobile/tablette */}
+      {/* Animation fluide avec position et scale responsives */}
       <div className="xl:hidden absolute top-0 left-0 w-full h-full flex items-center justify-center z-20" style={{
         background: 'transparent',
         pointerEvents: 'none'
       }}>
         <div className="flex justify-center" style={{ 
-          marginTop: positions.animationMarginTop, // MÊME POSITION POUR MOBILE ET TABLETTE
+          marginTop: positions.animationMarginTop,
           pointerEvents: 'none' 
         }}>
           <div 
             className="pointer-events-none"
             style={{ 
-              transform: `scale(${positions.animationScale}) translateY(-30px)`, // MÊME SCALE POUR MOBILE ET TABLETTE
+              transform: `scale(${positions.animationScale}) translateY(-30px)`,
               opacity: canvasOpacity > 0.5 ? 1 : 0
             }}
           >
@@ -672,11 +678,10 @@ const Home: React.FC = () => {
         </div>
       </div>
 
-      {/* Boutons avec positions identiques mobile/tablette */}
-      
-      {/* MOBILE ET TABLETTE : Boutons réseaux sociaux avec position identique */}
+      {/* MOBILE ET TABLETTE : Boutons réseaux sociaux avec position responsive */}
       <div className="xl:hidden absolute left-1/2 transform -translate-x-1/2 z-50" style={{ 
-        bottom: positions.socialButtonsBottom // MÊME POSITION POUR MOBILE ET TABLETTE
+        bottom: positions.socialButtonsBottom,
+        transition: 'bottom 0.3s ease'
       }}>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -694,9 +699,10 @@ const Home: React.FC = () => {
         </motion.div>
       </div>
 
-      {/* MOBILE ET TABLETTE : Bouton CV avec position identique */}
+      {/* MOBILE ET TABLETTE : Bouton CV avec position responsive */}
       <div className="xl:hidden absolute left-1/2 transform -translate-x-1/2 z-50" style={{ 
-        bottom: positions.cvButtonBottom // MÊME POSITION POUR MOBILE ET TABLETTE
+        bottom: positions.cvButtonBottom,
+        transition: 'bottom 0.3s ease'
       }}>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
