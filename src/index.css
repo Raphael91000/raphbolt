@@ -119,7 +119,7 @@ section {
   overflow: hidden;
 }
 
-/* ===== TEXT SPLIT & CARDS ===== */
+/* ===== TEXT SPLIT ===== */
 .text-split-enter {
   clip-path: inset(0 0 50% 0);
   animation: splitEnterTop 0.5s ease forwards;
@@ -136,12 +136,6 @@ section {
   from { transform: translateY(50%); opacity: 0; }
   to { transform: translateY(0); opacity: 1; }
 }
-.card-container { perspective: 1000px; }
-.card {
-  transition: transform 0.6s ease-out;
-  transform-style: preserve-3d;
-}
-.card:hover { transform: rotateY(5deg) rotateX(5deg); }
 
 /* ===== EFFET ONDE AU CLIC ===== */
 .click-wave {
@@ -467,5 +461,409 @@ html[dir="rtl"] { font-family: 'Amiri', serif; }
   
   .package .text {
     font-size: 0.86rem;
+  }
+}
+
+/* ===== NOUVELLES CARDS HOVER ===== */
+
+/* SKILL CARDS - Glow Border Style */
+.glow-card {
+  width: 300px;
+  height: 300px;
+  background: rgba(0, 0, 0, 0.8);
+  border-radius: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  margin: 1rem;
+}
+
+.glow-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, #ff69b4, #ffa500, #800080, #ff69b4);
+  background-size: 400% 400%;
+  animation: gradient 4s ease infinite;
+  z-index: -2;
+  border-radius: 15px;
+}
+
+.glow-card::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  right: 3px;
+  bottom: 3px;
+  background: #111;
+  border-radius: 12px;
+  z-index: -1;
+}
+
+@keyframes gradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.glow-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(255, 105, 180, 0.4);
+}
+
+.glow-card:hover::before {
+  animation-duration: 2s;
+}
+
+.glow-icon {
+  font-size: 3.5rem;
+  z-index: 1;
+  filter: drop-shadow(0 4px 8px rgba(255, 105, 180, 0.3));
+  transition: all 0.3s ease;
+}
+
+.glow-card:hover .glow-icon {
+  transform: scale(1.1);
+  filter: drop-shadow(0 6px 12px rgba(255, 105, 180, 0.5));
+}
+
+.glow-title {
+  font-weight: 700;
+  font-size: 1.4rem;
+  z-index: 1;
+  text-align: center;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  transition: all 0.3s ease;
+  background: linear-gradient(45deg, #ff69b4, #ffa500, #800080);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.glow-card:hover .glow-title {
+  transform: translateY(-2px);
+}
+
+/* EXPERIENCE CARDS */
+.experience-card-container {
+  width: 300px;
+  height: 300px;
+  position: relative;
+  border-radius: 15px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+  transition: all 0.3s ease;
+  margin: 1rem;
+}
+
+.experience-card-container:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px rgba(255, 105, 180, 0.3);
+}
+
+.experience-card {
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  position: relative;
+}
+
+.experience-front-content {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  transition: all 0.6s cubic-bezier(0.23, 1, 0.320, 1);
+  border-radius: inherit;
+  padding: 2rem;
+}
+
+.experience-company {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: white;
+  text-align: center;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  margin-bottom: 0.5rem;
+}
+
+.experience-position {
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.9);
+  text-align: center;
+  transition: all 0.6s cubic-bezier(0.23, 1, 0.320, 1);
+}
+
+.experience-content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  text-align: left;
+  gap: 0.8rem;
+  background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+  color: #333;
+  padding: 1.5rem;
+  line-height: 1.4;
+  border-radius: inherit;
+  pointer-events: none;
+  transform: translateY(-100%);
+  transition: all 0.6s cubic-bezier(0.23, 1, 0.320, 1);
+  overflow-y: auto;
+}
+
+.experience-heading {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #2d3748;
+  margin-bottom: 0.3rem;
+}
+
+.experience-role {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #4a5568;
+  margin-bottom: 0.3rem;
+}
+
+.experience-period {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #718096;
+  background: rgba(116, 83, 163, 0.1);
+  padding: 0.2rem 0.6rem;
+  border-radius: 12px;
+  display: inline-block;
+  margin-bottom: 0.5rem;
+}
+
+.experience-description {
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: #4a5568;
+  margin-bottom: 0.8rem;
+}
+
+.experience-card:hover .experience-content {
+  transform: translateY(0);
+}
+
+.experience-card:hover .experience-front-content {
+  transform: translateY(-30%);
+}
+
+.experience-card:hover .experience-position {
+  opacity: 0;
+}
+
+/* PROJECT CARDS */
+.project-card-container {
+  width: 300px;
+  height: 300px;
+  position: relative;
+  border-radius: 15px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+  transition: all 0.3s ease;
+  margin: 1rem;
+}
+
+.project-card-container:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px rgba(255, 105, 180, 0.3);
+}
+
+.project-card {
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  position: relative;
+}
+
+.project-front-content {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+  transition: all 0.6s cubic-bezier(0.23, 1, 0.320, 1);
+  border-radius: inherit;
+  padding: 2rem;
+}
+
+.project-icon {
+  font-size: 3rem;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+}
+
+.project-name {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: white;
+  text-align: center;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  transition: all 0.6s cubic-bezier(0.23, 1, 0.320, 1);
+}
+
+.project-content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  text-align: left;
+  gap: 1rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 1.5rem;
+  line-height: 1.4;
+  border-radius: inherit;
+  pointer-events: auto;
+  transform: translateX(100%);
+  transition: all 0.6s cubic-bezier(0.23, 1, 0.320, 1);
+  overflow-y: auto;
+}
+
+.project-heading {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.project-description {
+  font-size: 0.9rem;
+  line-height: 1.5;
+  opacity: 0.9;
+  margin-bottom: 1rem;
+}
+
+.project-tech {
+  margin-bottom: 1rem;
+}
+
+.tech-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  opacity: 0.8;
+  display: block;
+  margin-bottom: 0.3rem;
+}
+
+.tech-list {
+  font-size: 0.85rem;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 0.4rem 0.8rem;
+  border-radius: 8px;
+  backdrop-filter: blur(10px);
+}
+
+.project-period {
+  margin-top: auto;
+}
+
+.period-label {
+  font-size: 0.8rem;
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  padding: 0.3rem 0.8rem;
+  border-radius: 12px;
+  font-weight: 500;
+}
+
+.project-card:hover .project-content {
+  transform: translateX(0);
+}
+
+.project-card:hover .project-front-content {
+  transform: translateX(-30%);
+}
+
+.project-card:hover .project-name {
+  opacity: 0;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .glow-card {
+    width: 280px;
+    height: 280px;
+    margin: 0.8rem;
+  }
+  
+  .glow-icon {
+    font-size: 3rem;
+  }
+  
+  .glow-title {
+    font-size: 1.2rem;
+  }
+  
+  .experience-card-container,
+  .project-card-container {
+    width: 280px;
+    height: 280px;
+    margin: 0.8rem;
+  }
+  
+  .experience-company {
+    font-size: 1.5rem;
+  }
+  
+  .project-name {
+    font-size: 1.3rem;
+  }
+  
+  .experience-heading,
+  .project-heading {
+    font-size: 1.4rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .glow-card {
+    width: 260px;
+    height: 260px;
+    margin: 0.5rem;
+  }
+  
+  .glow-icon {
+    font-size: 2.5rem;
+  }
+  
+  .glow-title {
+    font-size: 1.1rem;
+  }
+  
+  .experience-card-container,
+  .project-card-container {
+    width: 260px;
+    height: 260px;
+    margin: 0.5rem;
   }
 }

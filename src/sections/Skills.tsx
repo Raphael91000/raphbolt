@@ -2,10 +2,33 @@ import React, { useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
-import Card3D from '../components/ui/Card3D';
 import AnimatedBot from '../components/ui/AnimatedBot';
 import ParticleBackground from '../components/layout/ParticleBackground';
 import { skills } from '../constants/skills';
+
+// Composant SkillCard avec bordures animées
+interface SkillCardProps {
+  title: string;
+  description: string;
+  icon: string;
+  color: string;
+  index: number;
+}
+
+const SkillCard: React.FC<SkillCardProps> = ({ 
+  title, 
+  description, 
+  icon,
+  color,
+  index 
+}) => {
+  return (
+    <div className="glow-card">
+      <div className="glow-icon">{icon}</div>
+      <div className="glow-title">{title}</div>
+    </div>
+  );
+};
 
 const Skills: React.FC = () => {
   const { t } = useTranslation();
@@ -66,7 +89,7 @@ const Skills: React.FC = () => {
       className="relative py-20 px-4 md:px-10 bg-black"
     >
       {/* Background de particules avec opacité réduite pour ne pas gêner les cards */}
-      <ParticleBackground opacity={0.6} />
+      <ParticleBackground opacity={0.75} particleCount={45} />
       
       <div ref={ref} className="relative z-10 max-w-6xl mx-auto">
         <div className="text-center mb-16">
@@ -102,7 +125,7 @@ const Skills: React.FC = () => {
         >
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center">
             {visibleSkills().map((skill, index) => (
-              <Card3D
+              <SkillCard
                 key={`${skill.id}-${index}`}
                 title={skill.title}
                 description={skill.description}
