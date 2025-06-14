@@ -251,6 +251,7 @@ const Home: React.FC = () => {
   const isRtl = i18n.dir(i18n.language) === "rtl";
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [canvasOpacity, setCanvasOpacity] = useState(1);
+  const [isOnHomePage, setIsOnHomePage] = useState(true);
   const worldRef = useRef<HTMLDivElement>(null);
   const welcomeRef = useRef<HTMLDivElement>(null);
   
@@ -307,7 +308,12 @@ const Home: React.FC = () => {
         o = Math.max(0, 1 - (scrollY - h * 0.2) / (h * 0.6));
       }
       setCanvasOpacity(o);
+      setIsOnHomePage(scrollY < h * 0.9);
     };
+    
+    setIsOnHomePage(true);
+    handleScroll();
+    
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -318,16 +324,12 @@ const Home: React.FC = () => {
       if (worldRef.current && welcomeRef.current) {
         const worldWidth = worldRef.current.getBoundingClientRect().width;
         welcomeRef.current.style.width = `${worldWidth}px`;
-        
-        // Forcer le reflow pour s'assurer que les changements sont appliqués
         welcomeRef.current.offsetHeight;
       }
     };
 
-    // Alignement initial avec plusieurs tentatives
     const performAlignment = () => {
       alignTexts();
-      // Plusieurs tentatives pour s'assurer que les polices sont chargées
       setTimeout(alignTexts, 50);
       setTimeout(alignTexts, 150);
       setTimeout(alignTexts, 300);
@@ -336,7 +338,6 @@ const Home: React.FC = () => {
 
     performAlignment();
     
-    // Réalignement lors du redimensionnement avec debounce
     let resizeTimeout: NodeJS.Timeout;
     const handleResize = () => {
       clearTimeout(resizeTimeout);
@@ -345,7 +346,6 @@ const Home: React.FC = () => {
     
     window.addEventListener('resize', handleResize);
     
-    // Alignement quand les polices sont chargées
     if (document.fonts) {
       document.fonts.ready.then(alignTexts);
     }
@@ -416,7 +416,7 @@ const Home: React.FC = () => {
     <section
       id="home"
       className="relative min-h-screen overflow-hidden"
-      style={{ background: "transparent" }} // FOND TRANSPARENT AU LIEU DE NOIR
+      style={{ background: "transparent" }}
     >
       {/* Animation formes fluides - VISIBLE SUR TOUS LES ÉCRANS */}
       <FluidShapesAnimation opacity={canvasOpacity} />
@@ -537,7 +537,7 @@ const Home: React.FC = () => {
           className="flex flex-col items-center text-center"
           style={{ 
             opacity: canvasOpacity,
-            marginTop: '-490px', // REMONTÉ de -80px à -150px
+            marginTop: '-490px',
             pointerEvents: 'none'
           }}
         >
@@ -605,84 +605,68 @@ const Home: React.FC = () => {
             className="pointer-events-none"
             style={{ 
               transform: 'scale(1.2) translateY(-30px)',
-              opacity: canvasOpacity
+              opacity: canvasOpacity > 0.5 ? 1 : 0
             }}
           >
-            <MobileFluidAnimation opacity={canvasOpacity} />
+            <MobileFluidAnimation opacity={canvasOpacity > 0.5 ? 1 : 0} />
           </div>
         </div>
       </div>
 
-      {/* Boutons réseaux sociaux et CV */}
+      {/* BOUTONS RELATIFS À LA SECTION - VERSION CORRIGÉE */}
       
-      {/* Mobile : Bouton réseaux sociaux - REMONTÉ ENCORE PLUS */}
-      <div className="sm:hidden absolute z-[9999]" style={{ 
-        left: '50%', 
-        transform: 'translateX(-50%)', 
-        bottom: '20%', // REMONTÉ : était 15%
-        pointerEvents: 'auto'
-      }}>
+      {/* Mobile : Boutons réseaux sociaux */}
+      <div className="sm:hidden absolute left-1/2 transform -translate-x-1/2 z-50" style={{ bottom: '20%' }}>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
+          className="pointer-events-auto"
           style={{ 
             opacity: canvasOpacity,
-            pointerEvents: 'auto',
-            position: 'relative'
+            pointerEvents: 'auto'
           }}
         >
-          <div style={{ 
-            opacity: 1,
-            pointerEvents: 'auto',
-            position: 'relative',
-            zIndex: 10000,
-            padding: '20px',
-            margin: '-20px',
-            cursor: 'pointer'
-          }}>
-            <div style={{
-              width: '100%',
-              height: '100%',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              cursor: 'pointer',
-              userSelect: 'none'
-            }}>
-              <SocialButtons />
-            </div>
+          <div style={{ pointerEvents: 'auto' }}>
+            <SocialButtons />
           </div>
         </motion.div>
       </div>
 
-      {/* Mobile : Bouton CV - REMONTÉ AUSSI */}
-      <div className="sm:hidden absolute z-40" style={{ 
-        left: '50%', 
-        transform: 'translateX(-50%)', 
-        bottom: '16%' // REMONTÉ : était 11%
-      }}>
+      {/* Mobile : Bouton CV */}
+      <div className="sm:hidden absolute left-1/2 transform -translate-x-1/2 z-50" style={{ bottom: '12%' }}>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.4 }}
-          style={{ opacity: canvasOpacity, pointerEvents: 'auto' }}
+          className="pointer-events-auto"
+          style={{ 
+            opacity: canvasOpacity,
+            pointerEvents: 'auto'
+          }}
         >
-          <CVButton />
+          <div style={{ pointerEvents: 'auto' }}>
+            <CVButton />
+          </div>
         </motion.div>
       </div>
 
       {/* Desktop : boutons empilés */}
-      <div className="hidden sm:block absolute left-0 right-0 z-40 bottom-8 md:bottom-12 lg:bottom-16">
+      <div className="hidden sm:block absolute left-1/2 transform -translate-x-1/2 z-50" style={{ bottom: '8%' }}>
         {/* Boutons réseaux sociaux */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="w-full flex justify-center mb-4"
-          style={{ opacity: canvasOpacity, pointerEvents: 'auto' }}
+          className="flex justify-center mb-4 pointer-events-auto"
+          style={{ 
+            opacity: canvasOpacity,
+            pointerEvents: 'auto'
+          }}
         >
-          <SocialButtons />
+          <div style={{ pointerEvents: 'auto' }}>
+            <SocialButtons />
+          </div>
         </motion.div>
 
         {/* Bouton CV */}
@@ -690,10 +674,15 @@ const Home: React.FC = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.4 }}
-          className="w-full flex justify-center"
-          style={{ opacity: canvasOpacity, pointerEvents: 'auto' }}
+          className="flex justify-center pointer-events-auto"
+          style={{ 
+            opacity: canvasOpacity,
+            pointerEvents: 'auto'
+          }}
         >
-          <CVButton />
+          <div style={{ pointerEvents: 'auto' }}>
+            <CVButton />
+          </div>
         </motion.div>
       </div>
     </section>

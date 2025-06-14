@@ -41,7 +41,6 @@ const buttons = [
 const SocialButtons: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-  const [isVisible, setIsVisible] = useState(true);
   const socialClockRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -55,34 +54,10 @@ const SocialButtons: React.FC = () => {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  // CORRECTION: Logique de visibilité améliorée
-  useEffect(() => {
-    const handlePageChange = () => {
-      const currentHash = window.location.hash;
-      const currentPath = window.location.pathname;
-      
-      // Visible SEULEMENT sur la home page
-      const isHomePage = (currentPath === '/' || currentPath === '/index.html') && 
-                        (!currentHash || currentHash === '' || currentHash === '#' || currentHash === '#home');
-      
-      console.log('Path:', currentPath, 'Hash:', currentHash, 'Is Home:', isHomePage);
-      setIsVisible(isHomePage);
-    };
+  // SUPPRESSION: Logique de visibilité complexe - le composant sera toujours visible
+  // La gestion de la visibilité se fera dans le composant parent (Home.tsx)
 
-    // Vérifier au chargement
-    handlePageChange();
-
-    // Écouter les changements de navigation (hash et popstate pour les vraies pages)
-    window.addEventListener('hashchange', handlePageChange);
-    window.addEventListener('popstate', handlePageChange);
-
-    return () => {
-      window.removeEventListener('hashchange', handlePageChange);
-      window.removeEventListener('popstate', handlePageChange);
-    };
-  }, []);
-
-  // AJOUT: Fermer au scroll ET au touch sur mobile
+  // Fermer au scroll ET au touch sur mobile
   useEffect(() => {
     const handleScroll = () => {
       if (isMobile && isOpen) {
@@ -107,33 +82,32 @@ const SocialButtons: React.FC = () => {
     };
   }, [isMobile, isOpen]);
 
-  // CORRIGÉ: Gestion des clics sur le bouton trigger - Amélioration tactile
+  // Gestion des clics sur le bouton trigger
   const handleTriggerClick = (e: React.MouseEvent | React.TouchEvent) => {
-    e.preventDefault(); // Empêcher le comportement par défaut
+    e.preventDefault();
     if (isMobile) {
       setIsOpen(!isOpen);
     }
   };
 
-  // CORRIGÉ: Gestion tactile pour les liens sociaux
+  // Gestion tactile pour les liens sociaux
   const handleSocialClick = (e: React.MouseEvent | React.TouchEvent, href: string) => {
-    e.preventDefault(); // Empêcher le comportement par défaut
-    e.stopPropagation(); // Empêcher la propagation
+    e.preventDefault();
+    e.stopPropagation();
     window.open(href, '_blank', 'noopener,noreferrer');
     if (isMobile) {
       setIsOpen(false);
     }
   };
 
-  // Si pas visible, ne pas rendre le composant
-  if (!isVisible) {
-    return null;
-  }
-
   return (
     <div 
       className={`social-clock ${isMobile && isOpen ? 'mobile-open' : ''}`}
       ref={socialClockRef}
+      style={{ 
+        marginTop: 0,  // SUPPRESSION du margin-top qui déplaçait le bouton
+        pointerEvents: 'auto'  // S'assurer que les événements passent
+      }}
     >
       <div className="social-clock__list">
         {buttons.map((btn, i) => (
