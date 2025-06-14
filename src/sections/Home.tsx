@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
 import SocialButtons from "../components/layout/SocialButtons";
 import CVButton from "../components/layout/CVButton";
+import ParticleBackground from "../components/layout/ParticleBackground";
 
 // --- Hook pour gérer les positions responsives ---
 const useResponsivePositions = () => {
@@ -489,6 +490,13 @@ const Home: React.FC = () => {
       className="relative min-h-screen overflow-hidden"
       style={{ background: "transparent" }}
     >
+      {/* ParticleBackground très subtil pour Home */}
+      <ParticleBackground 
+        opacity={0.25}        // Très transparent (25%)
+        particleCount={18}    // Peu de particules  
+        className="z-0"       // Derrière tout le contenu
+      />
+
       {/* Animation formes fluides - VISIBLE SUR TOUS LES ÉCRANS */}
       <FluidShapesAnimation opacity={canvasOpacity} />
 

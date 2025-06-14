@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useCallback } from "react";
+import React, { useRef, useEffect } from "react";
 
 interface ParticleBackgroundProps {
   opacity?: number;
@@ -8,18 +8,19 @@ interface ParticleBackgroundProps {
 
 const ParticleBackground: React.FC<ParticleBackgroundProps> = ({ 
   opacity = 0.75, 
-  particleCount = 35, // Réduit de 65 à 35
+  particleCount = 45, // Compromis entre performance et visuel
   className = ""
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animationRef = useRef<number>();
   const particlesRef = useRef<any[]>([]);
-  const isVisibleRef = useRef(true);
   const lastFrameTime = useRef(0);
 
-  // Throttle animation to 30 FPS instead of 60
-  const targetFPS = 30;
-  const frameInterval = 1000 / targetFPS;
+  // FPS adaptatif selon la taille d'écran
+  const getTargetFPS = () => {
+    if (typeof window === 'undefined') return 30;
+    return window.innerWidth < 768 ? 20 : 30; // Mobile plus lent
+  };
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -28,16 +29,51 @@ const ParticleBackground: React.FC<ParticleBackgroundProps> = ({
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    // Configuration optimisée
-    const maxDistance = 120; // Réduit de 160 à 120
-    
-    // Redimensionner le canvas avec throttling
-    const resizeCanvas = () => {
-      canvas.width = Math.min(canvas.offsetWidth, 1920); // Limite la résolution
-      canvas.height = Math.min(canvas.offsetHeight, 1080);
+    const targetFPS = getTargetFPS();
+    const frameInterval = 1000 / targetFPS;
+
+    // Configuration responsive
+    const getConfig = () => {
+      const width = window.innerWidth;
+      if (width < 768) {
+        // Mobile
+        return {
+          maxDistance: 100,
+          particleSpeed: 0.3,
+          connectionOpacity: 0.4,
+          effectiveParticleCount: Math.max(25, Math.floor(particleCount * 0.6))
+        };
+      } else if (width < 1024) {
+        // Tablet
+        return {
+          maxDistance: 130,
+          particleSpeed: 0.4,
+          connectionOpacity: 0.5,
+          effectiveParticleCount: Math.max(35, Math.floor(particleCount * 0.8))
+        };
+      } else {
+        // Desktop
+        return {
+          maxDistance: 150,
+          particleSpeed: 0.5,
+          connectionOpacity: 0.6,
+          effectiveParticleCount: particleCount
+        };
+      }
     };
 
-    // Classe Particule optimisée
+    let config = getConfig();
+
+    // Redimensionner le canvas
+    const resizeCanvas = () => {
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = rect.width;
+      canvas.height = rect.height;
+      config = getConfig();
+      initParticles(); // Réinitialiser avec le nouveau config
+    };
+
+    // Classe Particule
     class Particle {
       x: number;
       y: number;
@@ -50,17 +86,17 @@ const ParticleBackground: React.FC<ParticleBackgroundProps> = ({
       constructor() {
         this.x = Math.random() * canvas.width;
         this.y = Math.random() * canvas.height;
-        this.vx = (Math.random() - 0.5) * 0.4; // Mouvement plus lent
-        this.vy = (Math.random() - 0.5) * 0.4;
-        this.size = Math.random() * 2 + 1.5; // Tailles plus petites
+        this.vx = (Math.random() - 0.5) * config.particleSpeed;
+        this.vy = (Math.random() - 0.5) * config.particleSpeed;
+        this.size = Math.random() * 2.5 + 1.5;
         
-        // Couleurs pré-calculées
+        // Couleurs mélangées rouge/orange/violet
         const colors = [
-          { main: '#ff6347', glow: '#ff4500' },
-          { main: '#ff4500', glow: '#ffa500' },
-          { main: '#8a2be2', glow: '#9932cc' },
-          { main: '#ff1493', glow: '#ff69b4' },
-          { main: '#ff8c00', glow: '#ffd700' }
+          { main: '#ff6347', glow: '#ff4500' }, // Rouge-orange
+          { main: '#ff4500', glow: '#ffa500' }, // Orange
+          { main: '#8a2be2', glow: '#9932cc' }, // Violet
+          { main: '#ff1493', glow: '#ff69b4' }, // Rose-rouge
+          { main: '#ff8c00', glow: '#ffd700' }  // Orange doré
         ];
         const colorSet = colors[Math.floor(Math.random() * colors.length)];
         this.color = colorSet.main;
@@ -71,23 +107,32 @@ const ParticleBackground: React.FC<ParticleBackgroundProps> = ({
         this.x += this.vx;
         this.y += this.vy;
 
-        // Rebond optimisé
+        // Rebond sur les bords
         if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
         if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
 
+        // Garder dans les limites
         this.x = Math.max(0, Math.min(canvas.width, this.x));
         this.y = Math.max(0, Math.min(canvas.height, this.y));
       }
 
       draw() {
         if (!ctx) return;
-        
-        // Dessin simplifié - moins d'effets
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
         ctx.fillStyle = this.color;
-        ctx.shadowBlur = 8; // Réduit de 15 à 8
         ctx.shadowColor = this.glowColor;
+        ctx.shadowBlur = 12;
+        ctx.fill();
+        
+        // Halo externe coloré (responsive)
+        const haloSize = window.innerWidth < 768 ? this.size * 1.5 : this.size * 2;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, haloSize, 0, Math.PI * 2);
+        const gradient = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, haloSize);
+        gradient.addColorStop(0, `${this.color}40`);
+        gradient.addColorStop(1, 'transparent');
+        ctx.fillStyle = gradient;
         ctx.fill();
       }
     }
@@ -95,45 +140,49 @@ const ParticleBackground: React.FC<ParticleBackgroundProps> = ({
     // Initialiser les particules
     const initParticles = () => {
       particlesRef.current = [];
-      for (let i = 0; i < particleCount; i++) {
+      for (let i = 0; i < config.effectiveParticleCount; i++) {
         particlesRef.current.push(new Particle());
       }
     };
 
-    // Connexions optimisées avec cache
+    // Dessiner les connexions - MÊME DENSITÉ QUE ABOUT
     const drawConnections = () => {
       if (!ctx) return;
       const particles = particlesRef.current;
 
-      // Dessiner moins de connexions
-      for (let i = 0; i < particles.length; i += 2) { // Skip every other particle
-        for (let j = i + 2; j < particles.length; j += 2) {
+      // Connexions colorées aléatoires
+      const connectionColors = [
+        '#ff6347', // Rouge
+        '#ff4500', // Orange  
+        '#8a2be2', // Violet
+        '#ff1493', // Rose
+        '#ff8c00'  // Orange doré
+      ];
+
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
           const dx = particles[i].x - particles[j].x;
           const dy = particles[i].y - particles[j].y;
           const distance = Math.sqrt(dx * dx + dy * dy);
 
-          if (distance < maxDistance) {
-            const opacityCalc = (maxDistance - distance) / maxDistance;
+          if (distance < config.maxDistance) {
+            const opacityCalc = (config.maxDistance - distance) / config.maxDistance;
+            const randomColor = connectionColors[Math.floor(Math.random() * connectionColors.length)];
             
             ctx.beginPath();
             ctx.moveTo(particles[i].x, particles[i].y);
             ctx.lineTo(particles[j].x, particles[j].y);
-            ctx.strokeStyle = `rgba(255, 165, 0, ${opacityCalc * 0.3})`; // Opacité réduite
-            ctx.lineWidth = 1;
+            ctx.strokeStyle = `${randomColor}${Math.floor(opacityCalc * config.connectionOpacity * 255).toString(16).padStart(2, '0')}`;
+            ctx.lineWidth = window.innerWidth < 768 ? 1 : 1.5;
             ctx.stroke();
           }
         }
       }
     };
 
-    // Animation avec FPS limité
+    // Animation principale
     const animate = (currentTime: number) => {
-      if (!isVisibleRef.current) {
-        animationRef.current = requestAnimationFrame(animate);
-        return;
-      }
-
-      // Throttle to target FPS
+      // Throttle FPS
       if (currentTime - lastFrameTime.current < frameInterval) {
         animationRef.current = requestAnimationFrame(animate);
         return;
@@ -151,47 +200,32 @@ const ParticleBackground: React.FC<ParticleBackgroundProps> = ({
         particle.draw();
       });
 
-      // Dessiner les connexions (moins fréquemment)
-      if (Math.floor(currentTime / 100) % 2 === 0) { // Every 200ms
-        drawConnections();
-      }
+      // Dessiner TOUTES les connexions (comme About)
+      drawConnections();
 
       animationRef.current = requestAnimationFrame(animate);
     };
 
-    // Observer d'intersection pour pause/resume
-    const intersectionObserver = new IntersectionObserver(
-      (entries) => {
-        entries.forEach(entry => {
-          isVisibleRef.current = entry.isIntersecting;
-        });
-      },
-      { threshold: 0.1 }
-    );
-
-    // Throttled resize
+    // Gestion du resize avec debounce
     let resizeTimeout: NodeJS.Timeout;
-    const throttledResize = () => {
+    const handleResize = () => {
       clearTimeout(resizeTimeout);
       resizeTimeout = setTimeout(resizeCanvas, 250);
     };
 
     // Initialisation
     resizeCanvas();
-    initParticles();
     animate(0);
 
     // Event listeners
-    window.addEventListener('resize', throttledResize);
-    if (canvas) intersectionObserver.observe(canvas);
+    window.addEventListener('resize', handleResize);
 
     // Cleanup
     return () => {
       if (animationRef.current) {
         cancelAnimationFrame(animationRef.current);
       }
-      window.removeEventListener('resize', throttledResize);
-      intersectionObserver.disconnect();
+      window.removeEventListener('resize', handleResize);
       clearTimeout(resizeTimeout);
     };
   }, [particleCount]);
@@ -202,8 +236,8 @@ const ParticleBackground: React.FC<ParticleBackgroundProps> = ({
       className={`absolute inset-0 w-full h-full pointer-events-none ${className}`}
       style={{ 
         opacity,
-        willChange: 'auto', // Optimisation CSS
-        transform: 'translateZ(0)' // Force hardware acceleration
+        willChange: 'auto',
+        transform: 'translateZ(0)'
       }}
     />
   );
