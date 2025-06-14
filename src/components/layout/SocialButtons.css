@@ -17,7 +17,6 @@
   width: var(--size);
   transition: all 0.5s linear;
   margin: 0 auto;
-  /* SUPPRESSION: margin-top: 200px; qui déplaçait le bouton */
 }
 
 .social-clock,
@@ -36,12 +35,12 @@
   height: var(--size);
   pointer-events: all;
   width: var(--size);
-  z-index: 5; /* Augmenté pour être au-dessus de la liste */
+  z-index: 5;
   cursor: pointer;
-  position: absolute; /* Ajouté pour le positionnement */
+  position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%); /* Centré parfaitement */
+  transform: translate(-50%, -50%);
 }
 
 /* Trigger - Icon */
@@ -68,16 +67,17 @@
     transform 0.3s linear;
 }
 
-/* Animation au hover - SEULEMENT sur le trigger */
-.social-clock__trigger:hover ~ .social-clock__list {
-  --size: 100%;
-  transform: rotate(360deg);
-}
+/* Animation au hover - SEULEMENT sur desktop (>1024px) */
+@media (min-width: 1025px) {
+  .social-clock__trigger:hover ~ .social-clock__list {
+    --size: 100%;
+    transform: rotate(360deg);
+  }
 
-/* Animation au hover - SEULEMENT quand on survole les boutons déployés */
-.social-clock__list:hover {
-  --size: 100% !important;
-  transform: rotate(360deg) !important;
+  .social-clock__list:hover {
+    --size: 100% !important;
+    transform: rotate(360deg) !important;
+  }
 }
 
 /* Boutons sociaux */
@@ -124,9 +124,11 @@
   transition: background 0.3s linear;
 }
 
-/* Background - Interactions */
-.social-clock:hover .social-clock__button::before {
-  background: rgba(0, 0, 0, var(--fill-opacity));
+/* Background - Interactions - SEULEMENT sur desktop */
+@media (min-width: 1025px) {
+  .social-clock:hover .social-clock__button::before {
+    background: rgba(0, 0, 0, var(--fill-opacity));
+  }
 }
 
 .social-clock__button::after {
@@ -141,14 +143,16 @@
   transition: box-shadow 0.3s ease-in-out;
 }
 
-/* Animation de remplissage au hover */
-.social-clock__button:hover::after {
-  --fill-size: calc(-0.5 * (var(--size-clock) + var(--size)));
-  pointer-events: all;
-}
+/* Animation de remplissage au hover - SEULEMENT sur desktop */
+@media (min-width: 1025px) {
+  .social-clock__button:hover::after {
+    --fill-size: calc(-0.5 * (var(--size-clock) + var(--size)));
+    pointer-events: all;
+  }
 
-.social-clock__button:active::after {
-  --fill-opacity: 1;
+  .social-clock__button:active::after {
+    --fill-opacity: 1;
+  }
 }
 
 /* Icons des boutons */
@@ -192,16 +196,24 @@
   --index: 2;
 }
 
-/* Responsive */
-@media (max-width: 700px) {
+/* Responsive - MOBILE ET TABLETTE */
+@media (max-width: 1024px) {
   .social-clock {
-    --size-clock: 12rem;
-    --size-button: 3rem;
+    --size-clock: 14rem;
+    --size-button: 3.5rem;
   }
   
-  /* Simulation du hover en mode mobile */
+  /* Simulation du clic pour mobile ET tablette */
   .social-clock.mobile-open .social-clock__list {
     --size: 100%;
     transform: rotate(360deg);
+  }
+}
+
+/* Responsive - MOBILE UNIQUEMENT */
+@media (max-width: 767px) {
+  .social-clock {
+    --size-clock: 12rem;
+    --size-button: 3rem;
   }
 }

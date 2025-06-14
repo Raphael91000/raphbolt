@@ -40,66 +40,77 @@ const buttons = [
 
 const SocialButtons: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
+  const [isMobileOrTablet, setIsMobileOrTablet] = useState(false); // MODIFIÉ : inclut tablette
   const [isHovered, setIsHovered] = useState(false);
   const socialClockRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth <= 700);
+    const checkDevice = () => {
+      // MODIFIÉ : Mobile ET tablette utilisent le système de clic (≤1024px)
+      setIsMobileOrTablet(window.innerWidth <= 1024);
     };
 
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
+    checkDevice();
+    window.addEventListener('resize', checkDevice);
 
-    return () => window.removeEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkDevice);
   }, []);
 
-  // Fermer au scroll ET au touch sur mobile
+  // Fermer au scroll ET au touch sur mobile/tablette
   useEffect(() => {
     const handleScroll = () => {
-      if (isMobile && isOpen) {
+      if (isMobileOrTablet && isOpen) {
         setIsOpen(false);
       }
     };
 
     const handleTouchOutside = (e: TouchEvent) => {
-      if (isMobile && isOpen && socialClockRef.current && !socialClockRef.current.contains(e.target as Node)) {
+      if (isMobileOrTablet && isOpen && socialClockRef.current && !socialClockRef.current.contains(e.target as Node)) {
         setIsOpen(false);
       }
     };
 
-    if (isMobile && isOpen) {
+    // NOUVEAU : Gestion du clic en dehors pour tablette
+    const handleClickOutside = (e: MouseEvent) => {
+      if (isMobileOrTablet && isOpen && socialClockRef.current && !socialClockRef.current.contains(e.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+
+    if (isMobileOrTablet && isOpen) {
       window.addEventListener('scroll', handleScroll, { passive: true });
       document.addEventListener('touchstart', handleTouchOutside, { passive: true });
+      document.addEventListener('click', handleClickOutside); // NOUVEAU pour tablette
     }
 
     return () => {
       window.removeEventListener('scroll', handleScroll);
       document.removeEventListener('touchstart', handleTouchOutside);
+      document.removeEventListener('click', handleClickOutside);
     };
-  }, [isMobile, isOpen]);
+  }, [isMobileOrTablet, isOpen]);
 
   // Gestion des clics sur le bouton trigger
   const handleTriggerClick = (e: React.MouseEvent | React.TouchEvent) => {
     e.preventDefault();
-    console.log('Trigger clicked, isMobile:', isMobile, 'current isOpen:', isOpen); // DEBUG
-    if (isMobile) {
+    e.stopPropagation(); // NOUVEAU : empêche la propagation
+    console.log('Trigger clicked, isMobileOrTablet:', isMobileOrTablet, 'current isOpen:', isOpen); // DEBUG
+    if (isMobileOrTablet) {
       setIsOpen(!isOpen);
       console.log('New isOpen state will be:', !isOpen); // DEBUG
     }
   };
 
-  // Gestion du hover sur le trigger (desktop/tablette uniquement)
+  // Gestion du hover sur le trigger (desktop uniquement)
   const handleTriggerHover = (hovered: boolean) => {
-    if (!isMobile) {
+    if (!isMobileOrTablet) { // MODIFIÉ : seulement desktop
       setIsHovered(hovered);
     }
   };
 
-  // Gestion du hover sur la liste (pour maintenir ouvert)
+  // Gestion du hover sur la liste (pour maintenir ouvert sur desktop)
   const handleListHover = (hovered: boolean) => {
-    if (!isMobile) {
+    if (!isMobileOrTablet) { // MODIFIÉ : seulement desktop
       setIsHovered(hovered);
     }
   };
@@ -109,14 +120,14 @@ const SocialButtons: React.FC = () => {
     e.preventDefault();
     e.stopPropagation();
     window.open(href, '_blank', 'noopener,noreferrer');
-    if (isMobile) {
+    if (isMobileOrTablet) { // MODIFIÉ : ferme sur mobile ET tablette
       setIsOpen(false);
     }
   };
 
   return (
     <div 
-      className={`social-clock ${isMobile && isOpen ? 'mobile-open' : ''}`}
+      className={`social-clock ${isMobileOrTablet && isOpen ? 'mobile-open' : ''}`} // MODIFIÉ : classe pour mobile/tablette
       ref={socialClockRef}
       style={{ 
         marginTop: 0,
@@ -129,13 +140,13 @@ const SocialButtons: React.FC = () => {
         onMouseLeave={() => handleListHover(false)}
         style={{
           // Style inline pour forcer l'animation
-          '--size': (isMobile && isOpen) || (!isMobile && isHovered) ? '100%' : 'calc(var(--size-button) + var(--size-padding))',
-          transform: (isMobile && isOpen) || (!isMobile && isHovered) ? 'rotate(360deg)' : 'none',
+          '--size': (isMobileOrTablet && isOpen) || (!isMobileOrTablet && isHovered) ? '100%' : 'calc(var(--size-button) + var(--size-padding))',
+          transform: (isMobileOrTablet && isOpen) || (!isMobileOrTablet && isHovered) ? 'rotate(360deg)' : 'none',
           transition: 'all 0.3s ease-in-out, transform 0.3s linear'
         } as React.CSSProperties}
       >
         {buttons.map((btn, i) => (
-          isMobile ? (
+          isMobileOrTablet ? ( // MODIFIÉ : div cliquable pour mobile ET tablette
             <div
               key={i}
               className={`social-clock__button ${btn.className}`}
@@ -146,7 +157,7 @@ const SocialButtons: React.FC = () => {
             >
               {btn.svg}
             </div>
-          ) : (
+          ) : ( // Liens normaux pour desktop
             <a
               key={i}
               href={btn.href}
@@ -165,11 +176,11 @@ const SocialButtons: React.FC = () => {
         onClick={handleTriggerClick}
         onTouchEnd={handleTriggerClick}
         onMouseEnter={() => {
-          console.log('Mouse enter trigger'); // DEBUG
+          console.log('Mouse enter trigger, isMobileOrTablet:', isMobileOrTablet); // DEBUG
           handleTriggerHover(true);
         }}
         onMouseLeave={() => {
-          console.log('Mouse leave trigger'); // DEBUG
+          console.log('Mouse leave trigger, isMobileOrTablet:', isMobileOrTablet); // DEBUG
           handleTriggerHover(false);
         }}
         aria-label={isOpen ? 'Fermer les réseaux sociaux' : 'Ouvrir les réseaux sociaux'}
