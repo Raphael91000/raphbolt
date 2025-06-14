@@ -529,7 +529,7 @@ const Home: React.FC = () => {
         pointerEvents: 'none'
       }}>
         
-        {/* Texte "Welcome to my World" centré pour mobile - SANS CONTAINER */}
+        {/* Texte "Welcome to my World" centré pour mobile - REMONTÉ */}
         <motion.div
           initial={{ opacity: 0, y: -30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -537,7 +537,7 @@ const Home: React.FC = () => {
           className="flex flex-col items-center text-center"
           style={{ 
             opacity: canvasOpacity,
-            marginTop: '-80px',
+            marginTop: '-490px', // REMONTÉ de -80px à -150px
             pointerEvents: 'none'
           }}
         >
@@ -593,13 +593,18 @@ const Home: React.FC = () => {
             </span>
           </div>
         </motion.div>
+      </div>
 
-        {/* Animation fluide plus grosse pour mobile - sous le texte */}
-        <div className="flex justify-center" style={{ marginTop: '-20px', pointerEvents: 'none' }}>
+      {/* Animation fluide mobile - SÉPARÉE ET INDÉPENDANTE */}
+      <div className="sm:hidden absolute top-0 left-0 w-full h-full flex items-center justify-center z-20" style={{
+        background: 'transparent',
+        pointerEvents: 'none'
+      }}>
+        <div className="flex justify-center" style={{ marginTop: '-50px', pointerEvents: 'none' }}>
           <div 
             className="pointer-events-none"
             style={{ 
-              transform: 'scale(1.2)',
+              transform: 'scale(1.2) translateY(-30px)',
               opacity: canvasOpacity
             }}
           >
@@ -610,11 +615,11 @@ const Home: React.FC = () => {
 
       {/* Boutons réseaux sociaux et CV */}
       
-      {/* Mobile : Bouton réseaux sociaux */}
+      {/* Mobile : Bouton réseaux sociaux - REMONTÉ ENCORE PLUS */}
       <div className="sm:hidden absolute z-[9999]" style={{ 
         left: '50%', 
         transform: 'translateX(-50%)', 
-        bottom: '15%',
+        bottom: '20%', // REMONTÉ : était 15%
         pointerEvents: 'auto'
       }}>
         <motion.div
@@ -651,11 +656,11 @@ const Home: React.FC = () => {
         </motion.div>
       </div>
 
-      {/* Mobile : Bouton CV */}
+      {/* Mobile : Bouton CV - REMONTÉ AUSSI */}
       <div className="sm:hidden absolute z-40" style={{ 
         left: '50%', 
         transform: 'translateX(-50%)', 
-        bottom: '11%'
+        bottom: '16%' // REMONTÉ : était 11%
       }}>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
