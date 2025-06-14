@@ -21,34 +21,24 @@ const useResponsivePositions = () => {
       console.log('Current width:', width); // Debug
       
       if (width <= 767) {
-        // Mobile - GARDER EXACTEMENT LES MÊMES VALEURS
-        console.log('Applying MOBILE layout'); // Debug
+        // MOBILE UNIQUEMENT - GARDER LES VALEURS ACTUELLES QUI FONCTIONNENT
+        console.log('Applying MOBILE layout');
         setPositions({
           textMarginTop: '-490px',
           animationMarginTop: '-55px',
           animationScale: 1.2,
-          socialButtonsBottom: '20%',
-          cvButtonBottom: '17%'
-        });
-      } else if (width <= 1024) {
-        // Tablette - MODIFICATIONS DEMANDÉES
-        console.log('Applying TABLET layout'); // Debug
-        setPositions({
-          textMarginTop: '-800px',      // 1) Texte plus haut (-420px → -520px)
-          animationMarginTop: '-200px',  // 2) Animation remontée (-35px → -60px)
-          animationScale: 1.4,
-          socialButtonsBottom: '28%',   // 3) Boutons sociaux remontés (22% → 28%)
-          cvButtonBottom: '18%'         // 4) Bouton CV remonté (12% → 18%)
+          socialButtonsBottom: '20%',    // Position mobile OK
+          cvButtonBottom: '17%'          // Position mobile OK
         });
       } else if (width <= 1279) {
-        // Tablette large - MODIFICATIONS DEMANDÉES
-        console.log('Applying TABLET LARGE layout'); // Debug
+        // TABLETTE UNIQUEMENT - REMONTER LES BOUTONS
+        console.log('Applying TABLET layout');
         setPositions({
-          textMarginTop: '-450px',      // 1) Texte plus haut (-350px → -450px)
-          animationMarginTop: '-40px',  // 2) Animation remontée (-10px → -40px)
-          animationScale: 1.6,
-          socialButtonsBottom: '26%',   // 3) Boutons sociaux remontés (20% → 26%)
-          cvButtonBottom: '16%'         // 4) Bouton CV remonté (10% → 16%)
+          textMarginTop: '-640px',
+          animationMarginTop: '-100px',
+          animationScale: 1.2,
+          socialButtonsBottom: '30%',    // Remonter les boutons sociaux
+          cvButtonBottom: '20%'          // Remonter le bouton CV
         });
       }
     };
@@ -207,9 +197,9 @@ const ResponsiveMobileAnimation = ({ opacity = 1, scale = 1.2 }: { opacity?: num
 
   useEffect(() => {
     const updateSize = () => {
-      if (window.innerWidth <= 768) setCanvasSize(160);  // Mobile - taille réduite
-      else if (window.innerWidth <= 1024) setCanvasSize(200);  // Tablette - taille intermédiaire  
-      else setCanvasSize(240);  // Tablette large
+      // MÊME TAILLE POUR MOBILE ET TABLETTE
+      if (window.innerWidth <= 1279) setCanvasSize(160);  // Mobile ET tablette - même taille
+      else setCanvasSize(240);  // Desktop uniquement
     };
     updateSize();
     window.addEventListener("resize", updateSize);
@@ -515,7 +505,7 @@ const Home: React.FC = () => {
         aria-hidden="true"
       />
 
-      {/* Layout Desktop - côte à côte */}
+      {/* Layout Desktop UNIQUEMENT - côte à côte */}
       <div className="relative z-30 w-full px-4 sm:px-8 md:px-12 lg:px-16 pt-8 sm:pt-12 md:pt-16 hidden xl:block">
         <div className="flex items-start justify-between w-full max-w-7xl mx-auto bg-transparent">
           <motion.div
@@ -589,13 +579,13 @@ const Home: React.FC = () => {
         </div>
       </div>
 
-      {/* Layout Mobile ET TABLETTE - RESPONSIVE INTELLIGENT */}
+      {/* Layout MOBILE ET TABLETTE - DISPOSITION IDENTIQUE */}
       <div className="xl:hidden absolute top-0 left-0 w-full h-full flex flex-col items-center justify-center z-30" style={{
         background: 'transparent',
         pointerEvents: 'none'
       }}>
         
-        {/* Texte "Welcome to my World" avec position responsive */}
+        {/* Texte "Welcome to my World" avec position identique mobile/tablette */}
         <motion.div
           initial={{ opacity: 0, y: -30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -603,7 +593,7 @@ const Home: React.FC = () => {
           className="flex flex-col items-center text-center"
           style={{ 
             opacity: canvasOpacity,
-            marginTop: positions.textMarginTop, // Position dynamique
+            marginTop: positions.textMarginTop, // MÊME POSITION POUR MOBILE ET TABLETTE
             pointerEvents: 'none'
           }}
         >
@@ -658,19 +648,19 @@ const Home: React.FC = () => {
         </motion.div>
       </div>
 
-      {/* Animation fluide avec position et scale responsive */}
+      {/* Animation fluide avec position et scale identiques mobile/tablette */}
       <div className="xl:hidden absolute top-0 left-0 w-full h-full flex items-center justify-center z-20" style={{
         background: 'transparent',
         pointerEvents: 'none'
       }}>
         <div className="flex justify-center" style={{ 
-          marginTop: positions.animationMarginTop, // Position dynamique
+          marginTop: positions.animationMarginTop, // MÊME POSITION POUR MOBILE ET TABLETTE
           pointerEvents: 'none' 
         }}>
           <div 
             className="pointer-events-none"
             style={{ 
-              transform: `scale(${positions.animationScale}) translateY(-30px)`, // Scale dynamique
+              transform: `scale(${positions.animationScale}) translateY(-30px)`, // MÊME SCALE POUR MOBILE ET TABLETTE
               opacity: canvasOpacity > 0.5 ? 1 : 0
             }}
           >
@@ -682,11 +672,11 @@ const Home: React.FC = () => {
         </div>
       </div>
 
-      {/* Boutons avec positions responsives */}
+      {/* Boutons avec positions identiques mobile/tablette */}
       
-      {/* Mobile ET TABLETTE : Boutons réseaux sociaux avec position responsive */}
+      {/* MOBILE ET TABLETTE : Boutons réseaux sociaux avec position identique */}
       <div className="xl:hidden absolute left-1/2 transform -translate-x-1/2 z-50" style={{ 
-        bottom: positions.socialButtonsBottom // Position dynamique
+        bottom: positions.socialButtonsBottom // MÊME POSITION POUR MOBILE ET TABLETTE
       }}>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -704,9 +694,9 @@ const Home: React.FC = () => {
         </motion.div>
       </div>
 
-      {/* Mobile ET TABLETTE : Bouton CV avec position responsive */}
+      {/* MOBILE ET TABLETTE : Bouton CV avec position identique */}
       <div className="xl:hidden absolute left-1/2 transform -translate-x-1/2 z-50" style={{ 
-        bottom: positions.cvButtonBottom // Position dynamique
+        bottom: positions.cvButtonBottom // MÊME POSITION POUR MOBILE ET TABLETTE
       }}>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -724,7 +714,7 @@ const Home: React.FC = () => {
         </motion.div>
       </div>
 
-      {/* Desktop : boutons empilés */}
+      {/* Desktop UNIQUEMENT : boutons empilés */}
       <div className="hidden xl:block absolute left-1/2 transform -translate-x-1/2 z-50" style={{ bottom: '8%' }}>
         {/* Boutons réseaux sociaux */}
         <motion.div

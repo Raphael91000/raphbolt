@@ -67,8 +67,8 @@
     transform 0.3s linear;
 }
 
-/* Animation au hover - SEULEMENT sur desktop (>1024px) */
-@media (min-width: 1025px) {
+/* Animation au hover - SEULEMENT sur desktop (>1440px) */
+@media (min-width: 1441px) {
   .social-clock__trigger:hover ~ .social-clock__list {
     --size: 100%;
     transform: rotate(360deg);
@@ -125,7 +125,7 @@
 }
 
 /* Background - Interactions - SEULEMENT sur desktop */
-@media (min-width: 1025px) {
+@media (min-width: 1441px) {
   .social-clock:hover .social-clock__button::before {
     background: rgba(0, 0, 0, var(--fill-opacity));
   }
@@ -144,7 +144,7 @@
 }
 
 /* Animation de remplissage au hover - SEULEMENT sur desktop */
-@media (min-width: 1025px) {
+@media (min-width: 1441px) {
   .social-clock__button:hover::after {
     --fill-size: calc(-0.5 * (var(--size-clock) + var(--size)));
     pointer-events: all;
@@ -196,14 +196,14 @@
   --index: 2;
 }
 
-/* Responsive - MOBILE ET TABLETTE */
-@media (max-width: 1024px) {
+/* Responsive - MOBILE, TABLETTE ET IPAD */
+@media (max-width: 1440px) {
   .social-clock {
     --size-clock: 14rem;
     --size-button: 3.5rem;
   }
   
-  /* Simulation du clic pour mobile ET tablette */
+  /* Simulation du clic pour mobile, tablette ET iPad */
   .social-clock.mobile-open .social-clock__list {
     --size: 100%;
     transform: rotate(360deg);

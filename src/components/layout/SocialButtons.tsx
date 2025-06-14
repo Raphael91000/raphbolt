@@ -46,8 +46,27 @@ const SocialButtons: React.FC = () => {
 
   useEffect(() => {
     const checkDevice = () => {
-      // MODIFIÉ : Mobile ET tablette utilisent le système de clic (≤1024px)
-      setIsMobileOrTablet(window.innerWidth <= 1024);
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+      
+      // Détecter spécifiquement les iPads et appareils mobiles
+      const isIpad = /iPad/.test(navigator.userAgent);
+      const isIphone = /iPhone/.test(navigator.userAgent);
+      const isAndroidTablet = /Android/.test(navigator.userAgent) && !/Mobile/.test(navigator.userAgent);
+      const isAndroidMobile = /Android/.test(navigator.userAgent) && /Mobile/.test(navigator.userAgent);
+      const isOtherMobile = /webOS|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      
+      // Critères pour utiliser le système de clic
+      const isTrueDevice = isIpad || isIphone || isAndroidTablet || isAndroidMobile || isOtherMobile;
+      const isSmallScreen = width <= 1024 && height <= 1400; // Inclut tous les iPads
+      
+      console.log('SocialButtons - Device detection:', {
+        width, height, isIpad, isIphone, isAndroidTablet, 
+        shouldUseMobileSystem: isTrueDevice || isSmallScreen
+      });
+      
+      // Utiliser le système de clic pour tous les vrais devices
+      setIsMobileOrTablet(isTrueDevice || isSmallScreen);
     };
 
     checkDevice();

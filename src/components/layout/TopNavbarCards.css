@@ -247,8 +247,8 @@
   position: relative;
 }
 
-/* MOBILE ET TABLETTE - HAMBURGER TOUJOURS VISIBLE */
-@media (max-width: 1024px) {
+/* MOBILE ET TABLETTE - HAMBURGER TOUJOURS VISIBLE (jusqu'à 1440px pour TOUS les iPads) */
+@media (max-width: 1440px) {
   .top-navbar-cards {
     background: transparent !important;
     height: auto !important;
@@ -298,8 +298,8 @@
   }
 }
 
-/* DESKTOP VERSION - Masquer le hamburger */
-@media (min-width: 1025px) {
+/* DESKTOP VERSION - Navigation normale (à partir de 1441px) */
+@media (min-width: 1441px) {
   .hamburger-menu {
     display: none !important;
   }

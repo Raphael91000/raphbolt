@@ -13,10 +13,28 @@ const PersistentHamburger: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
-  // Détecter si on est sur mobile/tablette (jusqu'à 1024px)
+  // Détecter si on est sur mobile/tablette/iPad (vrais devices)
   useEffect(() => {
     const checkMobile = () => {
-      setIsMobile(window.innerWidth <= 1024);
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+      
+      // Détecter spécifiquement les iPads et appareils mobiles
+      const isIpad = /iPad/.test(navigator.userAgent);
+      const isIphone = /iPhone/.test(navigator.userAgent);
+      const isAndroidTablet = /Android/.test(navigator.userAgent) && !/Mobile/.test(navigator.userAgent);
+      const isAndroidMobile = /Android/.test(navigator.userAgent) && /Mobile/.test(navigator.userAgent);
+      const isOtherMobile = /webOS|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      
+      const isTrueDevice = isIpad || isIphone || isAndroidTablet || isAndroidMobile || isOtherMobile;
+      const isSmallScreen = width <= 1024 && height <= 1400; // Inclut tous les iPads
+      
+      console.log('Hamburger - Device detection:', {
+        width, height, isIpad, isIphone, isAndroidTablet,
+        shouldShowHamburger: isTrueDevice || isSmallScreen
+      });
+      
+      setIsMobile(isTrueDevice || isSmallScreen);
     };
 
     checkMobile();

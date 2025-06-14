@@ -30,8 +30,8 @@ function App() {
       {/* Menu hamburger persistant - VISIBLE SUR MOBILE/TABLETTE UNIQUEMENT */}
       <PersistentHamburger />
       
-      {/* CORRIGÉ: Padding-top SEULEMENT sur desktop + z-index pour éviter les conflits */}
-      <main className="sm:pt-[74px] pt-0 relative z-0">
+      {/* CORRIGÉ: Padding-top SEULEMENT sur desktop (>1279px) + z-index pour éviter les conflits */}
+      <main className="2xl:pt-[74px] pt-0 relative z-0">
         <Home />
         <About />
         <Skills />
