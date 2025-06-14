@@ -41,6 +41,7 @@ const buttons = [
 const SocialButtons: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
   const socialClockRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -53,9 +54,6 @@ const SocialButtons: React.FC = () => {
 
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
-
-  // SUPPRESSION: Logique de visibilité complexe - le composant sera toujours visible
-  // La gestion de la visibilité se fera dans le composant parent (Home.tsx)
 
   // Fermer au scroll ET au touch sur mobile
   useEffect(() => {
@@ -85,8 +83,24 @@ const SocialButtons: React.FC = () => {
   // Gestion des clics sur le bouton trigger
   const handleTriggerClick = (e: React.MouseEvent | React.TouchEvent) => {
     e.preventDefault();
+    console.log('Trigger clicked, isMobile:', isMobile, 'current isOpen:', isOpen); // DEBUG
     if (isMobile) {
       setIsOpen(!isOpen);
+      console.log('New isOpen state will be:', !isOpen); // DEBUG
+    }
+  };
+
+  // Gestion du hover sur le trigger (desktop/tablette uniquement)
+  const handleTriggerHover = (hovered: boolean) => {
+    if (!isMobile) {
+      setIsHovered(hovered);
+    }
+  };
+
+  // Gestion du hover sur la liste (pour maintenir ouvert)
+  const handleListHover = (hovered: boolean) => {
+    if (!isMobile) {
+      setIsHovered(hovered);
     }
   };
 
@@ -105,14 +119,23 @@ const SocialButtons: React.FC = () => {
       className={`social-clock ${isMobile && isOpen ? 'mobile-open' : ''}`}
       ref={socialClockRef}
       style={{ 
-        marginTop: 0,  // SUPPRESSION du margin-top qui déplaçait le bouton
-        pointerEvents: 'auto'  // S'assurer que les événements passent
+        marginTop: 0,
+        pointerEvents: 'auto'
       }}
     >
-      <div className="social-clock__list">
+      <div 
+        className="social-clock__list"
+        onMouseEnter={() => handleListHover(true)}
+        onMouseLeave={() => handleListHover(false)}
+        style={{
+          // Style inline pour forcer l'animation
+          '--size': (isMobile && isOpen) || (!isMobile && isHovered) ? '100%' : 'calc(var(--size-button) + var(--size-padding))',
+          transform: (isMobile && isOpen) || (!isMobile && isHovered) ? 'rotate(360deg)' : 'none',
+          transition: 'all 0.3s ease-in-out, transform 0.3s linear'
+        } as React.CSSProperties}
+      >
         {buttons.map((btn, i) => (
           isMobile ? (
-            // Mobile : div cliquable avec gestion tactile améliorée
             <div
               key={i}
               className={`social-clock__button ${btn.className}`}
@@ -124,7 +147,6 @@ const SocialButtons: React.FC = () => {
               {btn.svg}
             </div>
           ) : (
-            // Desktop : liens normaux avec hover
             <a
               key={i}
               href={btn.href}
@@ -142,6 +164,14 @@ const SocialButtons: React.FC = () => {
         className="social-clock__trigger"
         onClick={handleTriggerClick}
         onTouchEnd={handleTriggerClick}
+        onMouseEnter={() => {
+          console.log('Mouse enter trigger'); // DEBUG
+          handleTriggerHover(true);
+        }}
+        onMouseLeave={() => {
+          console.log('Mouse leave trigger'); // DEBUG
+          handleTriggerHover(false);
+        }}
         aria-label={isOpen ? 'Fermer les réseaux sociaux' : 'Ouvrir les réseaux sociaux'}
         style={{ touchAction: 'manipulation' }}
       >
