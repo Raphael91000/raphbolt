@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import ContactForm from '../components/ui/ContactForm';
+import ParticleBackground from '../components/layout/ParticleBackground';
 import { Mail, Phone, MapPin } from 'lucide-react';
 
 const Contact: React.FC = () => {
@@ -16,11 +17,12 @@ const Contact: React.FC = () => {
     <section
       id="contact"
       ref={ref}
-      className="py-20 px-4 md:px-10 bg-black"
-      // Pour une variante plus subtile :
-      // style={{ background: "linear-gradient(to bottom, #16161f, #222235)" }}
+      className="relative py-20 px-4 md:px-10 bg-black"
     >
-      <div className="max-w-6xl mx-auto">
+      {/* Background de particules */}
+      <ParticleBackground opacity={0.7} />
+      
+      <div className="relative z-10 max-w-6xl mx-auto">
         <div className="text-center mb-16">
           <motion.div
             initial={{ width: 0 }}

@@ -1,6 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useInView } from 'react-intersection-observer';
+import ParticleBackground from '../components/layout/ParticleBackground';
 import { personalProjects } from '../constants/experiences';
 
 const PersonalProjects: React.FC = () => {
@@ -14,11 +15,12 @@ const PersonalProjects: React.FC = () => {
     <section
       id="projets-perso"
       ref={ref}
-      className="py-16 px-4 sm:px-6 lg:px-8 bg-black"
-      // Pour un style plus dynamique, tu peux aussi essayer :
-      // style={{ background: "linear-gradient(to bottom, #191929, #1a334a)" }}
+      className="relative py-16 px-4 sm:px-6 lg:px-8 bg-black"
     >
-      <div className="max-w-7xl mx-auto text-center">
+      {/* Background de particules */}
+      <ParticleBackground opacity={0.65} />
+      
+      <div className="relative z-10 max-w-7xl mx-auto text-center">
         <h2
           className={`text-3xl sm:text-4xl font-bold text-white mb-8 transition-all duration-1000 ${
             inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'

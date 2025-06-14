@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import Card3D from '../components/ui/Card3D';
 import AnimatedBot from '../components/ui/AnimatedBot';
+import ParticleBackground from '../components/layout/ParticleBackground';
 import { skills } from '../constants/skills';
 
 const Skills: React.FC = () => {
@@ -63,9 +64,11 @@ const Skills: React.FC = () => {
     <section 
       id="skills" 
       className="relative py-20 px-4 md:px-10 bg-black"
-      // Option : pour un effet tech subtil tu peux remplacer bg-black par bg-gradient-to-b from-black via-[#161626] to-[#22223b]
     >
-      <div ref={ref} className="max-w-6xl mx-auto">
+      {/* Background de particules avec opacité réduite pour ne pas gêner les cards */}
+      <ParticleBackground opacity={0.6} />
+      
+      <div ref={ref} className="relative z-10 max-w-6xl mx-auto">
         <div className="text-center mb-16">
           <motion.div
             initial={{ width: 0 }}
