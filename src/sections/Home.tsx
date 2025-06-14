@@ -4,6 +4,70 @@ import { motion } from "framer-motion";
 import SocialButtons from "../components/layout/SocialButtons";
 import CVButton from "../components/layout/CVButton";
 
+// --- Hook pour gérer les positions responsives ---
+const useResponsivePositions = () => {
+  const [positions, setPositions] = useState({
+    textMarginTop: '-490px',
+    animationMarginTop: '-55px',
+    animationScale: 1.2,
+    socialButtonsBottom: '20%',
+    cvButtonBottom: '17%'
+  });
+
+  useEffect(() => {
+    const updatePositions = () => {
+      const width = window.innerWidth;
+      
+      console.log('Current width:', width); // Debug
+      
+      if (width <= 767) {
+        // Mobile - GARDER EXACTEMENT LES MÊMES VALEURS
+        console.log('Applying MOBILE layout'); // Debug
+        setPositions({
+          textMarginTop: '-490px',
+          animationMarginTop: '-55px',
+          animationScale: 1.2,
+          socialButtonsBottom: '20%',
+          cvButtonBottom: '17%'
+        });
+      } else if (width <= 1024) {
+        // Tablette - MODIFICATIONS DEMANDÉES
+        console.log('Applying TABLET layout'); // Debug
+        setPositions({
+          textMarginTop: '-800px',      // 1) Texte plus haut (-420px → -520px)
+          animationMarginTop: '-200px',  // 2) Animation remontée (-35px → -60px)
+          animationScale: 1.4,
+          socialButtonsBottom: '28%',   // 3) Boutons sociaux remontés (22% → 28%)
+          cvButtonBottom: '18%'         // 4) Bouton CV remonté (12% → 18%)
+        });
+      } else if (width <= 1279) {
+        // Tablette large - MODIFICATIONS DEMANDÉES
+        console.log('Applying TABLET LARGE layout'); // Debug
+        setPositions({
+          textMarginTop: '-450px',      // 1) Texte plus haut (-350px → -450px)
+          animationMarginTop: '-40px',  // 2) Animation remontée (-10px → -40px)
+          animationScale: 1.6,
+          socialButtonsBottom: '26%',   // 3) Boutons sociaux remontés (20% → 26%)
+          cvButtonBottom: '16%'         // 4) Bouton CV remonté (10% → 16%)
+        });
+      }
+    };
+
+    updatePositions();
+    window.addEventListener('resize', updatePositions);
+    
+    // Force un update après 100ms pour s'assurer que ça prend effet
+    const timeoutId = setTimeout(updatePositions, 100);
+    
+    return () => {
+      window.removeEventListener('resize', updatePositions);
+      clearTimeout(timeoutId);
+    };
+  }, []);
+
+  return positions;
+};
+
 // --- Animation fluid shapes ---
 const FluidShapesAnimation = ({ opacity = 1 }: { opacity?: number }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -11,135 +75,15 @@ const FluidShapesAnimation = ({ opacity = 1 }: { opacity?: number }) => {
 
   useEffect(() => {
     const updateSize = () => {
-      if (window.innerWidth < 480) setCanvasSize(140); // Mobile
-      else if (window.innerWidth < 768) setCanvasSize(220); // Tablette
-      else if (window.innerWidth < 1024) setCanvasSize(300); // Petit desktop
-      else setCanvasSize(400); // Desktop large
+      if (window.innerWidth < 480) setCanvasSize(140);
+      else if (window.innerWidth < 768) setCanvasSize(180);
+      else if (window.innerWidth < 1025) setCanvasSize(240);
+      else setCanvasSize(400);
     };
     updateSize();
     window.addEventListener("resize", updateSize);
     return () => window.removeEventListener("resize", updateSize);
   }, []);
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-    canvas.width = canvasSize;
-    canvas.height = canvasSize;
-    let animationId: number;
-
-    const drawFluidShapes = () => {
-      ctx.clearRect(0, 0, canvasSize, canvasSize);
-      ctx.save();
-      ctx.translate(canvasSize / 2, canvasSize / 2);
-      const time = Date.now() * 0.001;
-      const scaleFactor = canvasSize / 400;
-      for (let shape = 0; shape < 3; shape++) {
-        const shapeOffset = (shape * Math.PI * 2) / 3;
-        const wavePhase = time + shape * 2;
-        let gradient;
-        if (shape === 0) {
-          gradient = ctx.createRadialGradient(0, 0, 20 * scaleFactor, 0, 0, 120 * scaleFactor);
-          gradient.addColorStop(0, "rgba(255, 165, 0, 0.9)"); // Orange
-          gradient.addColorStop(0.3, "rgba(255, 34, 68, 0.7)"); // Rouge
-          gradient.addColorStop(0.6, "rgba(128, 0, 128, 0.7)"); // Violet
-          gradient.addColorStop(1, "rgba(255, 165, 0, 0.3)");
-        } else if (shape === 1) {
-          gradient = ctx.createRadialGradient(0, 0, 20 * scaleFactor, 0, 0, 120 * scaleFactor);
-          gradient.addColorStop(0, "rgba(255, 34, 68, 0.9)"); // Rouge
-          gradient.addColorStop(0.3, "rgba(128, 0, 128, 0.7)"); // Violet
-          gradient.addColorStop(0.6, "rgba(255, 165, 0, 0.7)"); // Retour à orange
-          gradient.addColorStop(1, "rgba(255, 34, 68, 0.3)");
-        } else {
-          gradient = ctx.createRadialGradient(0, 0, 20 * scaleFactor, 0, 0, 120 * scaleFactor);
-          gradient.addColorStop(0, "rgba(128, 0, 128, 0.9)"); // Violet
-          gradient.addColorStop(0.3, "rgba(255, 165, 0, 0.7)"); // Orange
-          gradient.addColorStop(0.6, "rgba(255, 34, 68, 0.7)"); // Rouge
-          gradient.addColorStop(1, "rgba(128, 0, 128, 0.3)");
-        }
-        ctx.beginPath();
-        const segments = 80;
-        const baseRadius = (60 + shape * 20) * scaleFactor;
-        for (let i = 0; i <= segments; i++) {
-          const t = (i / segments) * Math.PI * 2;
-          const wave1 = Math.sin(t * 3 + wavePhase) * 15 * scaleFactor;
-          const wave2 = Math.cos(t * 5 + wavePhase * 0.7) * 8 * scaleFactor;
-          const wave3 = Math.sin(t * 2 + wavePhase * 1.3) * 12 * scaleFactor;
-          const baseAngle = t + shapeOffset + time * 0.1;
-          const radius = baseRadius + wave1 + wave2 + wave3;
-          const distortion = Math.sin(t * 4 + wavePhase) * 0.1;
-          const x = Math.cos(baseAngle + distortion) * radius;
-          const y = Math.sin(baseAngle + distortion) * radius;
-          if (i === 0) ctx.moveTo(x, y);
-          else ctx.lineTo(x, y);
-        }
-        ctx.closePath();
-        ctx.fillStyle = gradient;
-        ctx.fill();
-        ctx.strokeStyle = gradient;
-        ctx.lineWidth = 2 * scaleFactor;
-        ctx.stroke();
-        ctx.beginPath();
-        for (let i = 0; i <= segments; i++) {
-          const t = (i / segments) * Math.PI * 2;
-          const wave1 = Math.sin(t * 3 + wavePhase) * 15 * scaleFactor;
-          const wave2 = Math.cos(t * 5 + wavePhase * 0.7) * 8 * scaleFactor;
-          const wave3 = Math.sin(t * 2 + wavePhase * 1.3) * 12 * scaleFactor;
-          const baseAngle = t + shapeOffset + time * 0.1;
-          const radius = (baseRadius + wave1 + wave2 + wave3) * 0.6;
-          const distortion = Math.sin(t * 4 + wavePhase) * 0.1;
-          const x = Math.cos(baseAngle + distortion) * radius;
-          const y = Math.sin(baseAngle + distortion) * radius;
-          if (i === 0) ctx.moveTo(x, y);
-          else ctx.lineTo(x, y);
-        }
-        ctx.closePath();
-        const innerGradient = ctx.createRadialGradient(0, 0, 0, 0, 0, 40 * scaleFactor);
-        innerGradient.addColorStop(0, "rgba(255, 255, 255, 0.3)");
-        innerGradient.addColorStop(1, "rgba(255, 255, 255, 0.05)");
-        ctx.fillStyle = innerGradient;
-        ctx.fill();
-      }
-      ctx.restore();
-      animationId = requestAnimationFrame(drawFluidShapes);
-    };
-    drawFluidShapes();
-    return () => { if (animationId) cancelAnimationFrame(animationId); };
-  }, [canvasSize]);
-
-  return (
-    <div 
-      className="absolute pointer-events-none transition-opacity duration-300" 
-      style={{ 
-        zIndex: 20, 
-        opacity,
-        right: 'clamp(1rem, 5vw, 4rem)',
-        top: 'clamp(-2rem, -1vh, 1rem)',
-        transform: 'none'
-      }}
-    >
-      <canvas
-        ref={canvasRef}
-        width={canvasSize}
-        height={canvasSize}
-        className="hidden sm:block" 
-        style={{
-          filter: "blur(0.5px)",
-          mixBlendMode: "screen",
-          width: canvasSize + "px",
-          height: canvasSize + "px"
-        }}
-      />
-    </div>
-  );
-};
-
-// --- Animation mobile séparée ---
-const MobileFluidAnimation = ({ opacity = 1 }: { opacity?: number }) => {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const canvasSize = 200;
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -227,7 +171,138 @@ const MobileFluidAnimation = ({ opacity = 1 }: { opacity?: number }) => {
     };
     drawFluidShapes();
     return () => { if (animationId) cancelAnimationFrame(animationId); };
+  }, [canvasSize]);
+
+  return (
+    <div 
+      className="absolute pointer-events-none transition-opacity duration-300" 
+      style={{ 
+        zIndex: 20, 
+        opacity,
+        right: 'clamp(1rem, 5vw, 4rem)',
+        top: 'clamp(-2rem, -1vh, 1rem)',
+        transform: 'none'
+      }}
+    >
+      <canvas
+        ref={canvasRef}
+        width={canvasSize}
+        height={canvasSize}
+        className="hidden xl:block"
+        style={{
+          filter: "blur(0.5px)",
+          mixBlendMode: "screen",
+          width: canvasSize + "px",
+          height: canvasSize + "px"
+        }}
+      />
+    </div>
+  );
+};
+
+// --- Animation mobile/tablette responsive ---
+const ResponsiveMobileAnimation = ({ opacity = 1, scale = 1.2 }: { opacity?: number, scale?: number }) => {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [canvasSize, setCanvasSize] = useState(200);
+
+  useEffect(() => {
+    const updateSize = () => {
+      if (window.innerWidth <= 768) setCanvasSize(160);  // Mobile - taille réduite
+      else if (window.innerWidth <= 1024) setCanvasSize(200);  // Tablette - taille intermédiaire  
+      else setCanvasSize(240);  // Tablette large
+    };
+    updateSize();
+    window.addEventListener("resize", updateSize);
+    return () => window.removeEventListener("resize", updateSize);
   }, []);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+    canvas.width = canvasSize;
+    canvas.height = canvasSize;
+    let animationId: number;
+
+    const drawFluidShapes = () => {
+      ctx.clearRect(0, 0, canvasSize, canvasSize);
+      ctx.save();
+      ctx.translate(canvasSize / 2, canvasSize / 2);
+      const time = Date.now() * 0.001;
+      const scaleFactor = canvasSize / 400;
+      for (let shape = 0; shape < 3; shape++) {
+        const shapeOffset = (shape * Math.PI * 2) / 3;
+        const wavePhase = time + shape * 2;
+        let gradient;
+        if (shape === 0) {
+          gradient = ctx.createRadialGradient(0, 0, 20 * scaleFactor, 0, 0, 120 * scaleFactor);
+          gradient.addColorStop(0, "rgba(255, 165, 0, 0.9)");
+          gradient.addColorStop(0.3, "rgba(255, 34, 68, 0.7)");
+          gradient.addColorStop(0.6, "rgba(128, 0, 128, 0.7)");
+          gradient.addColorStop(1, "rgba(255, 165, 0, 0.3)");
+        } else if (shape === 1) {
+          gradient = ctx.createRadialGradient(0, 0, 20 * scaleFactor, 0, 0, 120 * scaleFactor);
+          gradient.addColorStop(0, "rgba(255, 34, 68, 0.9)");
+          gradient.addColorStop(0.3, "rgba(128, 0, 128, 0.7)");
+          gradient.addColorStop(0.6, "rgba(255, 165, 0, 0.7)");
+          gradient.addColorStop(1, "rgba(255, 34, 68, 0.3)");
+        } else {
+          gradient = ctx.createRadialGradient(0, 0, 20 * scaleFactor, 0, 0, 120 * scaleFactor);
+          gradient.addColorStop(0, "rgba(128, 0, 128, 0.9)");
+          gradient.addColorStop(0.3, "rgba(255, 165, 0, 0.7)");
+          gradient.addColorStop(0.6, "rgba(255, 34, 68, 0.7)");
+          gradient.addColorStop(1, "rgba(128, 0, 128, 0.3)");
+        }
+        ctx.beginPath();
+        const segments = 80;
+        const baseRadius = (60 + shape * 20) * scaleFactor;
+        for (let i = 0; i <= segments; i++) {
+          const t = (i / segments) * Math.PI * 2;
+          const wave1 = Math.sin(t * 3 + wavePhase) * 15 * scaleFactor;
+          const wave2 = Math.cos(t * 5 + wavePhase * 0.7) * 8 * scaleFactor;
+          const wave3 = Math.sin(t * 2 + wavePhase * 1.3) * 12 * scaleFactor;
+          const baseAngle = t + shapeOffset + time * 0.1;
+          const radius = baseRadius + wave1 + wave2 + wave3;
+          const distortion = Math.sin(t * 4 + wavePhase) * 0.1;
+          const x = Math.cos(baseAngle + distortion) * radius;
+          const y = Math.sin(baseAngle + distortion) * radius;
+          if (i === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        }
+        ctx.closePath();
+        ctx.fillStyle = gradient;
+        ctx.fill();
+        ctx.strokeStyle = gradient;
+        ctx.lineWidth = 2 * scaleFactor;
+        ctx.stroke();
+        ctx.beginPath();
+        for (let i = 0; i <= segments; i++) {
+          const t = (i / segments) * Math.PI * 2;
+          const wave1 = Math.sin(t * 3 + wavePhase) * 15 * scaleFactor;
+          const wave2 = Math.cos(t * 5 + wavePhase * 0.7) * 8 * scaleFactor;
+          const wave3 = Math.sin(t * 2 + wavePhase * 1.3) * 12 * scaleFactor;
+          const baseAngle = t + shapeOffset + time * 0.1;
+          const radius = (baseRadius + wave1 + wave2 + wave3) * 0.6;
+          const distortion = Math.sin(t * 4 + wavePhase) * 0.1;
+          const x = Math.cos(baseAngle + distortion) * radius;
+          const y = Math.sin(baseAngle + distortion) * radius;
+          if (i === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        }
+        ctx.closePath();
+        const innerGradient = ctx.createRadialGradient(0, 0, 0, 0, 0, 40 * scaleFactor);
+        innerGradient.addColorStop(0, "rgba(255, 255, 255, 0.3)");
+        innerGradient.addColorStop(1, "rgba(255, 255, 255, 0.05)");
+        ctx.fillStyle = innerGradient;
+        ctx.fill();
+      }
+      ctx.restore();
+      animationId = requestAnimationFrame(drawFluidShapes);
+    };
+    drawFluidShapes();
+    return () => { if (animationId) cancelAnimationFrame(animationId); };
+  }, [canvasSize]);
 
   return (
     <canvas
@@ -240,7 +315,8 @@ const MobileFluidAnimation = ({ opacity = 1 }: { opacity?: number }) => {
         mixBlendMode: "screen",
         width: canvasSize + "px",
         height: canvasSize + "px",
-        opacity
+        opacity,
+        transform: `scale(${scale})`
       }}
     />
   );
@@ -254,6 +330,9 @@ const Home: React.FC = () => {
   const [isOnHomePage, setIsOnHomePage] = useState(true);
   const worldRef = useRef<HTMLDivElement>(null);
   const welcomeRef = useRef<HTMLDivElement>(null);
+  
+  // Hook responsive pour les positions
+  const positions = useResponsivePositions();
   
   // État pour l'effet machine à écrire
   const [currentText, setCurrentText] = useState("");
@@ -277,19 +356,15 @@ const Home: React.FC = () => {
     
     const timeout = setTimeout(() => {
       if (!isDeleting) {
-        // Écriture
         if (currentText.length < currentRole.length) {
           setCurrentText(currentRole.slice(0, currentText.length + 1));
         } else {
-          // Pause avant de commencer à effacer
           setTimeout(() => setIsDeleting(true), pauseTime);
         }
       } else {
-        // Effacement
         if (currentText.length > 0) {
           setCurrentText(currentRole.slice(0, currentText.length - 1));
         } else {
-          // Passer au suivant
           setIsDeleting(false);
           setCurrentIndex((prev) => (prev + 1) % roles.length);
         }
@@ -387,10 +462,10 @@ const Home: React.FC = () => {
       for (let i = 0; i < filamentCount; i++) {
         const yOffset = filamentHeight * (i / filamentCount);
         const gradient = ctx.createLinearGradient(0, baseY + yOffset, width, baseY + yOffset);
-        gradient.addColorStop(0, "#ffa500"); // Orange
-        gradient.addColorStop(0.3, "#ff2244"); // Rouge
-        gradient.addColorStop(0.6, "#800080"); // Violet
-        gradient.addColorStop(1, "#ffa500"); // Retour à orange
+        gradient.addColorStop(0, "#ffa500");
+        gradient.addColorStop(0.3, "#ff2244");
+        gradient.addColorStop(0.6, "#800080");
+        gradient.addColorStop(1, "#ffa500");
         ctx.beginPath();
         ctx.strokeStyle = gradient;
         ctx.lineWidth = 1.5;
@@ -421,10 +496,10 @@ const Home: React.FC = () => {
       {/* Animation formes fluides - VISIBLE SUR TOUS LES ÉCRANS */}
       <FluidShapesAnimation opacity={canvasOpacity} />
 
-      {/* Fond canvas principal - MASQUÉ SUR MOBILE */}
+      {/* Fond canvas principal - MASQUÉ SUR MOBILE ET TABLETTE */}
       <canvas
         ref={canvasRef}
-        className="fixed inset-0 z-10 pointer-events-none hidden sm:block"
+        className="fixed inset-0 z-10 pointer-events-none hidden xl:block"
         style={{
           width: "100vw",
           height: "100vh",
@@ -440,13 +515,9 @@ const Home: React.FC = () => {
         aria-hidden="true"
       />
 
-      {/* Layout Desktop - côte à côte - MASQUÉ SUR MOBILE */}
-      <div className="relative z-30 w-full px-4 sm:px-8 md:px-12 lg:px-16 pt-8 sm:pt-12 md:pt-16 hidden sm:block">
-        
-        {/* Container flex pour aligner texte et animation - parfaitement alignés horizontalement */}
+      {/* Layout Desktop - côte à côte */}
+      <div className="relative z-30 w-full px-4 sm:px-8 md:px-12 lg:px-16 pt-8 sm:pt-12 md:pt-16 hidden xl:block">
         <div className="flex items-start justify-between w-full max-w-7xl mx-auto bg-transparent">
-          
-          {/* Texte "Welcome to my World" - Partie gauche */}
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
@@ -455,7 +526,6 @@ const Home: React.FC = () => {
             style={{ opacity: canvasOpacity }}
           >
             <div className="flex flex-col items-start">
-              {/* Welcome to my - aligné sur la largeur de WORLD */}
               <div 
                 ref={welcomeRef}
                 className="text-white font-light tracking-wide mb-1 sm:mb-2 leading-tight text-left"
@@ -469,7 +539,6 @@ const Home: React.FC = () => {
                 Welcome to my
               </div>
               
-              {/* WORLD avec dégradé - référence pour l'alignement */}
               <div 
                 ref={worldRef}
                 className="font-bold tracking-wide leading-none mb-1 sm:mb-2"
@@ -486,12 +555,11 @@ const Home: React.FC = () => {
                 WORLD
               </div>
               
-              {/* Texte animé machine à écrire */}
               <div 
                 className="text-white font-medium tracking-wide flex items-center"
                 style={{ 
                   fontSize: "clamp(1rem, 2.8vw, 2.2rem)",
-                  minHeight: "clamp(2rem, 5vw, 3rem)" // Hauteur fixe pour éviter les sautillements
+                  minHeight: "clamp(2rem, 5vw, 3rem)"
                 }}
               >
                 <span
@@ -515,21 +583,19 @@ const Home: React.FC = () => {
             </div>
           </motion.div>
 
-          {/* Espace pour l'animation fluide - Partie droite */}
           <div className="flex-1 relative flex items-start justify-end h-96">
             {/* L'animation est positionnée via le CSS dans FluidShapesAnimation */}
           </div>
-
         </div>
       </div>
 
-      {/* Layout Mobile - NOUVEAU LAYOUT SANS DIV PROBLÉMATIQUE */}
-      <div className="sm:hidden absolute top-0 left-0 w-full h-full flex flex-col items-center justify-center z-30" style={{
+      {/* Layout Mobile ET TABLETTE - RESPONSIVE INTELLIGENT */}
+      <div className="xl:hidden absolute top-0 left-0 w-full h-full flex flex-col items-center justify-center z-30" style={{
         background: 'transparent',
         pointerEvents: 'none'
       }}>
         
-        {/* Texte "Welcome to my World" centré pour mobile - REMONTÉ */}
+        {/* Texte "Welcome to my World" avec position responsive */}
         <motion.div
           initial={{ opacity: 0, y: -30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -537,11 +603,10 @@ const Home: React.FC = () => {
           className="flex flex-col items-center text-center"
           style={{ 
             opacity: canvasOpacity,
-            marginTop: '-490px',
+            marginTop: positions.textMarginTop, // Position dynamique
             pointerEvents: 'none'
           }}
         >
-          {/* Welcome to my - centré avec même police que texte animé */}
           <div 
             className="text-white font-medium tracking-wide mb-1 leading-tight"
             style={{ 
@@ -551,7 +616,6 @@ const Home: React.FC = () => {
             Welcome to my
           </div>
           
-          {/* WORLD avec dégradé - plus gros et centré */}
           <div 
             className="font-bold tracking-wide leading-none mb-1"
             style={{
@@ -566,7 +630,6 @@ const Home: React.FC = () => {
             WORLD
           </div>
           
-          {/* Texte animé machine à écrire - centré avec même espacement */}
           <div 
             className="text-white font-medium tracking-wide flex items-center justify-center"
             style={{ 
@@ -595,28 +658,36 @@ const Home: React.FC = () => {
         </motion.div>
       </div>
 
-      {/* Animation fluide mobile - SÉPARÉE ET INDÉPENDANTE */}
-      <div className="sm:hidden absolute top-0 left-0 w-full h-full flex items-center justify-center z-20" style={{
+      {/* Animation fluide avec position et scale responsive */}
+      <div className="xl:hidden absolute top-0 left-0 w-full h-full flex items-center justify-center z-20" style={{
         background: 'transparent',
         pointerEvents: 'none'
       }}>
-        <div className="flex justify-center" style={{ marginTop: '-50px', pointerEvents: 'none' }}>
+        <div className="flex justify-center" style={{ 
+          marginTop: positions.animationMarginTop, // Position dynamique
+          pointerEvents: 'none' 
+        }}>
           <div 
             className="pointer-events-none"
             style={{ 
-              transform: 'scale(1.2) translateY(-30px)',
+              transform: `scale(${positions.animationScale}) translateY(-30px)`, // Scale dynamique
               opacity: canvasOpacity > 0.5 ? 1 : 0
             }}
           >
-            <MobileFluidAnimation opacity={canvasOpacity > 0.5 ? 1 : 0} />
+            <ResponsiveMobileAnimation 
+              opacity={canvasOpacity > 0.5 ? 1 : 0}
+              scale={positions.animationScale}
+            />
           </div>
         </div>
       </div>
 
-      {/* BOUTONS RELATIFS À LA SECTION - VERSION CORRIGÉE */}
+      {/* Boutons avec positions responsives */}
       
-      {/* Mobile : Boutons réseaux sociaux */}
-      <div className="sm:hidden absolute left-1/2 transform -translate-x-1/2 z-50" style={{ bottom: '20%' }}>
+      {/* Mobile ET TABLETTE : Boutons réseaux sociaux avec position responsive */}
+      <div className="xl:hidden absolute left-1/2 transform -translate-x-1/2 z-50" style={{ 
+        bottom: positions.socialButtonsBottom // Position dynamique
+      }}>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -633,8 +704,10 @@ const Home: React.FC = () => {
         </motion.div>
       </div>
 
-      {/* Mobile : Bouton CV */}
-      <div className="sm:hidden absolute left-1/2 transform -translate-x-1/2 z-50" style={{ bottom: '16%' }}>
+      {/* Mobile ET TABLETTE : Bouton CV avec position responsive */}
+      <div className="xl:hidden absolute left-1/2 transform -translate-x-1/2 z-50" style={{ 
+        bottom: positions.cvButtonBottom // Position dynamique
+      }}>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -652,7 +725,7 @@ const Home: React.FC = () => {
       </div>
 
       {/* Desktop : boutons empilés */}
-      <div className="hidden sm:block absolute left-1/2 transform -translate-x-1/2 z-50" style={{ bottom: '8%' }}>
+      <div className="hidden xl:block absolute left-1/2 transform -translate-x-1/2 z-50" style={{ bottom: '8%' }}>
         {/* Boutons réseaux sociaux */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}

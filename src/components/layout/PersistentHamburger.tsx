@@ -13,7 +13,7 @@ const PersistentHamburger: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
-  // Détecter si on est sur mobile/tablette
+  // Détecter si on est sur mobile/tablette (jusqu'à 1024px)
   useEffect(() => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth <= 1024);
